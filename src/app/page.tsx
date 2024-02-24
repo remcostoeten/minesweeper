@@ -1,8 +1,8 @@
-import Component from "@/components/shells/v1";
-import Image from "next/image";
+import Component from '@/components/shells/v1'
+import React from 'react'
 
-export default function Home() {
+export default function page() {
   return (
-    <Component />
-  );
+    <Component/>
+    )
 }
