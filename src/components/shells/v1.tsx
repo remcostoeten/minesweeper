@@ -1,15 +1,10 @@
 import { Badge, Input, Button } from '@/components/ui/index'
+import TopBarShell from './TopBarShell'
 
 export default function Component() {
     return (
         <div className="bg-[#0e0e2c] h-screen w-full flex flex-col text-white">
-            <header className="p-6 border-b border-[#22234b] flex justify-between items-center">
-                <h1 className="text-2xl font-bold">Read Our Mines Casino Game Review and Play for Free</h1>
-                <div className="flex items-center space-x-4">
-                    <span className="font-medium">16:08</span>
-                    <span className="text-[#00f9ff] font-bold">| Mines</span>
-                </div>
-            </header>
+            <TopBarShell />
             <div className="flex flex-1">
                 <aside className="w-1/4 p-6 border-r border-[#22234b] space-y-6">
                     <div>
@@ -35,7 +30,7 @@ export default function Component() {
                         <h2 className="text-sm font-medium uppercase tracking-widest mb-2">Bet Amount</h2>
                         <div className="flex items-center space-x-2">
                             <Button className="bg-[#1f1f38]">-</Button>
-                            <Input className="text-center w-24 bg-[#1f1f38] border-none" placeholder="£2.00" />
+                            <input className="text-center w-24 bg-[#1f1f38] border-none" placeholder="£2.00" />
                             <Button className="bg-[#1f1f38]">+</Button>
                         </div>
                     </div>
