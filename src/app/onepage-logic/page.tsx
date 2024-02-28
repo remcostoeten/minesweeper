@@ -1,8 +1,7 @@
-'use client';
+'use client'
 import Wrapper from '@/components/shells/Wrapper';
 import { Button, Input } from '@/components/ui';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Cell } from '@/core/types';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -12,18 +11,17 @@ function Minesweeper() {
   const [gridSize, setGridSize] = useState(5);
   const [mines, setMines] = useState(3);
   const [gameState, setGameState] = useState('idle');
-  const [grid, setGrid] = useState<Cell[][]>([]);
+  const [grid, setGrid] = useState<string[][]>([]);
   const [openedCells, setOpenedCells] = useState(0);
   const [deaths, setDeaths] = useState(0);
-  const [openedAtEnd, setOpenedAtEnd] = useState(0);
   const [roundsPlayed, setRoundsPlayed] = useState(0);
 
   const initializeGame = () => {
-    const newGrid: Cell[][] = [];
+    const newGrid: string[][] = [];
     for (let i = 0; i < gridSize; i++) {
       newGrid[i] = [];
       for (let j = 0; j < gridSize; j++) {
-        newGrid[i][j] = { value: 0, revealed: false, flagged: false };
+        newGrid[i][j] = 'empty';
       }
     }
 
@@ -33,26 +31,27 @@ function Minesweeper() {
     setOpenedCells(0);
     setGameState('playing');
   };
+
   useEffect(() => {
     initializeGame();
   }, []);
 
-  const placeMines = (grid: Cell[][], numMines: number) => {
+  const placeMines = (grid: string[][], numMines: number) => {
     let placedMines = 0;
     while (placedMines < numMines) {
       const row = Math.floor(Math.random() * gridSize);
       const col = Math.floor(Math.random() * gridSize);
-      if (!grid[row][col].value && !grid[row][col].flagged) {
-        grid[row][col].value = '';
+      if (grid[row][col] === 'empty') {
+        grid[row][col] = '';
         placedMines++;
       }
     }
   };
 
-  const calculateCellValues = (grid: Cell[][]) => {
+  const calculateCellValues = (grid: string[][]) => {
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
-        if (grid[i][j].value === '') {
+        if (grid[i][j] === '') {
           continue;
         }
         let surroundingMines = 0;
@@ -60,12 +59,12 @@ function Minesweeper() {
           for (let dj = -1; dj <= 1; dj++) {
             const ni = i + di;
             const nj = j + dj;
-            if (ni >= 0 && ni < gridSize && nj >= 0 && nj < gridSize && grid[ni][nj].value === '') {
+            if (ni >= 0 && ni < gridSize && nj >= 0 && nj < gridSize && grid[ni][nj] === '') {
               surroundingMines++;
             }
           }
         }
-        grid[i][j].value = surroundingMines.toString();
+        grid[i][j] = surroundingMines.toString();
       }
     }
   };
@@ -75,15 +74,15 @@ function Minesweeper() {
       return;
     }
     const cell = grid[row][col];
-    if (cell.flagged) {
+    if (cell === 'flagged') {
       return;
     }
-    if (cell.value === '') {
+    if (cell === '') {
       setGameState('lose');
       revealAllMines();
       setDeaths(deaths + 1);
       setRoundsPlayed(roundsPlayed + 1);
-      setOpenedAtEnd(openedCells);
+      setOpenedCells(openedCells);
     } else {
       openCell(row, col);
       checkWinCondition();
@@ -91,34 +90,52 @@ function Minesweeper() {
   };
 
   const openCell = (row: number, col: number) => {
-    const cell = grid[row][col];
-    if (cell.revealed) {
-      return;
+    if (grid[row][col] !== 'empty') {
+      grid[row][col] = ' 💎';
+      setOpenedCells(openedCells + 1);
+      const surroundingOffsets = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+      ];
+      for (const [rowOffset, colOffset] of surroundingOffsets) {
+        const ni = row + rowOffset;
+        const nj = col + colOffset;
+        if (ni >= 0 && ni < gridSize && nj >= 0 && nj < gridSize && grid[ni][nj] === 'empty') {
+          openCell(ni, nj);
+        }
+      }
     }
-    cell.revealed = true;
-    setOpenedCells(openedCells + 1);
   };
 
   const revealAllMines = () => {
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
-        if (grid[i][j].value === '') {
-          grid[i][j].revealed = true;
+        if (grid[i][j] === '') {
+          grid[i][j] = ' 💎';
         }
       }
     }
     setGrid(grid);
   };
 
+  // Refactored checkWinCondition
   const checkWinCondition = () => {
     let allCellsRevealed = true;
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
-        if (!grid[i][j].revealed && grid[i][j].value !== '') {
+        // Exit loop early if a non- 💎 and non-flagged cell is found
+        if (grid[i][j] !== ' 💎' && grid[i][j] !== 'flagged') {
           allCellsRevealed = false;
           break;
         }
       }
+      // Break outer loop if allCells 💎 becomes false
       if (!allCellsRevealed) {
         break;
       }
@@ -132,8 +149,7 @@ function Minesweeper() {
     if (gameState === 'idle' || gameState === 'lose') {
       return;
     }
-    const cell = grid[row][col];
-    cell.flagged = !cell.flagged;
+    grid[row][col] = grid[row][col] === 'flagged' ? 'empty' : 'flagged';
   };
 
   const handleStartClick = () => {
@@ -142,12 +158,14 @@ function Minesweeper() {
 
   const renderCell = (cell: Cell, row: number, col: number) => {
     let content;
-    if (cell.revealed) {
-      if (cell.value === '') {
+    if (cell.revealed || state.gameState === 'lose') {
+      if (cell.value === 'mine') {
         content = '💣';
       } else {
-        content = '💎';
+        content = cell.value !== 0 ? cell.value : '';
       }
+    } else if (cell.flagged) {
+      content = '🚩';
     } else {
       content = '';
     }
@@ -160,16 +178,11 @@ function Minesweeper() {
           height: CELL_SIZE,
         }}
         onClick={() => handleCellClick(row, col)}
-        onContextMenu={(event) => {
-          event.preventDefault();
-          handleFlagClick(row, col);
-        }}
-        disabled={gameState === 'lose'}
+        disabled={state.gameState === 'lose'}
       >
         {content}
       </button>
     );
-  };
 
   return (
     <div className="flex">
@@ -178,7 +191,7 @@ function Minesweeper() {
           type="number"
           id="gridSize"
           value={gridSize}
-          onChange={(event: { target: { value: string } }) => setGridSize(parseInt(event.target.value))}
+          onChange={(event) => setGridSize(parseInt(event.target.value))}
           min="3"
           max="30"
         />
@@ -219,7 +232,8 @@ function Minesweeper() {
       </Wrapper>
       <Wrapper className="w-3/4 flex  flex-col flex-1 gap-2">
         <h1 className="text-2xl font-bold mb-4">Minesweeper</h1>
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${gridSize}, ${CELL_SIZE}px)` }}>
+        <div style={{ display: 'grid', gridTemplateColumns:
+          `repeat(${gridSize}, ${CELL_SIZE}px)` }}>
           {grid.map((row, rowIndex) => (
             row.map((cell, colIndex) => renderCell(cell, rowIndex, colIndex))
           ))}
