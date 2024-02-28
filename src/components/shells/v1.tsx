@@ -1,330 +1,145 @@
 'use client';
+import { Badge, Button } from '@/components/ui/index'
+import TopBarShell from './TopBarShell'
+import SidebarShell from './SidebarShell'
+import Minefield  from '@/components/Minefield'
+import GridSizeShell from './GridSizeShell';
+import AmountBombShell from './AmountBombhellProps';
 import { useState } from 'react';
-import AmountTilesShell from './AmountTilesShell';
-import SidebarShell from './SidebarShell';
-import GameShell from './GameShell';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
-import { ResetIcon } from '@radix-ui/react-icons';
-import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table';
-import Wrapper from './Wrapper';
+export default function Component() {
+    const [numMines, setNumMines] = useState(5);
+    const [gridSize, setGridSize] = useState(5);
+    return (
+        <div className="bg-[#0e0e2c] h-screen w-full flex flex-col text-white">
+            <TopBarShell />
+            <div className="flex flex-1">
+            <AmountBombShell onBombAmountChange={setNumMines} />
+      <GridSizeShell onGridSizeChange={setGridSize} />
 
 
-interface Cell {
-    isBomb: boolean;
-    isRevealed: boolean;
+            </div>
+
+            <div>
+                <h2 className="text-sm font-medium uppercase tracking-widest mb-2">Bet Amount</h2>
+                <div className="flex items-center space-x-2">
+                    <Button className="bg-[#1f1f38]">-</Button>
+                    <input className="text-center w-24 bg-[#1f1f38] border-none" placeholder="£2.00" />
+                    <Button className="bg-[#1f1f38]">+</Button>
+                </div>
+            </div>
+            <Button className="bg-[#00f9ff]">Bet</Button>
+            <div className="text-center">
+                <span className="text-sm">Demo Balance</span>
+                <p className="font-bold">£5,000.00</p>
+            </div>
+            <div className="flex justify-around">
+                <FileAudioIcon className="text-white" />
+                <MusicIcon className="text-white" />
+                <InfoIcon className="text-white" />
+            </div>
+
+            <SidebarShell className="flex-1 p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-4xl font-bold text-[#00f9ff]">MINES</h2>
+                    <div className="flex items-center space-x-2">
+                        <Badge variant="secondary">0.00x</Badge>
+                        <Badge variant="default">1.1x</Badge>
+                        <Badge variant="default">1.27x</Badge>
+                        <Badge variant="default">1.46x</Badge>
+                        <Badge variant="default">1.69x</Badge>
+                        <BitcoinIcon className="text-yellow-400" />
+                    </div>
+                </div>
+                <Minefield gridSize={gridSize} numMines={numMines} />
+                              <div className="flex justify-center items-center flex-wrap bg-[#1f1f38] p-6"></div>
+            </SidebarShell>
+        </div>
+    )
 }
 
-const initializeBoard = (rows: number, cols: number): Cell[][] => {
-    const board: Cell[][] = [];
-    for (let i = 0; i < rows; i++) {
-        board[i] = [];
-        for (let j = 0; j < cols; j++) {
-            board[i][j] = { isBomb: false, isRevealed: false };
-        }
-    }
-    return board;
-};
+function BitcoinIcon(props) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727" />
+        </svg>
+    )
+}
 
-const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
-    let bombsPlaced = 0;
-    while (bombsPlaced < bombs) {
-        const row = Math.floor(Math.random() * board.length);
-        const col = Math.floor(Math.random() * board[0].length);
-        if (!board[row][col].isBomb) {
-            board[row][col].isBomb = true;
-            bombsPlaced++;
-        }
-    }
-    return board;
-};
 
-export default function Component({ className = '' }: { className?: string }) {
-    const [showCustomInput, setShowCustomInput] = useState(false);
-    const [customValue, setCustomValue] = useState('');
+function FileAudioIcon(props) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M17.5 22h.5c.5 0 1-.2 1.4-.6.4-.4.6-.9.6-1.4V7.5L14.5 2H6c-.5 0-1 .2-1.4.6C4.2 3 4 3.5 4 4v3" />
+            <polyline points="14 2 14 8 20 8" />
+            <path d="M10 20v-1a2 2 0 1 1 4 0v1a2 2 0 1 1-4 0Z" />
+            <path d="M6 20v-1a2 2 0 1 0-4 0v1a2 2 0 1 0 4 0Z" />
+            <path d="M2 19v-3a6 6 0 0 1 12 0v3" />
+        </svg>
+    )
+}
 
-    const handleCustomButtonClick = () => {
-        setShowCustomInput(true);
-    };
 
-    const handleCustomInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCustomValue(e.target.value);
-    };
+function InfoIcon(props) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4" />
+            <path d="M12 8h.01" />
+        </svg>
+    )
+}
 
-    const [rows, setRows] = useState<number>(5);
-    const [cols, setCols] = useState<number>(5);
-    const [bombs, setBombs] = useState<number>(3);
-    const [openedTilesCount, setOpenedTilesCount] = useState(0);
-    const [timesClicked, setTimesClicked] = useState<number>(0);
-    const [board, setBoard] = useState<Cell[][]>(initializeBoard(rows, cols));
-    const [gameOver, setGameOver] = useState<boolean>(false);
-    const [numDeaths, setNumDeaths] = useState<number>(0);
-    const [roundResults, setRoundResults] = useState<
-        Array<{
-            round: number;
-            timesDied: number;
-            import React, { useState, useEffect } from 'react';
 
-            type Cell = {
-                isRevealed: boolean;
-                isBomb: boolean;
-            };
-
-            const V1: React.FC = () => {
-                const [timesClicked, setTimesClicked] = useState<number>(0);
-                const [rows, setRows] = useState<number>(0);
-                const [cols, setCols] = useState<number>(0);
-                const [bombs, setBombs] = useState<number>(0);
-                const [board, setBoard] = useState<Cell[][]>([]);
-                const [gameOver, setGameOver] = useState<boolean>(false);
-                const [openedTilesCount, setOpenedTilesCount] = useState<number>(0);
-                const [numDeaths, setNumDeaths] = useState<number>(0);
-                const [roundResults, setRoundResults] = useState<Array<{
-                    round: number;
-                    timesDied: number;
-                    timesClicked: number;
-                    rows: number;
-                    cols: number;
-                    bombs: number;
-                }>>([]);
-
-                const clearAll = () => {
-                    setRoundResults([]);
-                    localStorage.clear();
-                };
-
-                const resetGame = () => {
-                    const newBoard = placeBombs(initializeBoard(rows, cols), bombs);
-                    setBoard(newBoard);
-                    setGameOver(false);
-                    setTimesClicked(0);
-                };
-
-                const revealAll = () => {
-                    const newBoard = [...board];
-                    for (let i = 0; i < newBoard.length; i++) {
-                        for (let j = 0; j < newBoard[0].length; j++) {
-                            newBoard[i][j].isRevealed = true;
-                        }
-                    }
-                    setBoard(newBoard);
-                };
-
-                const handleCellClick = (row: number, col: number) => {
-                    if (gameOver || board[row][col].isRevealed) {
-                        return;
-                    }
-                    setTimesClicked((prevCount) => prevCount + 1);
-                    let newBoard = [...board];
-                    newBoard[row][col].isRevealed = true;
-                    setBoard(newBoard);
-
-                    if (board[row][col].isBomb) {
-                        setGameOver(true);
-                        revealAll();
-                        setNumDeaths((prevCount) => prevCount + 1);
-                        setRoundResults((prevResults) => [
-                            ...prevResults,
-                            { round: roundResults.length + 1, timesDied: numDeaths + 1, timesClicked, rows, cols, bombs },
-                        ]);
-                        toast(`Too bad, you died on the ${timesClicked + 1} click`);
-                    } else if (!board[row][col].isRevealed) {
-                        setOpenedTilesCount((prevCount) => prevCount + 1);
-                    }
-                };
-
-                useEffect(() => {
-                    resetGame();
-                }, [rows, cols, bombs]);
-
-                useEffect(() => {
-                    const savedRows = localStorage.getItem('rows');
-                    const savedCols = localStorage.getItem('cols');
-                    const savedBombs = localStorage.getItem('bombs');
-                    const savedBoard = localStorage.getItem('board');
-                    const savedOpenedTilesCount = localStorage.getItem('openedTilesCount');
-                    const savedGameOver = localStorage.getItem('gameOver');
-                    const savedNumDeaths = localStorage.getItem('numDeaths');
-
-                    if (savedRows) setRows(JSON.parse(savedRows));
-                    if (savedCols) setCols(JSON.parse(savedCols));
-                    if (savedBombs) setBombs(JSON.parse(savedBombs));
-                    if (savedBoard) setBoard(JSON.parse(savedBoard));
-                    if (savedOpenedTilesCount) setOpenedTilesCount(JSON.parse(savedOpenedTilesCount));
-                    if (savedGameOver) setGameOver(JSON.parse(savedGameOver));
-                    if (savedNumDeaths) setNumDeaths(JSON.parse(savedNumDeaths));
-                }, []);
-
-                useEffect(() => {
-                    localStorage.setItem('rows', JSON.stringify(rows));
-                    localStorage.setItem('cols', JSON.stringify(cols));
-                    localStorage.setItem('bombs', JSON.stringify(bombs));
-                    localStorage.setItem('board', JSON.stringify(board));
-                    localStorage.setItem('openedTilesCount', JSON.stringify(openedTilesCount));
-                    localStorage.setItem('gameOver', JSON.stringify(gameOver));
-                    localStorage.setItem('numDeaths', JSON.stringify(numDeaths));
-                }, [rows, cols, bombs, board, openedTilesCount, gameOver, numDeaths]);
-
-                const handleSetRows = (value: number) => {
-                    if (value < 3) {
-                        setRows(3);
-                    } else {
-                        setRows(value);
-                    }
-                };
-
-                const handleSetCols = (value: number) => {
-                    if (value < 3) {
-                        setCols(3);
-                    } else {
-                        setCols(value);
-                    }
-                };
-
-                const handleStartGame = () => {
-                    resetGame();
-                };
-
-                return (
-                    <>
-                        <SidebarShell>
-                            <AmountTilesShell
-                                rows={rows}
-                                cols={cols}
-                                bombs={bombs}
-                                setCols={handleSetCols}
-                                setBombs={setBombs}
-                                setRows={handleSetRows}
-                            />
-                            <button onClick={handleStartGame}>Start Game</button>
-                        </SidebarShell>
-                        <GameShell title="Minesweeper">
-                            <div className="flex">
-                                <div className="    center items-start">
-                                    <div className={`grid ${rows === 3 && cols === 3 ? 'grid-cols-3' : 'grid-cols-5'} gap-1 w-max place-items-center w-max-[900px]`}>
-                                        {board.map((row, rowIndex) =>
-                                            row.map((cell, colIndex) => (
-                                                <div
-                                                    key={`${rowIndex}-${colIndex}`}
-                                                    className={`border border-gray-100 h-32 w-32 flex items-center justify-center cursor-pointer text-lg font-semibold ${cell.isRevealed ? 'flex bg-emerald-600' : ''
-                                                        } ${cell.isRevealed && cell.isBomb ? 'bg-red-500' : ''}`}
-                                                    onClick={() => handleCellClick(rowIndex, colIndex)}
-                                                >
-                                                    <span className="scale-175">{cell.isRevealed && cell.isBomb ? '💣' : ''}</span>
-                                                    <span className="scale-175">{cell.isRevealed && !cell.isBomb ? '💎' : ''}</span>
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </GameShell>
-                        <ResultsSidebar reset={clearAll} timesDied={numDeaths} roundResults={roundResults} />
-                    </>
-                );
-            }
-
-            type ResultsSidebarProps = {
-                reset: () => void;
-                timesDied: number;
-                saveClickedPerRound: (round: number, timesClicked: number) => void;
-                roundResults: Array<{
-                    round: number;
-                    timesDied: number;
-                    timesClicked: number;
-                    rows: number;
-                    cols: number;
-                    bombs: number;
-                }>;
-            };
-
-            const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, saveClickedPerRound, roundResults }) => {
-                const [filter, setFilter] = useState('');
-                const [sort, setSort] = useState('');
-
-                // Filter the round results based on the filter value
-                const filteredResults = roundResults.filter((result) =>
-                    result.round.toString().includes(filter) ||
-                    result.timesDied.toString().includes(filter) ||
-                    result.timesClicked.toString().includes(filter) ||
-                    result.rows.toString().includes(filter) ||
-                    result.cols.toString().includes(filter) ||
-                    result.bombs.toString().includes(filter)
-                );
-
-                // Sort the round results based on the sort value
-                const sortedResults = filteredResults.sort((a, b) => {
-                    if (sort === 'round') {
-                        return a.round - b.round;
-                    } else if (sort === 'timesDied') {
-                        return a.timesDied - b.timesDied;
-                    } else if (sort === 'timesClicked') {
-                        return a.timesClicked - b.timesClicked;
-                    } else if (sort === 'rows') {
-                        return a.rows - b.rows;
-                    } else if (sort === 'cols') {
-                        return a.cols - b.cols;
-                    } else if (sort === 'bombs') {
-                        return a.bombs - b.bombs;
-                    } else {
-                        return 0;
-                    }
-                });
-
-                return (
-                    <Wrapper>
-                        <div className="flex justify-between items-center mb-4">
-                            <div>
-                                <label htmlFor="filter">Filter:</label>
-                                <input
-                                    type="text"
-                                    id="filter"
-                                    value={filter}
-                                    onChange={(e) => setFilter(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="sort">Sort:</label>
-                                <select
-                                    id="sort"
-                                    value={sort}
-                                    onChange={(e) => setSort(e.target.value)}
-                                >
-                                    <option value="">None</option>
-                                    <option value="round">Round</option>
-                                    <option value="timesDied">Times Died</option>
-                                    <option value="timesClicked">Times Clicked</option>
-                                    <option value="rows">Rows</option>
-                                    <option value="cols">Columns</option>
-                                    <option value="bombs">Bombs</option>
-                                </select>
-                            </div>
-                        </div>
-                        <Table>
-                            <ResetIcon height={30} width={30} className='absolute top-4 t right-4' onClick={reset} />
-                            <TableHeader className='mt-4 border-b'>
-                                <TableCell>Round</TableCell>
-                                <TableCell>Times Died</TableCell>
-                                <TableCell>Times Clicked</TableCell>
-                                <TableCell>Rows</TableCell>
-                                <TableCell>Columns</TableCell>
-                                <TableCell>Bombs</TableCell>
-                            </TableHeader>
-                            <TableBody>
-                                {sortedResults.map((result, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>{result.round}</TableCell>
-                                        <TableCell>{result.timesDied}</TableCell>
-                                        <TableCell>{result.timesClicked}</TableCell>
-                                        <TableCell>{result.rows}</TableCell>
-                                        <TableCell>{result.cols}</TableCell>
-                                        <TableCell>{result.bombs}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </Wrapper>
-                )
-            }
-
-            export default V1;
+function MusicIcon(props) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+        </svg>
+    )
+}

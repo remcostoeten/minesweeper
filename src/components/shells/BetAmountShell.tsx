@@ -1,3 +1,4 @@
+'use client';
 import React, { ChangeEvent } from 'react';
 import { Button } from '../ui';
 
