@@ -1,8 +1,8 @@
 'use client';
-import { Badge, Button } from '@/components/ui/index'
+import { Badge, Button } from '../../components/ui/index'
 import TopBarShell from './TopBarShell'
 import SidebarShell from './SidebarShell'
-import Minefield  from '@/components/Minefield'
+import Minefield  from '../../components/Minefield'
 import GridSizeShell from './GridSizeShell';
 import AmountBombShell from './AmountBombhellProps';
 import { useState } from 'react';

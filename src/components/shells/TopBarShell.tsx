@@ -1,5 +1,5 @@
 'use client';
-import useCurrentTime from '@/core/timeOfDay';
+import useCurrentTime from '../../core/timeOfDay';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 

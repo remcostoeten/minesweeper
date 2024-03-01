@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-
+import React from "react";
+import NoticeToFinishCursus from "../Notice"
+import { Toaster } from "../components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-900 text-white`}>{children}<Toaster invert/> </body>
+      <body className={`${inter.className} bg-slate-900 text-white`}>{children}<NoticeToFinishCursus /><Toaster invert/> </body>
     </html>
   );
 }
