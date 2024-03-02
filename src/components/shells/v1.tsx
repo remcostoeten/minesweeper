@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { ResetIcon } from '@radix-ui/react-icons';
 import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table';
 import Wrapper from './Wrapper';
+import { Button } from '../ui';
 
 
 interface Cell {
@@ -166,9 +167,28 @@ export default function Component({ className = '' }: { className?: string }) {
         resetGame();
     };
 
+    const endRoundOnWin = () => {
+        setRoundResults((prevResults) => [
+            ...prevResults,
+            { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
+        ]);
+    }
+
+    const startNewRound = () => {
+        endRoundOnWin();
+        resetGame();
+
+    }
+
+
     return (
         <>
-            <SidebarShell>
+           <div className='flex gap-2'>
+           <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
+        <Button onClick={handleStartGame} disabled={timesClicked > 0}>End round</Button>
+        <Button onClick={startNewRound} disabled={timesClicked === 0}>Start Round</Button>
+
+           <SidebarShell>
                 <AmountTilesShell
                     rows={rows}
                     cols={cols}
@@ -177,7 +197,6 @@ export default function Component({ className = '' }: { className?: string }) {
                     setBombs={setBombs}
                     setRows={handleSetRows}
                 />
-                <button onClick={handleStartGame}>Start Game</button>
             </SidebarShell>
             <GameShell title="Minesweeper">
                 <div className="flex">
@@ -200,8 +219,12 @@ export default function Component({ className = '' }: { className?: string }) {
                     </div>
                 </div>
             </GameShell>
+            </div>
+            <div className='w-2/6'>
             <ResultsSidebar reset={clearAll} timesDied={numDeaths}  roundResults={roundResults} />
-        </>
+            </div>
+            </div>
+                    </>
     );
 }
 
