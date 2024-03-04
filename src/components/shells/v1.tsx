@@ -9,11 +9,11 @@ import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table'
 import Wrapper from './Wrapper';
 import { Button } from '../ui';
 
-
 interface Cell {
     isBomb: boolean;
     isRevealed: boolean;
 }
+
 
 const initializeBoard = (rows: number, cols: number): Cell[][] => {
     const board: Cell[][] = [];
@@ -43,6 +43,7 @@ export default function Component({ className = '' }: { className?: string }) {
     const [showCustomInput, setShowCustomInput] = useState(false);
     const [customValue, setCustomValue] = useState('');
 
+
     const handleCustomButtonClick = () => {
         setShowCustomInput(true);
     };
@@ -50,7 +51,8 @@ export default function Component({ className = '' }: { className?: string }) {
     const handleCustomInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCustomValue(e.target.value);
     };
-
+    const [quickPlayMode, setQuickPlayMode] = useState(false);
+    const [selectedCells, setSelectedCells] = useState<{ row: number; col: number }[]>([]);
     const [rows, setRows] = useState<number>(5);
     const [cols, setCols] = useState<number>(5);
     const [bombs, setBombs] = useState<number>(3);
@@ -82,6 +84,18 @@ export default function Component({ className = '' }: { className?: string }) {
         setTimesClicked(0);
     };
 
+    const checkWin = (board: Cell[][]): boolean => {
+        for (let i = 0; i < board.length; i++) {
+          for (let j = 0; j < board[i].length; j++) {
+            const cell = board[i][j];
+            if (!cell.isBomb && !cell.isRevealed) {
+              return false;
+            }
+          }
+        }
+        return true;
+      };
+
     const revealAll = () => {
         const newBoard = [...board];
         for (let i = 0; i < newBoard.length; i++) {
@@ -97,11 +111,48 @@ export default function Component({ className = '' }: { className?: string }) {
             return;
         }
         setTimesClicked((prevCount) => prevCount + 1);
-        let newBoard = [...board];
-        newBoard[row][col].isRevealed = true;
-        setBoard(newBoard);
+        if (quickPlayMode) {
+            setSelectedCells((prevCells) => [...prevCells, { row, col }]);
+        } else {
+            let newBoard = [...board];
+            newBoard[row][col].isRevealed = true;
+            setBoard(newBoard);
 
-        if (board[row][col].isBomb) {
+            if (board[row][col].isBomb) {
+                setGameOver(true);
+                revealAll();
+                setNumDeaths((prevCount) => prevCount + 1);
+                setRoundResults((prevResults) => [
+                    ...prevResults,
+                    { round: roundResults.length + 1, timesDied: numDeaths + 1, timesClicked, rows, cols, bombs },
+                ]);
+                toast(`Too bad, you died on the ${timesClicked + 1} click`);
+            } else if (!board[row][col].isRevealed) {
+                setOpenedTilesCount((prevCount) => prevCount + 1);
+                if (checkWin(newBoard)) {
+                    setGameOver(true);
+                    setRoundResults((prevResults) => [
+                        ...prevResults,
+                        { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
+                    ]);
+                    toast(`Congratulations, you won!`);
+                }
+            }
+        }
+    };
+
+
+    const handleRevealClick = () => {
+        let newBoard = [...board];
+        let hitBomb = false;
+        for (let cell of selectedCells) {
+            newBoard[cell.row][cell.col].isRevealed = true;
+            if (newBoard[cell.row][cell.col].isBomb) {
+                hitBomb = true;
+            }
+        }
+        setBoard(newBoard);
+        if (hitBomb) {
             setGameOver(true);
             revealAll();
             setNumDeaths((prevCount) => prevCount + 1);
@@ -110,9 +161,15 @@ export default function Component({ className = '' }: { className?: string }) {
                 { round: roundResults.length + 1, timesDied: numDeaths + 1, timesClicked, rows, cols, bombs },
             ]);
             toast(`Too bad, you died on the ${timesClicked + 1} click`);
-        } else if (!board[row][col].isRevealed) {
-            setOpenedTilesCount((prevCount) => prevCount + 1);
+        } else if (checkWin(newBoard)) {
+            setGameOver(true);
+            setRoundResults((prevResults) => [
+                ...prevResults,
+                { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
+            ]);
+            toast(`Congratulations, you won!`);
         }
+        setSelectedCells([]);
     };
 
     useEffect(() => {
@@ -162,10 +219,18 @@ export default function Component({ className = '' }: { className?: string }) {
             setCols(value);
         }
     };
-
     const handleStartGame = () => {
-        resetGame();
-    };
+        // Reset game based on quick play mode
+        if (quickPlayMode) {
+          setBoard(initializeBoard(rows, cols)); // Reset board for quick play
+        } else {
+          // Existing logic for regular game start (replace with your implementation)
+          const bombCount = Math.floor(rows * cols / 5); // Example: Set bombs based on board size
+          setBoard(placeBombs(initializeBoard(rows, cols), bombCount));
+        }
+        setTimesClicked(0); // Reset clicks for both modes
+        setGameOver(false);
+      };
 
     const endRoundOnWin = () => {
         setRoundResults((prevResults) => [
@@ -187,7 +252,12 @@ export default function Component({ className = '' }: { className?: string }) {
            <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
         <Button onClick={handleStartGame} disabled={timesClicked > 0}>End round</Button>
         <Button onClick={startNewRound} disabled={timesClicked === 0}>Start Round</Button>
+        <Button onClick={() => setQuickPlayMode(!quickPlayMode)}>
 
+    {quickPlayMode ? 'Regular Play' : 'Quick Play'}
+</Button>
+<Button onClick={handleRevealClick}>Reveal</Button>
+<Button onClick={handleStartGame}>Start Game</Button>
            <SidebarShell>
                 <AmountTilesShell
                     rows={rows}
@@ -242,32 +312,34 @@ type ResultsSidebarProps = {
     }>;
 };
 
-const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, saveClickedPerRound, roundResults }) => {
+const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, roundResults, isQuickPlayActive }) => {
     return (
-        <Wrapper>
-            <Table>
-                <ResetIcon height={30} width={30} className='absolute top-4 t right-4' onClick={reset} />
-                <TableHeader className='mt-4 border-b'>
-                    <TableCell>Round</TableCell>
-                    <TableCell>Times Died</TableCell>
-                    <TableCell>Times Clicked</TableCell>
-                    <TableCell>Rows</TableCell>
-                    <TableCell>Columns</TableCell>
-                    <TableCell>Bombs</TableCell>
-                </TableHeader>
-                <TableBody>
-                    {roundResults.map((result, index) => (
-                        <TableRow key={index}>
-                            <TableCell>{result.round}</TableCell>
-                            <TableCell>{result.timesDied}</TableCell>
-                            <TableCell>{result.timesClicked}</TableCell>
-                            <TableCell>{result.rows}</TableCell>
-                            <TableCell>{result.cols}</TableCell>
-                            <TableCell>{result.bombs}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </Wrapper>
-    )
-}
+      <Wrapper>
+        <Table>
+          <ResetIcon height={30} width={30} className='absolute top-4 right-4' onClick={reset} />
+          <TableHeader className='mt-4 border-b'>
+            <TableCell>Round</TableCell>
+            <TableCell>Mode</TableCell>
+            <TableCell>Times Died</TableCell>
+            <TableCell>Times Clicked</TableCell>
+            <TableCell>Rows</TableCell>
+            <TableCell>Columns</TableCell>
+            <TableCell>Bombs</TableCell>
+          </TableHeader>
+          <TableBody>
+            {roundResults.map((result, index) => (
+              <TableRow key={index}>
+                <TableCell>{result.round}</TableCell>
+                <TableCell>{isQuickPlayActive && index === 0 ? 'Quick Play' : 'Normal'}</TableCell>
+                <TableCell>{result.timesDied}</TableCell>
+                <TableCell>{result.timesClicked}</TableCell>
+                <TableCell>{result.rows}</TableCell>
+                <TableCell>{result.cols}</TableCell>
+                <TableCell>{result.bombs}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Wrapper>
+    );
+  };
