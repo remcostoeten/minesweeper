@@ -1,4 +1,5 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
+import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
 interface AmountTileShellProps {
@@ -10,58 +11,49 @@ interface AmountTileShellProps {
     setBombs: (value: number) => void;
 }
 
-const AmountTileShell: React.FC<AmountTileShellProps> = ({
+export default function AmountTileShell({
     rows,
     cols,
     bombs,
     setRows,
     setCols,
     setBombs,
-}) => {
-    const handleChange = (e: ChangeEvent<HTMLInputElement>, setter: (value: number) => void) => {
-        const value = parseInt(e.target.value, 10);
-        setter(value);
-    };
-
+}: AmountTileShellProps) {
     return (
         <div className="flex justify-center mb-4">
-            <label className="flex flex-col items-center text-white mr-2">
-                Rows:
-                <Input
-                    type="number"
-                    min="3"
-                    max="9"
-                    value={rows}
-                    onChange={(e) => handleChange(e, setRows)}
-                    className="border p-2"
-                />
-            </label>
+            <div className="flex flex-col items-center text-white mr-2">
+                <div className="flex flex-col items-center text-white ml-2">
+                    Rows:
+                    <div className=' flex gap-1 my-2'>
+                        <Button onClick={() => {
+                            setRows(3);
+                            setCols(3);
+                        }}>3</Button>
+                        <Button onClick={() => {
+                            setRows(5);
+                            setCols(5);
+                        }}>5</Button>
+                        <Button onClick={() => {
+                            setRows(7);
+                            setCols(7);
+                        }}>7</Button>
+                        <Button onClick={() => {
+                            setRows(9);
+                            setCols(9);
+                        }}>9</Button>
+                    </div>
+                </div>
 
-            <label className="flex flex-col items-center text-white mx-2">
-                Columns:
-                <Input
-                    type="number"
-                    min="3"
-                    max="9"
-                    value={cols}
-                    onChange={(e) => handleChange(e, setCols)}
-                    className="border p-2"
-                />
-            </label>
-
-            <label className="flex flex-col items-center text-white ml-2">
-                Bombs:
-                <Input
-                    type="number"
-                    min="3"
-                    max={(rows - 1) * (cols - 1)}
-                    value={bombs}
-                    onChange={(e) => handleChange(e, setBombs)}
-                    className="border p-2"
-                />
-            </label>
+                <div className="flex flex-col items-center text-white ml-2">
+                    Bombs:
+                    <Input
+                        type="number"
+                        value={bombs}
+                        onChange={(e) => setBombs(Number(e.target.value))}
+                    />
+                </div>
+            </div>
         </div>
     );
 };
 
-export default AmountTileShell;

@@ -14,7 +14,6 @@ interface Cell {
     isRevealed: boolean;
 }
 
-
 const initializeBoard = (rows: number, cols: number): Cell[][] => {
     const board: Cell[][] = [];
     for (let i = 0; i < rows; i++) {
@@ -42,16 +41,6 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
 export default function Component({ className = '' }: { className?: string }) {
     const [showCustomInput, setShowCustomInput] = useState(false);
     const [customValue, setCustomValue] = useState('');
-
-
-    const handleCustomButtonClick = () => {
-        setShowCustomInput(true);
-    };
-
-    const handleCustomInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCustomValue(e.target.value);
-    };
-    const [quickPlayMode, setQuickPlayMode] = useState(false);
     const [selectedCells, setSelectedCells] = useState<{ row: number; col: number }[]>([]);
     const [rows, setRows] = useState<number>(5);
     const [cols, setCols] = useState<number>(5);
@@ -86,15 +75,15 @@ export default function Component({ className = '' }: { className?: string }) {
 
     const checkWin = (board: Cell[][]): boolean => {
         for (let i = 0; i < board.length; i++) {
-          for (let j = 0; j < board[i].length; j++) {
-            const cell = board[i][j];
-            if (!cell.isBomb && !cell.isRevealed) {
-              return false;
+            for (let j = 0; j < board[i].length; j++) {
+                const cell = board[i][j];
+                if (!cell.isBomb && !cell.isRevealed) {
+                    return false;
+                }
             }
-          }
         }
         return true;
-      };
+    };
 
     const revealAll = () => {
         const newBoard = [...board];
@@ -111,48 +100,11 @@ export default function Component({ className = '' }: { className?: string }) {
             return;
         }
         setTimesClicked((prevCount) => prevCount + 1);
-        if (quickPlayMode) {
-            setSelectedCells((prevCells) => [...prevCells, { row, col }]);
-        } else {
-            let newBoard = [...board];
-            newBoard[row][col].isRevealed = true;
-            setBoard(newBoard);
-
-            if (board[row][col].isBomb) {
-                setGameOver(true);
-                revealAll();
-                setNumDeaths((prevCount) => prevCount + 1);
-                setRoundResults((prevResults) => [
-                    ...prevResults,
-                    { round: roundResults.length + 1, timesDied: numDeaths + 1, timesClicked, rows, cols, bombs },
-                ]);
-                toast(`Too bad, you died on the ${timesClicked + 1} click`);
-            } else if (!board[row][col].isRevealed) {
-                setOpenedTilesCount((prevCount) => prevCount + 1);
-                if (checkWin(newBoard)) {
-                    setGameOver(true);
-                    setRoundResults((prevResults) => [
-                        ...prevResults,
-                        { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
-                    ]);
-                    toast(`Congratulations, you won!`);
-                }
-            }
-        }
-    };
-
-
-    const handleRevealClick = () => {
         let newBoard = [...board];
-        let hitBomb = false;
-        for (let cell of selectedCells) {
-            newBoard[cell.row][cell.col].isRevealed = true;
-            if (newBoard[cell.row][cell.col].isBomb) {
-                hitBomb = true;
-            }
-        }
+        newBoard[row][col].isRevealed = true;
         setBoard(newBoard);
-        if (hitBomb) {
+
+        if (board[row][col].isBomb) {
             setGameOver(true);
             revealAll();
             setNumDeaths((prevCount) => prevCount + 1);
@@ -161,15 +113,17 @@ export default function Component({ className = '' }: { className?: string }) {
                 { round: roundResults.length + 1, timesDied: numDeaths + 1, timesClicked, rows, cols, bombs },
             ]);
             toast(`Too bad, you died on the ${timesClicked + 1} click`);
-        } else if (checkWin(newBoard)) {
-            setGameOver(true);
-            setRoundResults((prevResults) => [
-                ...prevResults,
-                { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
-            ]);
-            toast(`Congratulations, you won!`);
+        } else if (!board[row][col].isRevealed) {
+            setOpenedTilesCount((prevCount) => prevCount + 1);
+            if (checkWin(newBoard)) {
+                setGameOver(true);
+                setRoundResults((prevResults) => [
+                    ...prevResults,
+                    { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
+                ]);
+                toast(`Congratulations, you won!`);
+            }
         }
-        setSelectedCells([]);
     };
 
     useEffect(() => {
@@ -205,103 +159,68 @@ export default function Component({ className = '' }: { className?: string }) {
     }, [rows, cols, bombs, board, openedTilesCount, gameOver, numDeaths]);
 
     const handleSetRows = (value: number) => {
-        if (value < 3) {
-            setRows(3);
-        } else {
+        if ([3, 5, 7, 9].includes(value)) {
             setRows(value);
         }
     };
 
     const handleSetCols = (value: number) => {
-        if (value < 3) {
-            setCols(3);
-        } else {
+        if ([3, 5, 7, 9].includes(value)) {
             setCols(value);
         }
     };
-    const handleStartGame = () => {
-        // Reset game based on quick play mode
-        if (quickPlayMode) {
-          setBoard(initializeBoard(rows, cols)); // Reset board for quick play
-        } else {
-          // Existing logic for regular game start (replace with your implementation)
-          const bombCount = Math.floor(rows * cols / 5); // Example: Set bombs based on board size
-          setBoard(placeBombs(initializeBoard(rows, cols), bombCount));
-        }
-        setTimesClicked(0); // Reset clicks for both modes
-        setGameOver(false);
-      };
-
-    const endRoundOnWin = () => {
-        setRoundResults((prevResults) => [
-            ...prevResults,
-            { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
-        ]);
-    }
-
-    const startNewRound = () => {
-        endRoundOnWin();
-        resetGame();
-
-    }
-
 
     return (
         <>
-           <div className='flex gap-2'>
-           <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
-        <Button onClick={handleStartGame} disabled={timesClicked > 0}>End round</Button>
-        <Button onClick={startNewRound} disabled={timesClicked === 0}>Start Round</Button>
-        <Button onClick={() => setQuickPlayMode(!quickPlayMode)}>
-
-    {quickPlayMode ? 'Regular Play' : 'Quick Play'}
-</Button>
-<Button onClick={handleRevealClick}>Reveal</Button>
-<Button onClick={handleStartGame}>Start Game</Button>
-           <SidebarShell>
-                <AmountTilesShell
-                    rows={rows}
-                    cols={cols}
-                    bombs={bombs}
-                    setCols={handleSetCols}
-                    setBombs={setBombs}
-                    setRows={handleSetRows}
-                />
-            </SidebarShell>
-            <GameShell title="Minesweeper">
-                <div className="flex">
-                    <div className="    center items-start">
-                        <div className={`grid ${rows === 3 && cols === 3 ? 'grid-cols-3' : 'grid-cols-5'} gap-1 w-max place-items-center w-max-[900px]`}>
-                            {board.map((row, rowIndex) =>
-                                row.map((cell, colIndex) => (
-                                    <div
-                                        key={`${rowIndex}-${colIndex}`}
-                                        className={`border border-gray-100 h-32 w-32 flex items-center justify-center cursor-pointer text-lg font-semibold ${cell.isRevealed ? 'flex bg-emerald-600' : ''
-                                            } ${cell.isRevealed && cell.isBomb ? 'bg-red-500' : ''}`}
-                                        onClick={() => handleCellClick(rowIndex, colIndex)}
-                                    >
-                                        <span className="scale-175">{cell.isRevealed && cell.isBomb ? '💣' : ''}</span>
-                                        <span className="scale-175">{cell.isRevealed && !cell.isBomb ? '💎' : ''}</span>
-                                    </div>
-                                ))
-                            )}
-                        </div>
+            <div className='flex gap-2'>
+                <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
+                    <div className='flex gap-2'>
+                        <Button onClick={resetGame} disabled={timesClicked > 0}>End round</Button>
+                        <Button onClick={resetGame} disabled={timesClicked === 0}>Start Game</Button>
                     </div>
+                    <SidebarShell>
+                        <AmountTilesShell
+                            rows={rows}
+                            cols={cols}
+                            bombs={bombs}
+                            setCols={handleSetCols}
+                            setBombs={setBombs}
+                            setRows={handleSetRows}
+                        />
+                    </SidebarShell>
+                    <GameShell title="Minesweeper">
+                        <div className="flex">
+                            <div className="    center items-start">
+                                <div className={`grid ${rows === 3 && cols === 3 ? 'grid-cols-3' : 'grid-cols-5'} gap-1 w-max place-items-center w-max-[900px]`}>
+                                    {board.map((row, rowIndex) =>
+                                        row.map((cell, colIndex) => (
+                                            <div
+                                                key={`${rowIndex}-${colIndex}`}
+                                                className={`border border-gray-100 h-32 w-32 flex items-center justify-center cursor-pointer text-lg font-semibold ${cell.isRevealed ? 'flex bg-emerald-600' : ''
+                                                    } ${cell.isRevealed && cell.isBomb ? 'bg-red-500' : ''}`}
+                                                onClick={() => handleCellClick(rowIndex, colIndex)}
+                                            >
+                                                <span className="scale-175">{cell.isRevealed && cell.isBomb ? '💣' : ''}</span>
+                                                <span className="scale-175">{cell.isRevealed && !cell.isBomb ? '💎' : ''}</span>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </GameShell>
                 </div>
-            </GameShell>
+                <div className='w-2/6'>
+                    <ResultsSidebar reset={clearAll} timesDied={numDeaths} roundResults={roundResults} />
+                </div>
             </div>
-            <div className='w-2/6'>
-            <ResultsSidebar reset={clearAll} timesDied={numDeaths}  roundResults={roundResults} />
-            </div>
-            </div>
-                    </>
+        </>
     );
 }
 
 type ResultsSidebarProps = {
     reset: () => void;
     timesDied: number;
-    saveClickedPerRound: (round: number, timesClicked: number) => void;
     roundResults: Array<{
         round: number;
         timesDied: number;
@@ -312,34 +231,32 @@ type ResultsSidebarProps = {
     }>;
 };
 
-const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, roundResults, isQuickPlayActive }) => {
+const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, roundResults }) => {
     return (
-      <Wrapper>
-        <Table>
-          <ResetIcon height={30} width={30} className='absolute top-4 right-4' onClick={reset} />
-          <TableHeader className='mt-4 border-b'>
-            <TableCell>Round</TableCell>
-            <TableCell>Mode</TableCell>
-            <TableCell>Times Died</TableCell>
-            <TableCell>Times Clicked</TableCell>
-            <TableCell>Rows</TableCell>
-            <TableCell>Columns</TableCell>
-            <TableCell>Bombs</TableCell>
-          </TableHeader>
-          <TableBody>
-            {roundResults.map((result, index) => (
-              <TableRow key={index}>
-                <TableCell>{result.round}</TableCell>
-                <TableCell>{isQuickPlayActive && index === 0 ? 'Quick Play' : 'Normal'}</TableCell>
-                <TableCell>{result.timesDied}</TableCell>
-                <TableCell>{result.timesClicked}</TableCell>
-                <TableCell>{result.rows}</TableCell>
-                <TableCell>{result.cols}</TableCell>
-                <TableCell>{result.bombs}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Wrapper>
+        <Wrapper>
+            <Table>
+                <ResetIcon height={30} width={30} className='absolute top-4 right-4' onClick={reset} />
+                <TableHeader className='mt-4 border-b'>
+                    <TableCell>Round</TableCell>
+                    <TableCell>Times Died</TableCell>
+                    <TableCell>Times Clicked</TableCell>
+                    <TableCell>Rows</TableCell>
+                    <TableCell>Columns</TableCell>
+                    <TableCell>Bombs</TableCell>
+                </TableHeader>
+                <TableBody>
+                    {roundResults.map((result, index) => (
+                        <TableRow key={index}>
+                            <TableCell>{result.round}</TableCell>
+                            <TableCell>{result.timesDied}</TableCell>
+                            <TableCell>{result.timesClicked}</TableCell>
+                            <TableCell>{result.rows}</TableCell>
+                            <TableCell>{result.cols}</TableCell>
+                            <TableCell>{result.bombs}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </Wrapper>
     );
-  };
+};
