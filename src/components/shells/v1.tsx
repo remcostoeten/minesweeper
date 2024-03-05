@@ -39,15 +39,13 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
 };
 
 export default function Component({ className = '' }: { className?: string }) {
-    const [showCustomInput, setShowCustomInput] = useState(false);
-    const [customValue, setCustomValue] = useState('');
-    const [selectedCells, setSelectedCells] = useState<{ row: number; col: number }[]>([]);
     const [rows, setRows] = useState<number>(5);
     const [cols, setCols] = useState<number>(5);
     const [bombs, setBombs] = useState<number>(3);
     const [openedTilesCount, setOpenedTilesCount] = useState(0);
     const [timesClicked, setTimesClicked] = useState<number>(0);
     const [board, setBoard] = useState<Cell[][]>(initializeBoard(rows, cols));
+    const [profitTaken, setProfitTaken] = useState<boolean>(false);
     const [gameOver, setGameOver] = useState<boolean>(false);
     const [numDeaths, setNumDeaths] = useState<number>(0);
     const [roundResults, setRoundResults] = useState<
@@ -61,17 +59,63 @@ export default function Component({ className = '' }: { className?: string }) {
         }>
     >([]);
 
+
     const clearAll = () => {
         setRoundResults([]);
         localStorage.clear();
     };
 
+    const [gameStarted, setGameStarted] = useState<boolean>(false);
+
+    const startGame = () => {
+            setBoard(initializeBoard(rows, cols));
+            setBoard(placeBombs(board, bombs));
+            setOpenedTilesCount(0);
+            setTimesClicked(0);
+            setGameOver(false);
+            setGameStarted(true);
+    }
+    let newBoard = initializeBoard(rows, cols);
+
+    const takeProfit =  () => {
+        setRoundResults((prevResults) => [
+            ...prevResults,
+            { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
+        ]);
+            toast('succesfully cashed out')
+        setProfitTaken(true);
+    }
+
     const resetGame = () => {
-        const newBoard = placeBombs(initializeBoard(rows, cols), bombs);
-        setBoard(newBoard);
         setGameOver(false);
+        newBoard = initializeBoard(rows, cols);
+        setBoard(newBoard);
         setTimesClicked(0);
+        toast('Field cleared and round reset!');
     };
+
+    const startNewGame = () => {
+        if (gameOver) {
+            setRoundResults((prevResults) => [
+                ...prevResults,
+                { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
+            ]);
+            setTimeout(() => {
+                newBoard = newBoard.map(row => row.map(cell => ({ ...cell, isRevealed: false })));
+                setBoard(newBoard);
+            }, 2000);
+        }
+        setBoard(placeBombs(newBoard, bombs));
+        setOpenedTilesCount(0);
+        setTimesClicked(0);
+        setGameOver(false);
+        setGameStarted(false);
+        setNumDeaths(0);
+        // setRoundResults([...roundResults, { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs }]);
+        setProfitTaken(false);
+   setBoard(newBoard);
+    }
+
 
     const checkWin = (board: Cell[][]): boolean => {
         for (let i = 0; i < board.length; i++) {
@@ -127,10 +171,6 @@ export default function Component({ className = '' }: { className?: string }) {
     };
 
     useEffect(() => {
-        resetGame();
-    }, [rows, cols, bombs]);
-
-    useEffect(() => {
         const savedRows = localStorage.getItem('rows');
         const savedCols = localStorage.getItem('cols');
         const savedBombs = localStorage.getItem('bombs');
@@ -170,13 +210,20 @@ export default function Component({ className = '' }: { className?: string }) {
         }
     };
 
+
     return (
         <>
             <div className='flex gap-2'>
                 <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
-                    <div className='flex gap-2'>
-                        <Button onClick={resetGame} disabled={timesClicked > 0}>End round</Button>
-                        <Button onClick={resetGame} disabled={timesClicked === 0}>Start Game</Button>
+                <div className="flex justify-center mb-4">
+                        <Button onClick={startGame} disabled={gameStarted}>Start Game</Button>
+                        {gameStarted && <Button onClick={takeProfit}>Take profit</Button>}
+                        {(gameOver || profitTaken) && (
+                            <Button onClick={startNewGame}>
+                                <ResetIcon height={30} width={30} className="mr-2" />
+                                Start New Game
+                            </Button>
+                        )}
                     </div>
                     <SidebarShell>
                         <AmountTilesShell
@@ -243,6 +290,7 @@ const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, round
                     <TableCell>Rows</TableCell>
                     <TableCell>Columns</TableCell>
                     <TableCell>Bombs</TableCell>
+                    <TableCell>Result</TableCell>
                 </TableHeader>
                 <TableBody>
                     {roundResults.map((result, index) => (
@@ -253,6 +301,7 @@ const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, round
                             <TableCell>{result.rows}</TableCell>
                             <TableCell>{result.cols}</TableCell>
                             <TableCell>{result.bombs}</TableCell>
+                            <TableCell>{result.timesDied === 0 ? 'Win' : 'Loss'}</TableCell> {/* Display 'Win' if timesDied is 0, otherwise display 'Loss' */}
                         </TableRow>
                     ))}
                 </TableBody>

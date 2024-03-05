@@ -24,7 +24,7 @@ export default function AmountTileShell({
             <div className="flex flex-col items-center text-white mr-2">
                 <div className="flex flex-col items-center text-white ml-2">
                     Rows:
-                    <div className=' flex gap-1 my-2'>
+                    <div className=' flex gap-'>
                         <Button onClick={() => {
                             setRows(3);
                             setCols(3);
