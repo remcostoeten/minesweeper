@@ -11,6 +11,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "noImplicitAny": false,
+    "forceConsistentCasingInFileNames": true,
+    "strictNullChecks": false,
     "incremental": true,
     "plugins": [
       {

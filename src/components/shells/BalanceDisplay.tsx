@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BalanceDisplay = ({ balance, profitLoss }) => {
+const BalanceDisplay = ({ balance, profitLoss }: { balance: number, profitLoss: number }) => {
   const profitLossClass = profitLoss > 0 ? 'profit' : 'loss';
   return (
     <div className="balance-display">
