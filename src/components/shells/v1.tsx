@@ -310,12 +310,48 @@ const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, roundResults }) 
         );
     };
 
+    const globalStatistics = () => {
+        return (
+            <>
+                <TableHeader className='mt-4 border-b'>
+                    <h2>Todo store data</h2>
+                    <TableCell>Round</TableCell>
+                    <TableCell>Times Died</TableCell>
+                    <TableCell>Times Clicked</TableCell>
+                    <TableCell>Rows</TableCell>
+                    <TableCell>Columns</TableCell>
+                    <TableCell>Bombs</TableCell>
+                    <TableCell>Result</TableCell>
+                </TableHeader>
+                <TableBody>
+                    {roundResults.map((result, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
+                                {result.timesDied === 0 ? (
+                                    <CheckIcon color="green" />
+                                ) : (
+                                    <Cross2Icon color="red" />
+                                )}
+                            </TableCell>
+                            <TableCell>{result.round}</TableCell>
+                            <TableCell>{result.timesDied}</TableCell>
+                            <TableCell>{result.timesClicked}</TableCell>
+                            <TableCell>{result.rows}</TableCell>
+                            <TableCell>{result.cols}</TableCell>
+                             <TableCell>{result.bombs}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </>
+        );
+    }
+
     return (
         <Wrapper>
-            <StatisticTabs triggerOne='Session statistics' triggerTwo='b  ' contentTwo={<>  </>} contentOne={<Table>
+            <StatisticTabs triggerOne='Session statistics' triggerTwo='Global Statistics' contentTwo={globalStatistics()} contentOne={<Table>
                 <ResetIcon height={30} width={30} className='absolute top-4 right-4' onClick={reset} />
                 {sessionStatistics()}
             </Table>} />
-            </Wrapper>
+        </Wrapper>
     );
 };

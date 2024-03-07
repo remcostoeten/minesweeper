@@ -1,10 +1,10 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface StatisticTabsProps {
-  triggerOne: string;
-  triggerTwo: string;
-  contentOne: string ;
-  contentTwo: string;
+  triggerOne: any;
+  triggerTwo: any;
+  contentOne: any;
+  contentTwo: any;
 }
 
 export default function StatisticTabs({ triggerOne, triggerTwo, contentOne, contentTwo }: StatisticTabsProps) {
