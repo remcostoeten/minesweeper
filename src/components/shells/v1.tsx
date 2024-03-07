@@ -9,6 +9,7 @@ import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table'
 import Wrapper from './Wrapper';
 import { Button } from '../ui';
 import StatisticTabs from '../statistics/StatisticTabs';
+import { Switch } from '../ui/switch';
 
 interface Cell {
     isBomb: boolean;
@@ -49,6 +50,7 @@ export default function Component({ className = '' }: { className?: string }) {
     const [profitTaken, setProfitTaken] = useState<boolean>(false);
     const [gameOver, setGameOver] = useState<boolean>(false);
     const [numDeaths, setNumDeaths] = useState<number>(0);
+    const [toggleHoldMouse, setToggleHoldMouse] = useState<boolean>(false);
     const [roundResults, setRoundResults] = useState<
         Array<{
             round: number;
@@ -59,7 +61,6 @@ export default function Component({ className = '' }: { className?: string }) {
             bombs: number;
         }>
     >([]);
-
 
     const clearAll = () => {
         setRoundResults([]);
@@ -171,12 +172,48 @@ export default function Component({ className = '' }: { className?: string }) {
                 }
             };
 
+            const handleCellMouseDown = (row: number, col: number) => {
+                if (gameOver) {
+                    return;
+               }    if (toggleHoldMouse) {
+                    handleCellClick(row, col);
+                }
+            }
+
+            const handleCellMouseEnter = (row: number, col: number) => {
+                if (gameOver) {
+                     return;
+                }
+                 if (toggleHoldMouse) {
+                    handleCellClick(row, col);
+                }
+            }
+
+            const toggleHoldMouseClick = () => {
+                setToggleHoldMouse(prevToggleHoldMouse => !prevToggleHoldMouse);
+            };
+
+            const ToggleComponent = () => {
+                return (
+                    <div>
+                        <h4>Toggle Hold Mouse</h4>
+                        <p>Toggle to allow for holding the mouse button to reveal cells</p>
+                        <Switch checked={toggleHoldMouse} onClick={toggleHoldMouseClick} />
+                        Curently {toggleHoldMouse  ? 'enabled' : 'disabled'}
+                    </div>
+                );
+            };
+
+            const handleMouseUp = () => {
+                setToggleHoldMouse(false);
+            };
+
             return (
                 <>
                     <div className='flex gap-2'>
                         <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
-                            <div className="flex justify-center mb-4">
-                                <Button onClick={startGame} disabled={gameStarted}>
+                                    <div className="flex justify-center mb-4">
+                           <Button onClick={startGame} disabled={gameStarted}>
                                     {gameStarted ? "Game is Started" : "Start Game"}
                                 </Button>
                                 {gameStarted && <Button onClick={takeProfit} disabled={profitTaken}>Take profit</Button>}
@@ -187,6 +224,7 @@ export default function Component({ className = '' }: { className?: string }) {
                                     </Button>
                                 )}
                             </div>
+                            {ToggleComponent()}
                             <SidebarShell>
                                 <AmountTilesShell
                                     rows={rows}
@@ -208,6 +246,9 @@ export default function Component({ className = '' }: { className?: string }) {
                                                         className={`border border-gray-100 h-32 w-32 flex items-center justify-center cursor-pointer text-lg font-semibold ${cell.isRevealed ? 'flex bg-emerald-600' : ''
                                                             } ${cell.isRevealed && cell.isBomb ? 'bg-red-500' : ''}`}
                                                         onClick={() => handleCellClick(rowIndex, colIndex)}
+                                                        onMouseDown={() => handleCellMouseDown(rowIndex, colIndex)}
+                                                        onMouseUp={handleMouseUp}
+                                                        onMouseEnter={() => handleCellMouseEnter(rowIndex, colIndex)}
                                                     >
                                                         <span className="scale-175">{cell.isRevealed && cell.isBomb ? '💣' : ''}</span>
                                                         <span className="scale-175">{cell.isRevealed && !cell.isBomb ? '💎' : ''}</span>
