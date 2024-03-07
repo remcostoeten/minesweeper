@@ -8,6 +8,7 @@ import { CheckIcon, Cross2Icon, ResetIcon } from '@radix-ui/react-icons';
 import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table';
 import Wrapper from './Wrapper';
 import { Button } from '../ui';
+import StatisticTabs from '../statistics/StatisticTabs';
 
 interface Cell {
     isBomb: boolean;
@@ -105,7 +106,7 @@ export default function Component({ className = '' }: { className?: string }) {
         setOpenedTilesCount(0);
         setTimesClicked(0);
         setGameOver(false);
-        setGameStarted(true);
+        setGameStarted(true); // Set gameStarted to true
         setNumDeaths(0);
         setProfitTaken(false);
         setBoard(newBoard);
@@ -210,16 +211,16 @@ export default function Component({ className = '' }: { className?: string }) {
             <div className='flex gap-2'>
                 <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
                     <div className="flex justify-center mb-4">
-                    <Button onClick={startGame} disabled={gameStarted}>
-                        {gameStarted ? "Game is Started" : "Start Game"}
-                    </Button>
-                    {gameStarted && <Button onClick={takeProfit} disabled={profitTaken || gameOver}>Take profit</Button>}
-                    {(gameOver || profitTaken) && (
-                        <Button onClick={startNewGame}>
-                            <ResetIcon height={30} width={30} className="mr-2" />
-                            Start New Game
+                        <Button onClick={startGame} disabled={gameStarted}>
+                            {gameStarted ? "Game is Started" : "Start Game"}
                         </Button>
-                    )}
+                        {gameStarted && <Button onClick={takeProfit} disabled={profitTaken}>Take profit</Button>}
+                        {(gameOver || profitTaken) && (
+                            <Button onClick={startNewGame}>
+                                <ResetIcon height={30} width={30} className="mr-2" />
+                                Start New Game
+                            </Button>
+                        )}
                     </div>
                     <SidebarShell>
                         <AmountTilesShell
@@ -273,12 +274,10 @@ type ResultsSidebarProps = {
         bombs: number;
     }>;
 };
-
-const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, roundResults }) => {
-    return (
-        <Wrapper>
-            <Table>
-                <ResetIcon height={30} width={30} className='absolute top-4 right-4' onClick={reset} />
+const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, roundResults }) => {
+    const sessionStatistics = () => {
+        return (
+            <>
                 <TableHeader className='mt-4 border-b'>
                     <TableCell>Round</TableCell>
                     <TableCell>Times Died</TableCell>
@@ -297,18 +296,26 @@ const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, round
                                 ) : (
                                     <Cross2Icon color="red" />
                                 )}
-                            </TableCell>    <TableCell>{result.round}</TableCell>
+                            </TableCell>
+                            <TableCell>{result.round}</TableCell>
                             <TableCell>{result.timesDied}</TableCell>
                             <TableCell>{result.timesClicked}</TableCell>
                             <TableCell>{result.rows}</TableCell>
                             <TableCell>{result.cols}</TableCell>
                             <TableCell>{result.bombs}</TableCell>
-
-
                         </TableRow>
                     ))}
                 </TableBody>
-            </Table>
-        </Wrapper>
+            </>
+        );
+    };
+
+    return (
+        <Wrapper>
+            <StatisticTabs triggerOne='Session statistics' triggerTwo='b  ' contentTwo={<>  </>} contentOne={<Table>
+                <ResetIcon height={30} width={30} className='absolute top-4 right-4' onClick={reset} />
+                {sessionStatistics()}
+            </Table>} />
+            </Wrapper>
     );
 };
