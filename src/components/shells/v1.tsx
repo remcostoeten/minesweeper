@@ -4,7 +4,7 @@ import AmountTilesShell from './AmountTilesShell';
 import SidebarShell from './SidebarShell';
 import GameShell from './GameShell';
 import { toast } from 'sonner';
-import { CheckIcon, Cross1Icon, Cross2Icon, ResetIcon } from '@radix-ui/react-icons';
+import { CheckIcon, Cross2Icon, ResetIcon } from '@radix-ui/react-icons';
 import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table';
 import Wrapper from './Wrapper';
 import { Button } from '../ui';
@@ -68,21 +68,21 @@ export default function Component({ className = '' }: { className?: string }) {
     const [gameStarted, setGameStarted] = useState<boolean>(false);
 
     const startGame = () => {
-            setBoard(initializeBoard(rows, cols));
-            setBoard(placeBombs(board, bombs));
-            setOpenedTilesCount(0);
-            setTimesClicked(0);
-            setGameOver(false);
-            setGameStarted(true);
+        setBoard(initializeBoard(rows, cols));
+        setBoard(placeBombs(board, bombs));
+        setOpenedTilesCount(0);
+        setTimesClicked(0);
+        setGameOver(false);
+        setGameStarted(true);
     }
     let newBoard = initializeBoard(rows, cols);
 
-    const takeProfit =  () => {
+    const takeProfit = () => {
         setRoundResults((prevResults) => [
             ...prevResults,
             { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
         ]);
-            toast('succesfully cashed out')
+        toast('succesfully cashed out')
         setProfitTaken(true);
     }
 
@@ -96,10 +96,6 @@ export default function Component({ className = '' }: { className?: string }) {
 
     const startNewGame = () => {
         if (gameOver) {
-            setRoundResults((prevResults) => [
-                ...prevResults,
-                { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs },
-            ]);
             setTimeout(() => {
                 newBoard = newBoard.map(row => row.map(cell => ({ ...cell, isRevealed: false })));
                 setBoard(newBoard);
@@ -109,13 +105,11 @@ export default function Component({ className = '' }: { className?: string }) {
         setOpenedTilesCount(0);
         setTimesClicked(0);
         setGameOver(false);
-        setGameStarted(false);
+        setGameStarted(true);
         setNumDeaths(0);
-        // setRoundResults([...roundResults, { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs }]);
         setProfitTaken(false);
-   setBoard(newBoard);
+        setBoard(newBoard);
     }
-
 
     const checkWin = (board: Cell[][]): boolean => {
         for (let i = 0; i < board.length; i++) {
@@ -215,15 +209,17 @@ export default function Component({ className = '' }: { className?: string }) {
         <>
             <div className='flex gap-2'>
                 <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
-                <div className="flex justify-center mb-4">
-                        <Button onClick={startGame} disabled={gameStarted}>Start Game</Button>
-                        {gameStarted && <Button onClick={takeProfit}>Take profit</Button>}
-                        {(gameOver || profitTaken) && (
-                            <Button onClick={startNewGame}>
-                                <ResetIcon height={30} width={30} className="mr-2" />
-                                Start New Game
-                            </Button>
-                        )}
+                    <div className="flex justify-center mb-4">
+                    <Button onClick={startGame} disabled={gameStarted}>
+                        {gameStarted ? "Game is Started" : "Start Game"}
+                    </Button>
+                    {gameStarted && <Button onClick={takeProfit} disabled={profitTaken || gameOver}>Take profit</Button>}
+                    {(gameOver || profitTaken) && (
+                        <Button onClick={startNewGame}>
+                            <ResetIcon height={30} width={30} className="mr-2" />
+                            Start New Game
+                        </Button>
+                    )}
                     </div>
                     <SidebarShell>
                         <AmountTilesShell
@@ -295,7 +291,7 @@ const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, round
                 <TableBody>
                     {roundResults.map((result, index) => (
                         <TableRow key={index}>
-                               <TableCell>
+                            <TableCell>
                                 {result.timesDied === 0 ? (
                                     <CheckIcon color="green" />
                                 ) : (
