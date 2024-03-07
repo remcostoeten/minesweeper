@@ -4,7 +4,7 @@ import AmountTilesShell from './AmountTilesShell';
 import SidebarShell from './SidebarShell';
 import GameShell from './GameShell';
 import { toast } from 'sonner';
-import { ResetIcon } from '@radix-ui/react-icons';
+import { CheckIcon, Cross1Icon, Cross2Icon, ResetIcon } from '@radix-ui/react-icons';
 import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table';
 import Wrapper from './Wrapper';
 import { Button } from '../ui';
@@ -295,13 +295,20 @@ const ResultsSidebar: React.FC<ResultsSidebarProps> = ({ reset, timesDied, round
                 <TableBody>
                     {roundResults.map((result, index) => (
                         <TableRow key={index}>
-                            <TableCell>{result.round}</TableCell>
+                               <TableCell>
+                                {result.timesDied === 0 ? (
+                                    <CheckIcon color="green" />
+                                ) : (
+                                    <Cross2Icon color="red" />
+                                )}
+                            </TableCell>    <TableCell>{result.round}</TableCell>
                             <TableCell>{result.timesDied}</TableCell>
                             <TableCell>{result.timesClicked}</TableCell>
                             <TableCell>{result.rows}</TableCell>
                             <TableCell>{result.cols}</TableCell>
                             <TableCell>{result.bombs}</TableCell>
-                            <TableCell>{result.timesDied === 0 ? 'Win' : 'Loss'}</TableCell> {/* Display 'Win' if timesDied is 0, otherwise display 'Loss' */}
+
+
                         </TableRow>
                     ))}
                 </TableBody>
