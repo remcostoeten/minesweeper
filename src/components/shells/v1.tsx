@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import AmountTilesShell from './AmountTilesShell';
 import SidebarShell from './SidebarShell';
 import GameShell from './GameShell';
@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { CheckIcon, Cross2Icon, ResetIcon } from '@radix-ui/react-icons';
 import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table';
 import Wrapper from './Wrapper';
-import { Button } from '../ui';
+import { Button, Input } from '../ui';
 import StatisticTabs from '../statistics/StatisticTabs';
 import { Switch } from '../ui/switch';
 
@@ -51,6 +51,9 @@ export default function Component({ className = '' }: { className?: string }) {
     const [gameOver, setGameOver] = useState<boolean>(false);
     const [numDeaths, setNumDeaths] = useState<number>(0);
     const [toggleHoldMouse, setToggleHoldMouse] = useState<boolean>(false);
+    const [baseBalance, setBaseBalance] = useState<number>(100);
+    const [gameStarted, setGameStarted] = useState<boolean>(false);
+    const [betSize, setBetSize] = useState<number>(1);
     const [roundResults, setRoundResults] = useState<
         Array<{
             round: number;
@@ -67,8 +70,6 @@ export default function Component({ className = '' }: { className?: string }) {
         localStorage.clear();
     };
 
-    const [gameStarted, setGameStarted] = useState<boolean>(false);
-
     const startGame = () => {
         setBoard(initializeBoard(rows, cols));
         setBoard(placeBombs(board, bombs));
@@ -76,6 +77,7 @@ export default function Component({ className = '' }: { className?: string }) {
         setTimesClicked(0);
         setGameOver(false);
         setGameStarted(true);
+        setBaseBalance((prevBalance) => prevBalance - betSize);
     }
     let newBoard = initializeBoard(rows, cols);
 
@@ -86,9 +88,11 @@ export default function Component({ className = '' }: { className?: string }) {
         ]);
         toast('succesfully cashed out')
         setProfitTaken(true);
-        revealAll(); // Add this line
+        revealAll();
+        setBaseBalance((prevBalance) => prevBalance + betSize );
     }
     const startNewGame = () => {
+        setBaseBalance((prevBalance) => prevBalance - betSize);
         if (gameOver) {
             setTimeout(() => {
                 newBoard = newBoard.map(row => row.map(cell => ({ ...cell, isRevealed: false })));
@@ -158,7 +162,24 @@ export default function Component({ className = '' }: { className?: string }) {
                 }
             };
 
+            const renderBalance = () => {
+                return (
+                    <div>
+                        <h4>Balance</h4>
+                        <p>Current balance: {baseBalance}</p>
+                    </div>
+                );
+            }
 
+            function renderBetSize() {
+                return (
+                    <div>
+                        <h4>Bet Size</h4>
+                        <input value={betSize} onChange={(e: { target: { value: any; }; }) => setBetSize(Number(e.target.value))} />
+                        <p>Current bet size: {betSize}</p>
+                    </div>
+                );
+            }
 
             const handleSetRows = (value: number) => {
                 if ([3, 5, 7, 9].includes(value)) {
@@ -224,6 +245,8 @@ export default function Component({ className = '' }: { className?: string }) {
                                     </Button>
                                 )}
                             </div>
+                             {renderBalance()}
+                            {renderBetSize()}
                             {ToggleComponent()}
                             <SidebarShell>
                                 <AmountTilesShell
