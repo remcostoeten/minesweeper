@@ -1,11 +1,11 @@
-'use client';
+     'use client';
 import { useState } from 'react';
 import AmountTilesShell from './AmountTilesShell';
 import SidebarShell from './SidebarShell';
 import GameShell from './GameShell';
 import { toast } from 'sonner';
 import { CheckIcon, Cross2Icon, ResetIcon } from '@radix-ui/react-icons';
-import { Table, TableHeader, TableCell, TableBody, TableRow } from '../ui/table';
+import { Table, TableHeader, TableCell, TableBody, TableRow, TableFooter } from '../ui/table';
 import Wrapper from './Wrapper';
 import { Button, Input } from '../ui';
 import StatisticTabs from '../statistics/StatisticTabs';
@@ -309,15 +309,12 @@ export default function Component({ className = '' }: { className?: string }) {
                 const totalWins = roundResults.filter(result => result.timesDied === 0).length;
                 const totalRounds = roundResults.length;
                 const winPercentage = totalRounds > 0 ? (totalWins / totalRounds) * 100 : 0;
+                const avarageClicksPerRound = roundResults.reduce((acc, result) => acc + result.timesClicked, 0) / totalRounds;
 
                 return (
-                    <>
-                        <div className="flex justify-between mb-4">
-                            <div>Total Deaths: {totalDeaths}</div>
-                            <div>Total Wins: {totalWins}</div>
-                            <div>Win Percentage: {winPercentage.toFixed(2)}%</div>
-                        </div>
-                        <TableHeader className='mt-4 border-b'>
+                    <Table>
+
+                        <TableHeader className='mt-4 border-b' style={{ width: '100%' }}>
                             <TableCell>Round</TableCell>
                             <TableCell>Times Died</TableCell>
                             <TableCell>Times Clicked</TableCell>
@@ -345,7 +342,13 @@ export default function Component({ className = '' }: { className?: string }) {
                                 </TableRow>
                             ))}
                         </TableBody>
-                    </>
+                        <TableFooter>
+                            <TableCell colSpan={2}>Total Deaths: {totalDeaths}</TableCell>
+                            <TableCell colSpan={2}>Total Wins: {totalWins}</TableCell>
+                            <TableCell colSpan={2}>Win Percentage: {winPercentage.toFixed(2)}%</TableCell>
+                            <TableCell colSpan={2}>You avarge died on the {avarageClicksPerRound}th click</TableCell>
+                        </TableFooter>
+                    </Table>
                 );
             };
 
@@ -388,7 +391,7 @@ export default function Component({ className = '' }: { className?: string }) {
             return (
                 <Wrapper>
                     <StatisticTabs triggerOne='Session statistics' triggerTwo='Global Statistics' contentTwo={globalStatistics()} contentOne={<Table>
-                        <ResetIcon height={30} width={30} className='absolute top-4 right-4' onClick={reset} />
+                        <ResetIcon height={30} width={30} className='absolute top-12 right-4' onClick={reset} />
                         {sessionStatistics()}
                     </Table>} />
                 </Wrapper>
