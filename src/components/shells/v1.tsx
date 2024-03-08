@@ -285,7 +285,7 @@ export default function Component({ className = '' }: { className?: string }) {
                             </Button>
                             {gameStarted && <Button onClick={handlePlay}>Play</Button>}
                             {gameStarted && <Button onClick={takeProfit} disabled={profitTaken}>Take profit</Button>}
-                            {(gameOver || profitTaken) && (
+                               {(gameOver || profitTaken) && (
                                 <Button onClick={startNewGame}>
                                     <ResetIcon height={30} width={30} className="mr-2" />
                                     Start New Game
