@@ -14,7 +14,6 @@ import { Switch } from '../ui/switch';
 interface Cell {
     isBomb: boolean;
     isRevealed: boolean;
-    isPreselected: boolean; // New state variable for pre-selection
 }
 
 const initializeBoard = (rows: number, cols: number): Cell[][] => {
@@ -22,7 +21,7 @@ const initializeBoard = (rows: number, cols: number): Cell[][] => {
     for (let i = 0; i < rows; i++) {
         board[i] = [];
         for (let j = 0; j < cols; j++) {
-            board[i][j] = { isBomb: false, isRevealed: false, isPreselected: false }; // Initialize pre-selection to false
+            board[i][j] = { isBomb: false, isRevealed: false,};
         }
     }
     return board;
@@ -56,8 +55,6 @@ export default function Component({ className = '' }: { className?: string }) {
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [betSize, setBetSize] = useState<number>(1);
     const [freezeGame, setFreezeGame] = useState<boolean>(false);
-    const [preselectionToggle, setPreselectionToggle] = useState(false);
-    const [preSelectedCells, setPreSelectedCells] = useState<[] | { row: number; col: number }[]>([]); // Stores pre-selected cells
     const [roundResults, setRoundResults] = useState<
         Array<{
             round: number;
@@ -73,26 +70,6 @@ export default function Component({ className = '' }: { className?: string }) {
         setFreezeGame((prevFreezeGame) => !prevFreezeGame);
     };
 
-    function handlePreselection(row: number, col: number) {
-        if (gameOver || freezeGame) {
-          return;
-        }
-        if (!gameStarted) {
-            return;
-        }
-        const newPreSelectedCells = [...preSelectedCells];
-        const cellAlreadySelected = newPreSelectedCells.find(
-            (cell) => cell.row === row && cell.col === col
-        );
-
-        if (cellAlreadySelected) {
-            // Remove cell from pre-selection if already selected
-            setPreSelectedCells(newPreSelectedCells.filter((cell) => cell !== cellAlreadySelected));
-        } else {
-            // Add cell to pre-selection
-            setPreSelectedCells([...newPreSelectedCells, { row, col }]);
-        }
-    };
 
     const clearAll = () => {
         setRoundResults([]);
@@ -107,7 +84,6 @@ export default function Component({ className = '' }: { className?: string }) {
         setGameOver(false);
             setGameStarted(true);
             setBaseBalance((prevBalance) => prevBalance - betSize);
-            setPreSelectedCells([]);
         };
 
         let newBoard = initializeBoard(rows, cols);
@@ -128,7 +104,7 @@ export default function Component({ className = '' }: { className?: string }) {
             if (gameOver) {
                 setTimeout(() => {
                     newBoard = newBoard.map((row) =>
-                        row.map((cell) => ({ ...cell, isRevealed: false, isPreselected: false })) // Clear pre-selections on new game
+                        row.map((cell) => ({ ...cell, isRevealed: false })) // Clear pre-selections on new game
                     );
                     setBoard(newBoard);
                 }, 2000);
@@ -141,7 +117,6 @@ export default function Component({ className = '' }: { className?: string }) {
             setNumDeaths(0);
             setProfitTaken(false);
             setBoard(newBoard);
-            setPreSelectedCells([]); // Clear pre-selections on new game
         }
 
         const checkWin = (board: Cell[][]): boolean => {
@@ -241,14 +216,19 @@ export default function Component({ className = '' }: { className?: string }) {
             if (gameOver) {
                 return;
             }
+            setToggleHoldMouse(true);
+        };
+
+        const handleMouseUp = () => {
+            setToggleHoldMouse(false);
         };
 
         const handleCellMouseEnter = (row: number, col: number) => {
-            if (gameOver) {
+            if (gameOver || !toggleHoldMouse) {
                 return;
             }
+            handleCellClick(row, col);
         };
-
         const toggleHoldMouseClick = () => {
             setToggleHoldMouse(prevToggleHoldMouse => !prevToggleHoldMouse);
         };
@@ -264,31 +244,16 @@ export default function Component({ className = '' }: { className?: string }) {
             );
         };
 
-        const handleMouseUp = () => {
-            setToggleHoldMouse(false);
-        };
-
-        const handlePreSelectionCheck = (row: number, col: number) => {
-            return preSelectedCells.some((cell) => cell.row === row && cell.col === col);
-        };
 
         const handlePlay = () => {
-            if (!gameStarted || gameOver || preSelectedCells.length === 0) {
+            if (!gameStarted || gameOver) {
                 return;
             }
 
             const newBoard = [...board];
-            let gameOverByPreselection = false;
 
-            for (const cell of preSelectedCells) {
-                const { row, col } = cell;
-                if (newBoard[row][col].isBomb) {
-                    gameOverByPreselection = true;
-                    break;
-                }
-            }
 
-            if (gameOverByPreselection) {
+            if (gameOver) {
                 setGameOver(true);
                 revealAll();
                 setNumDeaths((prevCount) => prevCount + 1);
@@ -298,14 +263,8 @@ export default function Component({ className = '' }: { className?: string }) {
                 ]);
                 toast('You lost! A bomb was pre-selected.');
             } else {
-                // No bombs pre-selected, reveal pre-selected cells and check for win
-                for (const cell of preSelectedCells) {
-                    const { row, col } = cell;
-                    newBoard[row][col].isRevealed = true;
-                    setOpenedTilesCount((prevCount) => prevCount + 1);
-                }
-                setBoard(newBoard);
-                if (checkWin(newBoard)) {
+                // No bombs pre-selected, check for win
+                if (checkWin(board)) {
                     setGameOver(true);
                     setRoundResults((prevResults) => [
                         ...prevResults,
@@ -314,35 +273,13 @@ export default function Component({ className = '' }: { className?: string }) {
                     toast(`Congratulations, you won!`);
                 }
             }
-
-            setPreSelectedCells([]); // Clear pre-selections after playing
         };
-
-        function renderPreSelectedCells() {
-            return (
-                <div>
-                    <h4>Pre-selected cells</h4>
-                    <p>Pre-selected cells: {preSelectedCells.length}</p>
-                </div>
-            );
-        }
-
-        function togglePreselection(row: number, col: number) {
-             return (
-                <div className='flex flex-col gap-2'>
-                    <h4>Pre-select cells</h4>
-                    <input type='checkbox' checked={preselectionToggle} onChange={() => setPreselectionToggle(!preselectionToggle)} />
-                    {preselectionToggle && preSelectedCells.length > 0 && (
-  <Button onClick={handlePlay}>Show Result</Button>
-)}     </div>
-             )
-        }
 
         return (
             <>
                 <div className='flex gap-2'>
-                    <div className='flex gap-2 flex-col w-4/6  justify-center  items-center'>
-                        <div className="flex justify-center mb-4">
+                    <div className='flex gap-2 flex-col w-max-4/6  p-10'>
+                        <div className="flex justify-center flex-col mb-4 ">
                             <Button onClick={startGame} disabled={gameStarted}>
                                 {gameStarted ? "Game is Started" : "Start Game"}
                             </Button>
@@ -356,12 +293,13 @@ export default function Component({ className = '' }: { className?: string }) {
                             )}
                         </div>
                         {renderBalance()}
+                        <hr/>
                         JavaScript
                         {renderBetSize()}
+                        <hr/>
                         {ToggleComponent()}
+                        <hr/>
                         {renderFreezeGame()}
-                        {renderPreSelectedCells()}
-                        {togglePreselection(0, 0)}
                         <SidebarShell>
                             <AmountTilesShell
                                 rows={rows}
@@ -372,39 +310,38 @@ export default function Component({ className = '' }: { className?: string }) {
                                 setRows={handleSetRows}
                             />
                         </SidebarShell>
-                        <GameShell title="Minesweeper">
-                                <div className="flex">
-                                    <div className="    center items-start">
-                                        <div className={`grid ${rows === 3 && cols === 3 ? 'grid-cols-3' : 'grid-cols-5'} gap-1 w-max place-items-center w-max-[900px]`}>
-                                            {board.map((row, rowIndex) =>
-                                                row.map((cell, colIndex) => (
-                                                    <div
-                                                        key={`${rowIndex}-${colIndex}`}
-                                                        className={`border border-gray-100 h-32 w-32 flex items-center justify-center cursor-pointer text-lg font-semibold
-                                                            ${cell.isRevealed ? 'flex bg-emerald-600' : ''}
-                                                            ${cell.isRevealed && cell.isBomb ? 'bg-red-500' : ''}
-                                                            ${handlePreSelectionCheck(rowIndex, colIndex) ? 'bg-blue-500' : ''}`} // Add this line
-                                                        onClick={() => preselectionToggle ? handlePreselection(rowIndex, colIndex) : handleCellClick(rowIndex, colIndex)}
-                                                        onMouseDown={() => handleCellMouseDown(rowIndex, colIndex)}
-                                                        onMouseUp={handleMouseUp}
-                                                        onMouseEnter={() => handleCellMouseEnter(rowIndex, colIndex)}
-                                                    >
-                                                        <span className="scale-175">{cell.isRevealed && cell.isBomb ? '💣' : ''}</span>
-                                                        <span className="scale-175">{cell.isRevealed && !cell.isBomb ? '💎' : ''}</span>
-                                                    </div>
-                                                ))
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </GameShell>
-                        </div>
-                        <div className='w-2/6'>
-                            <ResultsSidebar reset={clearAll} timesDied={numDeaths} roundResults={roundResults} />
-                        </div>
                     </div>
-                </>
-            );
+                    <GameShell title="Minesweeper">
+                        <div className="flex">
+                            <div className="    center items-start">
+                                <div className={`grid ${rows === 3 && cols === 3 ? 'grid-cols-3' : 'grid-cols-5'} gap-1 w-max place-items-center w-max-[900px]`}>
+                                    {board.map((row, rowIndex) =>
+                                        row.map((cell, colIndex) => (
+                                            <div
+                                                key={`${rowIndex}-${colIndex}`}
+                                                className={`border border-gray-100 h-32 w-32 flex items-center justify-center cursor-pointer text-lg font-semibold
+                                                    ${cell.isRevealed ? 'flex bg-emerald-600' : ''}
+                                                    ${cell.isRevealed && cell.isBomb ? 'bg-red-500' : ''}`}
+                                                onClick={() => handleCellClick(rowIndex, colIndex)}
+                                                onMouseDown={() => handleCellMouseDown(rowIndex, colIndex)}
+                                                onMouseUp={handleMouseUp}
+                                                onMouseEnter={() => handleCellMouseEnter(rowIndex, colIndex)}
+                                            >
+                                                <span className="scale-175">{cell.isRevealed && cell.isBomb ? '💣' : ''}</span>
+                                                <span className="scale-175">{cell.isRevealed && !cell.isBomb ? '💎' : ''}</span>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </GameShell>
+                    <div className='w-2/6'>
+                        <ResultsSidebar reset={clearAll} timesDied={numDeaths} roundResults={roundResults} />
+                    </div>
+                </div>
+            </>
+        );
         }
 
         type ResultsSidebarProps = {
