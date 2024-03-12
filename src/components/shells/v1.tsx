@@ -9,8 +9,11 @@ import { Table, TableHeader, TableCell, TableBody, TableRow, TableFooter } from 
 import Wrapper from './Wrapper';
 import { Button } from '../ui';
 import StatisticTabs from '../statistics/StatisticTabs';
-import { Switch } from '../ui/switch';
 import { ResultsSidebarProps } from '@/core/types';
+import Balance from '../game-logic/balance';
+import BetSize from '../game-logic/betSize';
+import FreezeGame from '../game-logic/freezeGame';
+import ToggleHoldMouse from '../game-logic/toggleHoldMouse';
 
 interface Cell {
     isBomb: boolean;
@@ -41,7 +44,8 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
     return board;
 };
 
-export default function Component({ className = '' }: { className?: string }) {
+export default function Minesweeper() {
+
     const [rows, setRows] = useState<number>(5);
     const [cols, setCols] = useState<number>(5);
     const [bombs, setBombs] = useState<number>(3);
@@ -106,7 +110,7 @@ export default function Component({ className = '' }: { className?: string }) {
         if (gameOver) {
             setTimeout(() => {
                 newBoard = newBoard.map((row) =>
-                    row.map((cell) => ({ ...cell, isRevealed: false })) // Clear pre-selections on new game
+                    row.map((cell) => ({ ...cell, isRevealed: false }))
                 );
                 setBoard(newBoard);
             }, 2000);
@@ -184,25 +188,6 @@ export default function Component({ className = '' }: { className?: string }) {
         );
     };
 
-    function renderBetSize() {
-        return (
-            <div>
-                <h4>Bet Size</h4>
-                <input value={betSize} onChange={(e: { target: { value: any; }; }) => setBetSize(Number(e.target.value))} />
-                <p>Current bet size: {betSize}</p>
-            </div>
-        );
-}
-
-    function renderFreezeGame() {
-        return (
-            <div>
-                <h4>Freeze game</h4>
-                <Switch checked={freezeGame} onClick={freezeGameClick} />
-            </div>
-        );
-    }
-
     const handleSetRows = (value: number) => {
         if ([3, 5, 7, 9].includes(value)) {
             setRows(value);
@@ -236,47 +221,6 @@ export default function Component({ className = '' }: { className?: string }) {
         setToggleHoldMouse(prevToggleHoldMouse => !prevToggleHoldMouse);
     };
 
-    const ToggleComponent = () => {
-        return (
-            <div>
-                <h4>Toggle Hold Mouse</h4>
-                <p>Toggle to allow for holding the mouse button to reveal cells</p>
-                <Switch checked={toggleHoldMouse} onClick={toggleHoldMouseClick} />
-                Curently {toggleHoldMouse ? 'enabled' : 'disabled'}
-            </div>
-        );
-    };
-
-
-    const handlePlay = () => {
-        if (!gameStarted || gameOver) {
-            return;
-        }
-
-        const newBoard = [...board];
-
-
-        if (gameOver) {
-            setGameOver(true);
-            revealAll();
-            setNumDeaths((prevCount) => prevCount + 1);
-            setRoundResults((prevResults) => [
-                ...prevResults,
-                { round: roundResults.length + 1, timesDied: numDeaths + 1, timesClicked: 0, rows, cols, bombs },
-            ]);
-            toast('You lost! A bomb was pre-selected.');
-        } else {
-            if (checkWin(board)) {
-                setGameOver(true);
-                setRoundResults((prevResults) => [
-                    ...prevResults,
-                    { round: roundResults.length + 1, timesDied: numDeaths, timesClicked: timesClicked, rows, cols, bombs },
-                ]);
-                toast(`Congratulations, you won!`);
-            }
-        }
-    };
-
     return (
         <>
             <div className='flex gap-2'>
@@ -291,13 +235,13 @@ export default function Component({ className = '' }: { className?: string }) {
                             </Button>
                         )}
                     </div>
-                    {renderBalance()}
+                    <Balance baseBalance={baseBalance} />
                     <hr />
-                    {renderBetSize()}
+                    <BetSize betSize={betSize} setBetSize={setBetSize} />
                     <hr />
-                    {ToggleComponent()}
+                    <ToggleHoldMouse toggleHoldMouse={toggleHoldMouse} toggleHoldMouseClick={toggleHoldMouseClick} />
                     <hr />
-                    {renderFreezeGame()}
+                    <FreezeGame freezeGame={freezeGame} freezeGameClick={freezeGameClick} />
                     <SidebarShell>
                         <AmountTilesShell
                             rows={rows}
