@@ -20,6 +20,8 @@ interface Cell {
     isRevealed: boolean;
 }
 
+const HOLD_MOUSE_DELAY = 1250;
+
 const initializeBoard = (rows: number, cols: number): Cell[][] => {
     const board: Cell[][] = [];
     for (let i = 0; i < rows; i++) {
@@ -205,6 +207,9 @@ export default function Minesweeper() {
             return;
         }
         setToggleHoldMouse(true);
+        if (!toggleHoldMouse) {
+            toast(`Holding mouse on ${row} ${col}`);
+        }
     };
 
     const handleMouseUp = () => {
@@ -215,7 +220,9 @@ export default function Minesweeper() {
         if (gameOver || !toggleHoldMouse) {
             return;
         }
-        handleCellClick(row, col);
+        setTimeout(() => {
+            handleCellClick(row, col);
+        }, HOLD_MOUSE_DELAY);
     };
     const toggleHoldMouseClick = () => {
         setToggleHoldMouse(prevToggleHoldMouse => !prevToggleHoldMouse);
@@ -286,15 +293,13 @@ export default function Minesweeper() {
             </div>
         </>
     );
-}
-
-function ResultsSidebar({reset, roundResults}: ResultsSidebarProps) {
+}function ResultsSidebar({ reset, roundResults }: ResultsSidebarProps) {
     const sessionStatistics = () => {
         const totalDeaths = roundResults.filter(result => result.timesDied > 0).length;
         const totalWins = roundResults.filter(result => result.timesDied === 0).length;
         const totalRounds = roundResults.length;
         const winPercentage = totalRounds > 0 ? (totalWins / totalRounds) * 100 : 0;
-        const avarageClicksPerRound = roundResults.reduce((acc, result) => acc + result.timesClicked, 0) / totalRounds;
+        const averageClicksPerRound = roundResults.reduce((acc, result) => acc + result.timesClicked, 0) / totalRounds;
         return (
             <Table>
                 <TableHeader className='mt-4 border-b' style={{ width: '100%' }}>
@@ -319,15 +324,17 @@ function ResultsSidebar({reset, roundResults}: ResultsSidebarProps) {
                             <TableCell>{result.timesClicked}</TableCell>
                             <TableCell>{result.rows} x {result.cols}</TableCell>
                             <TableCell>{result.bombs}</TableCell>
-                            <TableCell>{result.betSize}</TableCell> {/* Add this line */}
+                            <TableCell>{result.betSize}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
                 <TableFooter>
-                    <TableCell colSpan={2}>Total Deaths: {totalDeaths}</TableCell>
-                    <TableCell colSpan={2}>Total Wins: {totalWins}</TableCell>
+                    <TableCell colSpan={2}><div className='flex flex-col gap-0'>Total Deaths: {totalDeaths}
+                    Total Wins: {totalWins}
+                    </div></TableCell>
+                    <TableCell colSpan={2}></TableCell>
                     <TableCell colSpan={2}>Win Percentage: {winPercentage.toFixed(2)}%</TableCell>
-                    <TableCell colSpan={2}>You avarge died on the {avarageClicksPerRound}th click</TableCell>
+                    <TableCell colSpan={2}>Your average click is on the {averageClicksPerRound}th click</TableCell>
                 </TableFooter>
             </Table>
         );
@@ -369,7 +376,7 @@ function ResultsSidebar({reset, roundResults}: ResultsSidebarProps) {
                 </TableBody>
             </>
         );
-    }
+    };
 
     return (
         <Wrapper>
