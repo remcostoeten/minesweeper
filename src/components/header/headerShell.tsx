@@ -1,16 +1,12 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/DghsiuMyzDn
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
-import { AvatarImage, Avatar } from "@/components/ui/avatar"
+import { UserButton } from "@clerk/nextjs"
 
-export default function Component() {
+export default function HeaderShell() {
   return (
-    <header className="bg-[#4C0070] py-2">
+    <header className="">
       <div className="flex items-center justify-between max-w-7xl mx-auto px-4">
         <div className="flex items-center space-x-4">
           <Button className="bg-black text-white py-2 px-4 rounded flex items-center space-x-2">
@@ -32,7 +28,7 @@ export default function Component() {
         </div>
         <div className="flex items-center space-x-4">
           <Select>
-            <SelectTrigger id="currency">
+            <SelectTrigger className="bg-card border-outline" id="currency">
               <SelectValue placeholder="0.645688956" />
             </SelectTrigger>
             <SelectContent position="popper">
@@ -40,23 +36,21 @@ export default function Component() {
               <SelectItem value="eth">ETH</SelectItem>
             </SelectContent>
           </Select>
-          <Button className="bg-[#BD1E59] text-white py-2 px-4 rounded">Deposit</Button>
+          <Button className="bg-main text-white py-2 px-4 rounded">Deposit</Button>
+          </div>
           <div className="flex items-center space-x-1">
-            <Avatar>
-              <AvatarImage alt="User Avatar" src="/placeholder.svg?height=32&width=32" />
-            </Avatar>
-            <Select>
-              <SelectTrigger id="language">
-                <SelectValue placeholder="EN" />
+              <UserButton/>
+              <Select>
+              <SelectTrigger id="language" className="border-none">
+                <SelectValue placeholder=" EN " />
               </SelectTrigger>
               <SelectContent position="popper">
-                <SelectItem value="en">EN</SelectItem>
-                <SelectItem value="es">ES</SelectItem>
+                <SelectItem value="en">EN 🇺🇸</SelectItem>
+                <SelectItem value="es">ES 🇪🇸</SelectItem>
               </SelectContent>
             </Select>
           </div>
-        </div>
-      </div>
+          </div>
     </header>
   )
 }
