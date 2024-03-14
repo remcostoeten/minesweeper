@@ -26,6 +26,7 @@ const config = {
         'card-inner': 'var(--card-inner)',
         'main': 'var(--main)',
         'outline': 'var(--outline)',
+        'secondary': 'var(--secondary)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

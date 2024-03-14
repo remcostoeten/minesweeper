@@ -1,10 +1,9 @@
 import HeaderShell from "@/components/header/headerShell";
+import Setings from "@/components/layout/mainShell";
 import Sidebar from "@/components/sidebar/MainSidebar";
 
 export default function page() {
   return (<>
-  <HeaderShell/>
-        <Sidebar/>
     <div className='flex flex-col container mx-auto my-4'>
 
           <div className="w-full h-16 bg-body">body
@@ -18,7 +17,6 @@ export default function page() {
         </div>
         <div className="w-full h-16 bg-outline">outline
         </div>
-
 
     </div></>
   )
