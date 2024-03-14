@@ -1,48 +1,20 @@
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
 import { UserButton } from "@clerk/nextjs"
+import DisplayBalance from "../game-logic/displayBalance"
 
 export default function HeaderShell() {
   return (
-    <header className="">
+    <header className="py-4">
       <div className="flex items-center justify-between max-w-7xl mx-auto px-4">
         <div className="flex items-center space-x-4">
-          <Button className="bg-black text-white py-2 px-4 rounded flex items-center space-x-2">
-            <Dice1Icon className="h-6 w-6 text-white" />
-            <span>CASINO</span>
-          </Button>
-          <Button className="bg-black text-white py-2 px-4 rounded flex items-center space-x-2">
-            <GoalIcon className="h-6 w-6 text-white" />
-            <span>SPORTS</span>
-          </Button>
-          <div className="flex items-center bg-black text-white py-2 px-4 rounded">
-            <SearchIcon className="h-6 w-6 text-white" />
-            <Input
-              className="bg-transparent border-none text-white placeholder-white focus:ring-0"
-              placeholder="Search mine"
-              type="search"
-            />
-          </div>
-        </div>
-        <div className="flex items-center space-x-4">
-          <Select>
-            <SelectTrigger className="bg-card border-outline" id="currency">
-              <SelectValue placeholder="0.645688956" />
-            </SelectTrigger>
-            <SelectContent position="popper">
-              <SelectItem value="btc">BTC</SelectItem>
-              <SelectItem value="eth">ETH</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button className="bg-main text-white py-2 px-4 rounded">Deposit</Button>
+          <DisplayBalance/>
           </div>
           <div className="flex items-center space-x-1">
               <UserButton/>
               <Select>
               <SelectTrigger id="language" className="border-none">
-                <SelectValue placeholder=" EN " />
+                <SelectValue placeholder=" EN  🇺🇸" />
               </SelectTrigger>
               <SelectContent position="popper">
                 <SelectItem value="en">EN 🇺🇸</SelectItem>
