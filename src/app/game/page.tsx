@@ -1,7 +1,9 @@
+import HeaderShell from "@/components/header/headerShell";
 import Sidebar from "@/components/sidebar/MainSidebar";
 
 export default function page() {
   return (<>
+  <HeaderShell/>
         <Sidebar/>
     <div className='flex flex-col container mx-auto my-4'>
 
