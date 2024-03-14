@@ -27,6 +27,7 @@ const config = {
         'main': 'var(--main)',
         'outline': 'var(--outline)',
         'secondary': 'var(--secondary)',
+        'text': 'var(--text)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

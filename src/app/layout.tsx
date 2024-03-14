@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import '../styles/app.scss';
 import { Toaster } from "sonner";
 import ConvexClientProvider from "./ConvexClientProvider";
-import Image from "next/image";
+import Block from "@/components/Block";
+import YourBalance from "@/components/settings/balance";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,11 +23,12 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen bg-body text-white`}>
         <Toaster />
         <ConvexClientProvider>
-          <aside className='w-[40%] bg-card border-outline rounded-sm'>
+          <Block padding="4" className='w-[30%] gap-2 flex flex-col'>
             {selectMode()}
-          </aside>
+    <YourBalance />
+          </Block>
           <section>
-            {/* {children} */}
+            {children}
           </section>
         </ConvexClientProvider>
       </body>
@@ -35,18 +37,35 @@ export default function RootLayout({
 }
 
 
+type BtnProps = {
+  text: string;
+  onClick?: () => void;
+  bg?: string;
+};
 
 const selectMode = () => {
+  const Button = ({ text, onClick, bg = 'red-400' }: BtnProps) => {
+    return (
+      <button
+        onClick={onClick}
+        className={`bg-${bg} text-white w-full h-12 p-2 rounded-md border-outline`}
+      >
+        {text}
+      </button>
+    );
+  };
   return (
-    <div className="p-2 m-8 flex items-center justify-center bg-card-inner">
+    <div className="p-2 flex items-center justify-center bg-card-inner">
       <div className="flex gap-8 items-center justify-center w-full">
-        <div className="w-1/2">
-          <button className="bg-[#16171D] text-white w-full h-16 p-2 rounded-md border-white/90 bordder">Manual</button>
+        <div className="w-1/2 bg-[#161821]">
+        <Button text="Manual" />
         </div>
         <div className="w-1/2">
-        <button className="bg-transparent text-white w-full h-16 p-2 rounded-md border-outline/40">Automatic</button>
+        <Button bg="transparent" text="Easy" />
+
         </div>
       </div>
     </div>
   );
-}
+};
+

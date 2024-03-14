@@ -1,9 +1,10 @@
-import HeaderShell from "@/components/header/headerShell";
-import Setings from "@/components/layout/mainShell";
-import Sidebar from "@/components/sidebar/MainSidebar";
+import Block from "@/components/Block";
 
 export default function page() {
   return (<>
+  <Block>
+    dwdwd
+  </Block>
     <div className='flex flex-col container mx-auto my-4'>
 
           <div className="w-full h-16 bg-body">body
