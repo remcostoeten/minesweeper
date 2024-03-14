@@ -1,93 +1,145 @@
 'use client';
+import { Button } from '@/components/ui';
+import { Input } from '@/components/ui/input';
+import { useMutation } from 'convex/react';
 import React, { useState, useEffect } from 'react';
-import AddTodoForm from '../add';
-import EditTodoModal from '../edit';
-import { Todo } from '../todo';
+import { api } from '../../../../convex/_generated/api';
 
-const TODOS_KEY = 'todos';
+interface Todo {
+  id: number;
+  text: string;
+  description: string;
+}
 
-function HomePage() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editTodoId, setEditTodoId] = useState('');
+const TodoApp: React.FC = () => {
+    const createTodoMutation = useMutation(api.todo.createTodo)
+    const [todos, setTodos] = useState<Todo[]>([]);
+    const [inputValue, setInputValue] = useState<string>('');
+    const [descriptionValue, setDescriptionValue] = useState<string>('');
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editedText, setEditedText] = useState<string>('');
 
   useEffect(() => {
-    const storedTodos = localStorage.getItem(TODOS_KEY);
+    const storedTodos = localStorage.getItem('todos');
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(TODOS_KEY, JSON.stringify(todos));
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const handleAddTodo = (title: string, description?: string) => {
-    setTodos([
-      ...todos,
-      {
-        id: Math.random().toString(36).substring(2, 15),
-        title,
-        description,
-        completed: false,
-      },
-    ]);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
-  const handleToggleComplete = (id: string) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescriptionValue(event.target.value);
   };
 
-  const handleEdit = (id: string) => {
-    setEditTodoId(id);
-    setIsEditModalOpen(true);
+const handleAddTodo = async () => {
+    if (inputValue.trim() !== '') {
+        const newTodo: Todo = {
+            id: todos.length + 1,
+            text: inputValue.trim(),
+            description: descriptionValue,
+        };
+        setTodos([...todos, newTodo]);
+        setInputValue('');
+        setDescriptionValue('');
+        await createTodoMutation({ name: inputValue.trim(), description: descriptionValue });
+    }
+};
+
+  const handleEditInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedText(event.target.value);
   };
 
-  const handleDelete = (id: string) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+
+  const handleEditTodo = (id: number) => {
+    const todoToEdit = todos.find(todo => todo.id === id);
+    if (todoToEdit) {
+      setEditingId(id);
+      setEditedText(todoToEdit.text);
+    }
   };
 
-  const handleSave = (id: string, title: string, description?: string) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, title, description } : todo
-      )
-    );
-    setIsEditModalOpen(false);
+  const handleUpdateTodo = () => {
+    if (editedText.trim() !== '') {
+      setTodos(todos.map(todo =>
+        todo.id === editingId ? { ...todo, text: editedText.trim() } : todo
+      ));
+      setEditingId(null);
+      setEditedText('');
+    }
+  };
+
+  const handleDeleteTodo = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">My Todo List</h1>
-      <AddTodoForm onAddTodo={handleAddTodo} />
-      import { Todo } from '../todo'; // Import the Todo component
+      <h1 className="text-3xl font-bold mb-4">Todo App</h1>
+      <div className="flex mb-4">
+      <div className="flex flex-col gap-2">
+        <Input
+          type="text"
+          className="w-full mr-2 p-2 border border-gray-300 rounded"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <textarea className="bg-transparent w-full p-2 border border-gray-300 rounded" type='text' value={descriptionValue} onChange={handleDescriptionChange}></textarea>
 
-      {todos.length > 0 && (
-        <ul className="list-none">
-          {todos.map((todo) => (
-            <li key={todo.id} className="mb-2">
-              <Todo // Use the Todo component as a value
-                todo={todo}
-                onToggleComplete={() => handleToggleComplete(todo.id)}
-                onEdit={() => handleEdit(todo.id)}
-                onDelete={() => handleDelete(todo.id)}
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          onClick={handleAddTodo}
+        >
+          Add Todo
+        </button>
+        </div>
+        </div>
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id} className="flex items-center justify-between mb-2">
+            {editingId === todo.id ? (
+              <Input
+                type="text"
+                className="w-full mr-2 p-2 border border-gray-300 rounded"
+                value={editedText}
+                onChange={handleEditInputChange}
               />
-            </li>
-          ))}
-        </ul>
-      )}
-      <EditTodoModal
-        isOpen={isEditModalOpen}
-        todo={todos.find((todo) => todo.id === editTodoId) || { id: '', title: '', description: '', completed: false }}
-        onClose={() => setIsEditModalOpen(false)}
-        onSave={handleSave}
-      />
+            ) : (
+              todo.text
+            )}
+            <div>
+              <Button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded mr-2"
+                onClick={() => handleEditTodo(todo.id)}
+              >
+                Edit
+              </Button>
+              <Button
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                onClick={() => handleDeleteTodo(todo.id)}
+              >
+                Delete
+              </Button>
+              {editingId === todo.id && (
+                <button
+                  className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded ml-2"
+                  onClick={handleUpdateTodo}
+                >
+                  Update
+                </button>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
-export default HomePage;
+export default TodoApp;
