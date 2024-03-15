@@ -1,5 +1,4 @@
 'use client';
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import '../styles/app.scss';
 import { Toaster } from "sonner";
@@ -8,9 +7,11 @@ import Block from "@/components/Block";
 import BalanceBetSize from "@/components/settings/BalanceBetSize";
 import AmountTileShell from "@/components/settings/AmountTileShell";
 import { useState } from "react";
+import { Yt } from "@/components/settings/Icon";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// ToDo: Extract the layout to a separate file
 
 export default function RootLayout({
   children,
@@ -29,13 +30,15 @@ export default function RootLayout({
             {selectMode()}
             <BalanceBetSize />
             <AmountTileShell
-                rows={rows}
-                cols={cols}
-                bombs={bombs}
-                setRows={setRows}
-                setCols={setCols}
-                setBombs={setBombs}
-            />          </Block>
+              rows={rows}
+              cols={cols}
+              bombs={bombs}
+              setRows={setRows}
+              setCols={setCols}
+              setBombs={setBombs} />
+            <Yt className={undefined} color='red' />
+
+          </Block>
           <section>
             {children}
           </section>
