@@ -11,7 +11,7 @@ const BetBtn = ({ className, children, ...rest }: React.ButtonHTMLAttributes<HTM
     <Button className={`bg-transparent hover:bg-black/20 text-text border-outline ${className}`} {...rest}>{children}</Button>
 );
 
-export default function YourBalance(): JSX.Element {
+export default function BalanceBetSize(): JSX.Element {
 const balance = useQuery(api.balance.get);
 const [inputValue, setInputValue] = useState("0");
 const showBalance = balance?.[0]?.setBalance.toFixed(2);
@@ -65,10 +65,10 @@ return (
         </div>
 
         <div className="grid grid-cols-4 gap-1">
-            <BetBtn className="h-6 text-xs py-0 bg-red" onClick={() => handleButtonClick(0.1)}>+10%</BetBtn>
-            <BetBtn className="h-6 text-xs py-0 bg-green" onClick={() => handleButtonClick(0.5)}>+50%</BetBtn>
-            <BetBtn className="h-6 text-xs py-0 bg-blue" onClick={() => handleButtonClick(1)}>+100%</BetBtn>
-            <BetBtn className="h-6 text-xs py-0 bg-yellow" onClick={() => handleButtonClick(10)}>+1000%</BetBtn>
+            <BetBtn className="h-[50px] text-xs " onClick={() => handleButtonClick(0.1)}>+10%</BetBtn>
+            <BetBtn className="h-[50px] text-xs p" onClick={() => handleButtonClick(0.5)}>+50%</BetBtn>
+            <BetBtn className="h-[50px] text-xs p"onClick={() => handleButtonClick(1)}>+100%</BetBtn>
+            <BetBtn className="h-[50px] text-xs py" onClick={() => handleButtonClick(10)}>+1000%</BetBtn>
         </div>
     </div>
 );
