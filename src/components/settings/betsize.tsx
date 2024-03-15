@@ -1,5 +1,5 @@
 'use client';
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Button, Input } from "../ui";
 
@@ -7,15 +7,38 @@ const CustomButton = ({ className, children }) => (
     <Button className={`bg-transparent hover:bg-black/20 text-text border-outline ${className}`}>{children}</Button>
 );
 
-export default function YourBalance(): JSX.Element {
-    const balance = useQuery(api.balance.get);
-    return (
-        <div className="flex flex-col justify-center">
-            <div className="flex items-center justify-between w-full">
-                <span className="text-md text-text">Your balance</span>
-                <span className="text-md text-text">{balance?.[0]?.setBalance.toFixed(2)}</span>
-            </div>
+export default function BetSize(): JSX.Element {
+    const createBetsizeMutation = useMutation(api.balance.setBalance)
 
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault()
+
+        // Access the form data
+        const formData = new FormData(event.target as HTMLFormElement)
+        const name = formData.get('name') as string
+
+        // Perform any necessary data processing or validation
+
+        // Submit the data
+        await createBetsizeMutation({
+            name: name,
+        })
+    }
+    const form = (
+        <form onSubmit={handleSubmit}>
+            <label>
+                Name:
+                <input name='name' type="text" />
+            </label>
+            <button type="submit">Submit</button>
+        </form>
+    )
+
+    return (
+        <>
+            <div>
+                {form}
+            </div>
             <div className="flex justify-between items-center mb-4">
                 <div className="relative w-full">
                     <input placeholder="Your bet" className="bg-transparent w-full focus:border-outline/20 p-4 placeholder::text-red-400/40 border-outline h-10" />
@@ -25,14 +48,12 @@ export default function YourBalance(): JSX.Element {
                         <CustomButton className="text-xs h-6 px-2">MAX</CustomButton>
                     </div>
                 </div>
-            </div>
-
-            <div className="grid grid-cols-4 gap-1">
+            </div><div className="grid grid-cols-4 gap-1">
                 <CustomButton className="h-6 text-xs py-0" style={{ backgroundColor: 'red' }}>+10%</CustomButton>
                 <CustomButton className="h-6 text-xs py-0" style={{ backgroundColor: 'green' }}>+50%</CustomButton>
                 <CustomButton className="h-6 text-xs py-0" style={{ backgroundColor: 'blue' }}>+100%</CustomButton>
                 <CustomButton className="h-6 text-xs py-0" style={{ backgroundColor: 'yellow' }}>+1000%</CustomButton>
-            </div>
-        </div>
+            </div></>
+        </div >
     );
 }
