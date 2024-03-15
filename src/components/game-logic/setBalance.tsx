@@ -1,11 +1,9 @@
+   "use client"
 import { useMutation } from 'convex/react'
-import React from 'react'
-import { api } from '../../../../convex/_generated/api'
-import { createFile } from '@/core/mutations/demo'
-
-export default function MutExample() {
+import React, { useState } from 'react'
+export default function setBalance() {
     const createFileMutation = useMutation(api.balance.setBalance)
-    const [name, setName] = React.useState('')
+    const [balance, setBalance] = useState('')
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
@@ -35,7 +33,7 @@ export default function MutExample() {
     return (
         <div>
             {form}
-            <button onClick={handleClick}>create file</button>
+            {/* <button onClick={handleClick}>create file</button> */}
         </div>
     )
 }

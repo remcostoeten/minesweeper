@@ -10,7 +10,7 @@ import Wrapper from './Wrapper';
 import { Button } from '../ui';
 import StatisticTabs from '../statistics/StatisticTabs';
 import { ResultsSidebarProps } from '@/core/types';
-import Balance from '../game-logic/balance';
+import Balance from '../game-logic/displayBalance';
 import BetSize from '../game-logic/betSize';
 import FreezeGame from '../game-logic/freezeGame';
 import ToggleHoldMouse from '../game-logic/toggleHoldMouse';
