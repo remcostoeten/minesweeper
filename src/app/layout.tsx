@@ -8,9 +8,8 @@ import { Toaster } from 'sonner';
 import { TailwindIndicator } from '@/components/core/TailwindIndicator';
 import Sidebar from './__layout';
 import { Inter } from "next/font/google";
-import AmountTileShell from '@/components/shells/AmountTilesShell';
-import BalanceBetSize from '@/components/settings/BalanceBetSize';
 import { useState } from 'react';
+import HeaderShell from '@/components/header/headerShell';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,9 +27,8 @@ export default function RootLayout({children}) {
             <></>
           </Aside>
       <div className='w-full gap-4 flex flex-col'>
-        <header className='h-14 w-full bg-card  '>
-    header
-        </header>
+         <HeaderShell />
+
         <Flexer height='h-44' gap='4'>
           <Section>
             <GameControl />

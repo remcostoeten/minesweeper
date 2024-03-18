@@ -2,14 +2,12 @@
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
 import { UserButton } from "@clerk/nextjs"
 import DisplayBalance from "../game-logic/displayBalance"
+import Block from "../Block"
 
 export default function HeaderShell() {
   return (
-    <header className="py-4">
-      <div className="flex items-center justify-between max-w-7xl mx-auto px-4">
-        <div className="flex items-center space-x-4">
+    <Block className='h-14 w-full bg-card justify-between items-center !flex-row ' as="header">
           <DisplayBalance/>
-          </div>
           <div className="flex items-center space-x-1">
               <UserButton/>
               <Select>
@@ -22,8 +20,7 @@ export default function HeaderShell() {
               </SelectContent>
             </Select>
           </div>
-          </div>
-    </header>
+    </Block>
   )
 }
 
