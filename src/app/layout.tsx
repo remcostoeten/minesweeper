@@ -1,3 +1,4 @@
+'use client';
 import Flexer from '@/components/core/Flexer';
 import '../styles/app.scss';
 
@@ -7,18 +8,25 @@ import { Toaster } from 'sonner';
 import { TailwindIndicator } from '@/components/core/TailwindIndicator';
 import Sidebar from './__layout';
 import { Inter } from "next/font/google";
+import AmountTileShell from '@/components/shells/AmountTilesShell';
+import BalanceBetSize from '@/components/settings/BalanceBetSize';
+import { useState } from 'react';
 
 const inter = Inter({ subsets: ["latin"] });
 
 
 export default function RootLayout({children}) {
+  const [rows, setRows] = useState(3);
+  const [cols, setCols] = useState(3);
+  const [bombs, setBombs] = useState(1);
   return (
-    <Body>
-      <ConvexClientProvider>
-
-      <Aside>
-        <></>
-      </Aside>
+    <html lang="en">
+      <Body>
+        <Toaster />
+        <ConvexClientProvider>
+          <Aside>
+            <></>
+          </Aside>
       <div className='w-full gap-4 flex flex-col'>
         <header className='h-14 w-full bg-card  '>
     header
@@ -32,8 +40,9 @@ export default function RootLayout({children}) {
           </Main>
         </Flexer>
       </div>
-      </ConvexClientProvider>
-    </Body>
+        </ConvexClientProvider>
+      </Body>
+    </html>
   );
 }
 
