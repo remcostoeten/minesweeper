@@ -1,66 +1,64 @@
-import { TailwindIndicator } from "@/components/core/TailwindIndicator"
-import { Toaster } from "sonner"
-import ConvexClientProvider from "./ConvexClientProvider"
-import '../styles/app.scss'
+import Flexer from '@/components/core/Flexer';
+import '../styles/app.scss';
 
-import { Button } from "@/components/ui/button"
-import { Tabs } from "@/components/ui/tabs"
-import Block from "@/components/Block"
+import Block from "@/components/Block";
 
 const THEME_STYLES = {
   radius: 'rounded-md'
-}
+};
 
 export default function Component() {
   return (
     <Body>
       <Aside>
-<></>      </Aside>
-      <Section>
-        <GameControl />
-        <GameStats />
-      </Section>
-      <Main>
-        <GameVisualization />
-      </Main>
+        <></>
+      </Aside>
+      <div className='w-full gap-4 flex flex-col'>
+        <header className='h-14 w-full bg-card  '>
+    header
+        </header>
+        <Flexer height='h-44' gap='4'>
+          <Section>
+            <GameControl />
+          </Section>
+          <Main>
+            <GameVisualization />
+          </Main>
+        </Flexer>
+      </div>
     </Body>
-  )
+  );
 }
 
 function Body({ children }) {
   return (
-    <body className="flex h-screen gap-4 bg-body text-white">
+    <body className="flex h-screen gap-4 pt-4 pl-4 bg-body text-white">
       {children}
     </body>
-  )
+  );
 }
 
 function Aside({ children }) {
   return (
-    <Block width='1/5' as="aside" >
+    <Block width="1/6" as="aside" >
       <div className="space-y-4">
         {children}
       </div>
     </Block>
-  )
+  );
 }
 
 function Section({ children }) {
   return (
-    <Block width='1/3' as="section" >
+    <Block width='1/3' height='fit' as="section" >
       {children}
     </Block>
-  )
+  );
 }
 
 function GameControl() {
   // Add your game control logic here
-  return <div>Game Control</div>
-}
-
-function GameStats() {
-  // Add your game stats logic here
-  return <div>Game Stats</div>
+  return <div>Game Control</div>;
 }
 
 function Main({ children }) {
@@ -68,14 +66,13 @@ function Main({ children }) {
     <Block width="full" as="main" >
       {children}
     </Block>
-  )
+  );
 }
 
 function GameVisualization() {
   // Add your game visualization logic here
-  return <div>Game Visualization</div>
+  return <div>Game Visualization</div>;
 }
-
 
 function ClubIcon(props) {
   return (
@@ -94,9 +91,8 @@ function ClubIcon(props) {
       <path d="M17.28 9.05a5.5 5.5 0 1 0-10.56 0A5.5 5.5 0 1 0 12 17.66a5.5 5.5 0 1 0 5.28-8.6Z" />
       <path d="M12 17.66L12 22" />
     </svg>
-  )
+  );
 }
-
 
 function HotelIcon(props) {
   return (
@@ -122,5 +118,5 @@ function HotelIcon(props) {
       <path d="M8 11h.01" />
       <path d="M10 22v-6.5m4 0V22" />
     </svg>
-  )
+  );
 }
