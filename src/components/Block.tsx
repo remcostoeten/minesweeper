@@ -11,7 +11,7 @@ type BlockProps = {
         padding?: string;
         bg?: string;
         margin?: string;
-        width?: string | '[30%]' | '1/3' | 'fit'| 'full'| '1/6';
+        width?: string | '[30%]' | '1/3' | 'fit'| 'full'| '1/6' | '28';
         className?: string;
         children: React.ReactNode;
         direction?: 'col' | 'row';

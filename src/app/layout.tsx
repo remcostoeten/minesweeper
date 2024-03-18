@@ -40,7 +40,7 @@ function Body({ children }) {
 
 function Aside({ children }) {
   return (
-    <Block width="1/6" as="aside" >
+    <Block className='w-28'  as="aside" >
       <div className="space-y-4">
         {children}
       </div>
