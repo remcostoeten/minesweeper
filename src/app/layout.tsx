@@ -1,83 +1,126 @@
-'use client';
-import { Inter } from "next/font/google";
-import '../styles/app.scss';
-import { Toaster } from "sonner";
-import ConvexClientProvider from "./ConvexClientProvider";
-import Block from "@/components/Block";
-import BalanceBetSize from "@/components/settings/BalanceBetSize";
-import AmountTileShell from "@/components/settings/AmountTileShell";
-import { useState } from "react";
-import Flexer from "@/components/layout/Flexer";
+import { TailwindIndicator } from "@/components/core/TailwindIndicator"
+import { Toaster } from "sonner"
+import ConvexClientProvider from "./ConvexClientProvider"
+import '../styles/app.scss'
 
-const inter = Inter({ subsets: ["latin"] });
+import { Button } from "@/components/ui/button"
+import { Tabs } from "@/components/ui/tabs"
+import Block from "@/components/Block"
 
-// ToDo: Extract the layout to a separate file
+const THEME_STYLES = {
+  radius: 'rounded-md'
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const [rows, setRows] = useState(3);
-  const [cols, setCols] = useState(3);
-  const [bombs, setBombs] = useState(1);
+export default function Component() {
   return (
-    <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-body text-white`}>
-        <Toaster />
-        <ConvexClientProvider>
-        <Block
-  padding="4"
-  className='gap-2 flex flex-col'
->            {selectMode()}
-            <BalanceBetSize />
-            <AmountTileShell
-              rows={rows}
-              cols={cols}
-              bombs={bombs}
-              setRows={setRows}
-              setCols={setCols}
-              setBombs={setBombs} />
-          </Block>
-          <section>
-            {children}
-          </section>
-        </ConvexClientProvider>
-      </body>
-    </html>
-  );
+    <Body>
+      <Aside>
+<></>      </Aside>
+      <Section>
+        <GameControl />
+        <GameStats />
+      </Section>
+      <Main>
+        <GameVisualization />
+      </Main>
+    </Body>
+  )
+}
+
+function Body({ children }) {
+  return (
+    <body className="flex h-screen gap-4 bg-body text-white">
+      {children}
+    </body>
+  )
+}
+
+function Aside({ children }) {
+  return (
+    <Block width='1/5' as="aside" >
+      <div className="space-y-4">
+        {children}
+      </div>
+    </Block>
+  )
+}
+
+function Section({ children }) {
+  return (
+    <Block width='1/3' as="section" >
+      {children}
+    </Block>
+  )
+}
+
+function GameControl() {
+  // Add your game control logic here
+  return <div>Game Control</div>
+}
+
+function GameStats() {
+  // Add your game stats logic here
+  return <div>Game Stats</div>
+}
+
+function Main({ children }) {
+  return (
+    <Block width="full" as="main" >
+      {children}
+    </Block>
+  )
+}
+
+function GameVisualization() {
+  // Add your game visualization logic here
+  return <div>Game Visualization</div>
 }
 
 
-type BtnProps = {
-  text: string;
-  onClick?: () => void;
-  bg?: string;
-};
-
-const selectMode = () => {
-  const Button = ({ text, onClick, bg = 'red-400' }: BtnProps) => {
-    return (
-      <button
-        onClick={onClick}
-        className={`bg-${bg} text-white w-full h-12 p-2 rounded-md border-outline`}
-      >
-        {text}
-      </button>
-    );
-  };
+function ClubIcon(props) {
   return (
-    <div className="p-2 flex items-center justify-center bg-card-inner">
-      <Flexer direction="column" align="center" >
-        <div className="w-1/2 bg-[#161821]">
-          <Button text="Manual" />
-        </div>
-        <div className="w-1/2">
-          <Button bg="transparent" text="Easy" />
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M17.28 9.05a5.5 5.5 0 1 0-10.56 0A5.5 5.5 0 1 0 12 17.66a5.5 5.5 0 1 0 5.28-8.6Z" />
+      <path d="M12 17.66L12 22" />
+    </svg>
+  )
+}
 
-        </div>
-      </Flexer>
-    </div>
-  );
-};
 
+function HotelIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2Z" />
+      <path d="m9 16 .348-.24c1.465-1.013 3.84-1.013 5.304 0L15 16" />
+      <path d="M8 7h.01" />
+      <path d="M16 7h.01" />
+      <path d="M12 7h.01" />
+      <path d="M12 11h.01" />
+      <path d="M16 11h.01" />
+      <path d="M8 11h.01" />
+      <path d="M10 22v-6.5m4 0V22" />
+    </svg>
+  )
+}
