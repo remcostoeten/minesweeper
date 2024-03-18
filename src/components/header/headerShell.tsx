@@ -6,7 +6,7 @@ import Block from "../Block"
 
 export default function HeaderShell() {
   return (
-    <Block className='h-14 w-full bg-card justify-between items-center !flex-row ' as="header">
+    <Block padding="4" className='h-14 w-full bg-card justify-between items-center !flex-row ' as="header">
           <DisplayBalance/>
           <div className="flex items-center space-x-1">
               <UserButton/>

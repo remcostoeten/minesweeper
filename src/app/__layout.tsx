@@ -42,14 +42,15 @@ type BtnProps = {
   text: string;
   onClick?: () => void;
   bg?: string;
+  border?: boolean; // Added 'border' property to the BtnProps type
 };
 
 const selectMode = () => {
-  const Button = ({ text, onClick, bg = 'red-400' }: BtnProps) => {
+  const Button = ({ text, onClick, bg = 'red-400' }: BtnProps) => { // Removed 'border' property from the Button component
     return (
       <button
         onClick={onClick}
-        className={`bg-${bg} text-white w-full h-12 p-2 rounded-md border-outline`}
+        className={`bg-${bg} text-white w-full h-12 p-2 rounded-md`}
       >
         {text}
       </button>
@@ -62,11 +63,9 @@ const selectMode = () => {
           <Button text="Manual" />
         </div>
         <div className="w-1/2">
-          <Button bg="transparent" text="Easy" />
-
+          <Button bg="transparent" text="Easy" /> {/* Removed 'border' prop */}
         </div>
       </Flexer>
     </div><TailwindIndicator /></>
   );
 };
-
