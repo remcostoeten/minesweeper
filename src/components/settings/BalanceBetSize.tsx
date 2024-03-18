@@ -44,7 +44,7 @@ return (
     <div className="flex flex-col justify-center">
         <div className="flex items-center justify-between w-full">
             <span className="text-md text-text">Your balance</span>
-            <span className="text-md text-text">{showBalance}</span>
+            <span className="text-md text-text">€ {showBalance}</span>
         </div>
         <div className="flex justify-between items-center mb-4">
             <div className="relative w-full">

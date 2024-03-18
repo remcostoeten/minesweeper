@@ -7,7 +7,7 @@ import Block from "@/components/Block";
 import BalanceBetSize from "@/components/settings/BalanceBetSize";
 import AmountTileShell from "@/components/settings/AmountTileShell";
 import { useState } from "react";
-import { Yt } from "@/components/settings/Icon";
+import Flexer from "@/components/layout/Flexer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,8 +26,10 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen bg-body text-white`}>
         <Toaster />
         <ConvexClientProvider>
-          <Block padding="4" className='w-[30%] gap-2 flex flex-col'>
-            {selectMode()}
+        <Block
+  padding="4"
+  className='gap-2 flex flex-col'
+>            {selectMode()}
             <BalanceBetSize />
             <AmountTileShell
               rows={rows}
@@ -36,8 +38,6 @@ export default function RootLayout({
               setRows={setRows}
               setCols={setCols}
               setBombs={setBombs} />
-            <Yt className={undefined} color='red' />
-
           </Block>
           <section>
             {children}
@@ -68,7 +68,7 @@ const selectMode = () => {
   };
   return (
     <div className="p-2 flex items-center justify-center bg-card-inner">
-      <div className="flex gap-8 items-center justify-center w-full">
+      <Flexer direction="column" align="center" >
         <div className="w-1/2 bg-[#161821]">
           <Button text="Manual" />
         </div>
@@ -76,7 +76,7 @@ const selectMode = () => {
           <Button bg="transparent" text="Easy" />
 
         </div>
-      </div>
+      </Flexer>
     </div>
   );
 };

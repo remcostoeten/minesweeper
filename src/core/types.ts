@@ -11,3 +11,11 @@ export  type ResultsSidebarProps = {
         betSize: number;
     }>;
 };
+
+export type ResponsiveProps = {
+    xs?: string;
+    sm?: string;
+    md?: string;
+    lg?: string;
+    xl?: string;
+  };
