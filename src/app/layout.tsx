@@ -2,14 +2,20 @@ import Flexer from '@/components/core/Flexer';
 import '../styles/app.scss';
 
 import Block from "@/components/Block";
+import ConvexClientProvider from './ConvexClientProvider';
+import { Toaster } from 'sonner';
+import { TailwindIndicator } from '@/components/core/TailwindIndicator';
+import Sidebar from './__layout';
+import { Inter } from "next/font/google";
 
-const THEME_STYLES = {
-  radius: 'rounded-md'
-};
+const inter = Inter({ subsets: ["latin"] });
 
-export default function Component() {
+
+export default function RootLayout({children}) {
   return (
     <Body>
+      <ConvexClientProvider>
+
       <Aside>
         <></>
       </Aside>
@@ -22,21 +28,28 @@ export default function Component() {
             <GameControl />
           </Section>
           <Main>
-            <GameVisualization />
+            {children}
           </Main>
         </Flexer>
       </div>
+      </ConvexClientProvider>
     </Body>
   );
 }
 
 function Body({ children }) {
   return (
-    <body className="flex h-screen gap-4 pt-4 pl-4 bg-body text-white">
-      {children}
-    </body>
+    <>
+        <body className="flex h-screen gap-4 pt-4 pl-4 bg-body text-white">
+          {children}
+          <TailwindIndicator />
+          <Toaster />
+        </body>
+    </>
   );
 }
+
+
 
 function Aside({ children }) {
   return (
@@ -57,8 +70,8 @@ function Section({ children }) {
 }
 
 function GameControl() {
-  // Add your game control logic here
-  return <div>Game Control</div>;
+  return <Sidebar />
+  ;
 }
 
 function Main({ children }) {

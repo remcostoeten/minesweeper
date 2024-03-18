@@ -14,19 +14,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 // ToDo: Extract the layout to a separate file
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Sidebar({}) {
   const [rows, setRows] = useState(3);
   const [cols, setCols] = useState(3);
   const [bombs, setBombs] = useState(1);
   return (
-    <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-body text-white`}>
-        <Toaster />
-        <ConvexClientProvider>
+
         <Block
   padding="4"
   className='gap-2 flex flex-col'
@@ -40,12 +33,7 @@ export default function RootLayout({
               setCols={setCols}
               setBombs={setBombs} />
           </Block>
-          <section>
-            {children}
-          </section>
-        </ConvexClientProvider>
-      </body>
-    </html>
+
   );
 }
 
