@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { CheckIcon, Cross2Icon, ResetIcon } from '@radix-ui/react-icons';
@@ -11,8 +12,12 @@ import SelectMode from '../settings/SelectGameMode';
 import BalanceBetSize from '../settings/BalanceBetSize';
 import BalanceDisplay from './BalanceDisplay';
 import StatisticTabs from '../statistics/StatisticTabs';
-import ResultsSidebar from './ResultsSidebar';
 import { Button } from '../ui';
+import { ResultsSidebarProps } from '@/core/types';
+import BetSize from '../game-logic/betSize';
+import FreezeGame from '../game-logic/freezeGame';
+import ToggleHoldMouse from '../game-logic/toggleHoldMouse';
+import { Table, TableHeader, TableCell, TableBody, TableRow, TableFooter } from '../ui/table';
 
 interface Cell {
     isBomb: boolean;
@@ -271,3 +276,98 @@ const Minesweeper: React.FC = () => {
 };
 
 export default Minesweeper;
+
+function ResultsSidebar({ reset, roundResults }: ResultsSidebarProps) {
+    const sessionStatistics = () => {
+        const totalDeaths = roundResults.filter(result => result.timesDied > 0).length;
+        const totalWins = roundResults.filter(result => result.timesDied === 0).length;
+        const totalRounds = roundResults.length;
+        const winPercentage = totalRounds > 0 ? (totalWins / totalRounds) * 100 : 0;
+        const averageClicksPerRound = roundResults.reduce((acc, result) => acc + result.timesClicked, 0) / totalRounds;
+        return (
+            <Table>
+                <TableHeader className='mt-4 border-b' style={{ width: '100%' }}>
+                    <TableCell>Result</TableCell>
+                    <TableCell>Round</TableCell>
+                    <TableCell>Clicks</TableCell>
+                    <TableCell>Rows/Cols</TableCell>
+                    <TableCell>Bombs</TableCell>
+                    <TableCell>Bet size</TableCell>
+                </TableHeader>
+                <TableBody>
+                    {roundResults.map((result, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
+                                {result.timesDied === 0 ? (
+                                    <CheckIcon color="green" />
+                                ) : (
+                                    <Cross2Icon color="red" />
+                                )}
+                            </TableCell>
+                            <TableCell>{result.round}</TableCell>
+                            <TableCell>{result.timesClicked}</TableCell>
+                            <TableCell>{result.rows} x {result.cols}</TableCell>
+                            <TableCell>{result.bombs}</TableCell>
+                            <TableCell>{result.betSize}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableCell colSpan={2}><div className='flex flex-col gap-0'>Total Deaths: {totalDeaths}
+                    Total Wins: {totalWins}
+                    </div></TableCell>
+                    <TableCell colSpan={2}></TableCell>
+                    <TableCell colSpan={2}>Win Percentage: {winPercentage.toFixed(2)}%</TableCell>
+                    <TableCell colSpan={2}>Your average click is on the {averageClicksPerRound}th click</TableCell>
+                </TableFooter>
+            </Table>
+        );
+    };
+
+    const globalStatistics = () => {
+        return (
+            <>
+                <TableHeader className='mt-4 border-b'>
+                    <h2>Todo store data</h2>
+                    <TableCell>Round</TableCell>
+                    <TableCell>Times Died</TableCell>
+                    <TableCell>Times Clicked</TableCell>
+                    <TableCell>Rows</TableCell>
+                    <TableCell>Columns</TableCell>
+                    <TableCell>Bombs</TableCell>
+                    <TableCell>Result</TableCell>
+                    <TableCell>Bet size</TableCell> {/* Add this line */}
+                </TableHeader>
+                <TableBody>
+                    {roundResults.map((result, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
+                                {result.timesDied === 0 ? (
+                                    <CheckIcon color="green" />
+                                ) : (
+                                    <Cross2Icon color="red" />
+                                )}
+                            </TableCell>
+                            <TableCell>{result.round}</TableCell>
+                            <TableCell>{result.timesDied}</TableCell>
+                            <TableCell>{result.timesClicked}</TableCell>
+                            <TableCell>{result.rows}</TableCell>
+                            <TableCell>{result.cols}</TableCell>
+                            <TableCell>{result.bombs}</TableCell>
+                            <TableCell>{result.betSize}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </>
+        );
+    };
+
+    return (
+        <Wrapper>
+            <StatisticTabs triggerOne='Session statistics' triggerTwo='Global Statistics' contentTwo={globalStatistics()} contentOne={<Table>
+                <ResetIcon height={30} width={30} className='absolute top-12 right-4' onClick={reset} />
+                {sessionStatistics()}
+            </Table>} />
+        </Wrapper>
+    );
+}
