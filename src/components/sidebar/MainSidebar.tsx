@@ -43,7 +43,7 @@ const footerLinks: FooterLinkProps[] = [
   { icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/3a8d29fbc3c50bd97a0728fe6dd3bbfd9d2f13c70ae441ddf2c171c7d8d9fb88?apiKey=2a72745ec00444ad9fe2bd2391d98932&", label: "About Us" },
 ];
 
-const Sidebar: React.FC = () => {
+const NavSidebar: React.FC = () => {
   return (
     <aside className="flex flex-col justify-between p-4 text-base font-medium leading-6 text-white bg-card max-w-[307px] border-outline">
       <div className="flex gap-3">
@@ -67,4 +67,4 @@ const Sidebar: React.FC = () => {
   );
 };
 
-export default Sidebar;
+export default NavSidebar;

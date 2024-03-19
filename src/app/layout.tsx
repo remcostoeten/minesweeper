@@ -10,6 +10,7 @@ import { Inter } from "next/font/google";
 import { useState } from 'react';
 import HeaderShell from '@/components/header/headerShell';
 import Sidebar from '@/components/sidebar/MainSidebar';
+import NavSidebar from '@/components/sidebar/MainSidebar';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,7 @@ export default function RootLayout({children}) {
         <Toaster />
         <ConvexClientProvider>
           <Aside>
-            <></>
+        <NavSidebar/>
           </Aside>
       <div className='w-full gap-4 flex flex-col'>
          <HeaderShell />
@@ -60,10 +61,8 @@ function Body({ children }) {
 
 function Aside({ children }) {
   return (
-    <Block className='w-28'  as="aside" >
-      <div className="space-y-4">
+    <Block className='w-28 hidden xl:block overflow-hidden'  as="aside" >
         {children}
-      </div>
     </Block>
   );
 }
