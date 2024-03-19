@@ -14,21 +14,22 @@ const BetBtn = ({ className, children, ...rest }: React.ButtonHTMLAttributes<HTM
 export default function BalanceBetSize(): JSX.Element {
 const balance = useQuery(api.balance.get);
 const [inputValue, setInputValue] = useState("0");
-const showBalance = balance?.[0]?.setBalance.toFixed(2);
+const showBalance = balance?.[balance.length - 1]?.setBalance.toFixed(2);
 
 const handleChange = (event: { target: { value: string; }; }) => {
     const newValue = event.target.value;
     setInputValue(newValue);
-    if (parseFloat(newValue) > balance?.[0]?.setBalance) {
+    const newBet = parseFloat(newValue);
+    if (newBet > balance?.[0]?.setBalance) {
         setInputValue(balance?.[0]?.setBalance.toFixed(2).toString());
-        toast("Your bet is above your balance   ")
+        toast("Your bet is above your balance");
     }
 };
 
 const handleButtonClick = (modifier: number) => {
     let newValue = parseFloat(inputValue);
     newValue = Math.max(newValue + newValue * modifier, 0);
-    if (newValue > balance?.[0]?.setBalance) {
+    if (newValue > showBalance) {
         toast("You don't have enough balance to make this bet.  ");
         newValue = balance?.[0]?.setBalance;
     }
@@ -36,7 +37,7 @@ const handleButtonClick = (modifier: number) => {
 };
 
 const handleMaxClick = () => {
-    setInputValue(balance?.[0]?.setBalance.toFixed(2).toString());
+    setInputValue(showBalance);
 }
 
 
@@ -44,7 +45,7 @@ return (
     <div className="flex flex-col justify-center">
         <div className="flex items-center justify-between w-full">
             <span className="text-md text-text">Your balance</span>
-            <span className="text-md text-text">{showBalance}</span>
+            <span className="text-md text-text">€ {showBalance}</span>
         </div>
         <div className="flex justify-between items-center mb-4">
             <div className="relative w-full">

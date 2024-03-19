@@ -20,6 +20,9 @@ const config = {
       },
     },
     extend: {
+      width: {
+        30: "30%",
+      },
       colors: {
         'body': 'var(--body)',
         'card': 'var(--card)',
