@@ -1,24 +1,18 @@
-'use client';
-import { useState } from 'react';
-import AmountTilesShell from './AmountTilesShell';
-import SidebarShell from './SidebarShell';
-import GameShell from './GameShell';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { CheckIcon, Cross2Icon, ResetIcon } from '@radix-ui/react-icons';
-import { Table, TableHeader, TableCell, TableBody, TableRow, TableFooter } from '../ui/table';
+import { useRevealAll } from '@/core/base-game-logic';
+import SidebarShell from './SidebarShell';
+import GameShell from './GameShell';
+import AmountTilesShell from './AmountTilesShell';
 import Wrapper from './Wrapper';
-import { Button } from '../ui';
-import StatisticTabs from '../statistics/StatisticTabs';
-import { ResultsSidebarProps } from '@/core/types';
-import Balance from '../game-logic/displayBalance';
-import BetSize from '../game-logic/betSize';
-import FreezeGame from '../game-logic/freezeGame';
-import ToggleHoldMouse from '../game-logic/toggleHoldMouse';
 import Flexer from '../core/Flexer';
 import SelectMode from '../settings/SelectGameMode';
 import BalanceBetSize from '../settings/BalanceBetSize';
 import BalanceDisplay from './BalanceDisplay';
-import { revealAll } from '@/core/base-game-logic';
+import StatisticTabs from '../statistics/StatisticTabs';
+import ResultsSidebar from './ResultsSidebar';
+import { Button } from '../ui';
 
 interface Cell {
     isBomb: boolean;
@@ -32,7 +26,7 @@ const initializeBoard = (rows: number, cols: number): Cell[][] => {
     for (let i = 0; i < rows; i++) {
         board[i] = [];
         for (let j = 0; j < cols; j++) {
-            board[i][j] = { isBomb: false, isRevealed: false, };
+            board[i][j] = { isBomb: false, isRevealed: false };
         }
     }
     return board;
@@ -51,13 +45,12 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
     return board;
 };
 
-export default function Minesweeper() {
+const Minesweeper: React.FC = () => {
     const [rows, setRows] = useState<number>(5);
     const [cols, setCols] = useState<number>(5);
     const [bombs, setBombs] = useState<number>(3);
-    const [openedTilesCount, setOpenedTilesCount] = useState(0);
+    const [openedTilesCount, setOpenedTilesCount] = useState<number>(0);
     const [timesClicked, setTimesClicked] = useState<number>(0);
-    const [board, setBoard] = useState<Cell[][]>(initializeBoard(rows, cols));
     const [profitTaken, setProfitTaken] = useState<boolean>(false);
     const [gameOver, setGameOver] = useState<boolean>(false);
     const [numDeaths, setNumDeaths] = useState<number>(0);
@@ -77,11 +70,11 @@ export default function Minesweeper() {
             betSize: number;
         }>
     >([]);
+    const { board, setBoard, revealAll } = useRevealAll(initializeBoard(rows, cols));
 
     const freezeGameClick = () => {
         setFreezeGame((prevFreezeGame) => !prevFreezeGame);
     };
-
 
     const clearAll = () => {
         setRoundResults([]);
@@ -98,14 +91,12 @@ export default function Minesweeper() {
         setBaseBalance((prevBalance) => prevBalance - betSize);
     };
 
-    let newBoard = initializeBoard(rows, cols);
-
     const takeProfit = () => {
         setRoundResults((prevResults) => [
             ...prevResults,
             { round: roundResults.length + 1, timesDied: numDeaths, timesClicked, rows, cols, bombs, betSize },
         ]);
-        toast('succesfully cashed out');
+        toast('successfully cashed out');
         setProfitTaken(true);
         revealAll();
         setBaseBalance((prevBalance) => prevBalance + betSize);
@@ -115,21 +106,17 @@ export default function Minesweeper() {
         setBaseBalance((prevBalance) => prevBalance - betSize);
         if (gameOver) {
             setTimeout(() => {
-                newBoard = newBoard.map((row) =>
-                    row.map((cell) => ({ ...cell, isRevealed: false }))
-                );
+                const newBoard = initializeBoard(rows, cols);
+                setBoard(placeBombs(newBoard, bombs));
+                setOpenedTilesCount(0);
+                setTimesClicked(0);
+                setGameOver(false);
+                setNumDeaths(0);
+                setProfitTaken(false);
                 setBoard(newBoard);
             }, 2000);
         }
-        setBoard(placeBombs(newBoard, bombs));
-        setOpenedTilesCount(0);
-        setTimesClicked(0);
-        setGameOver(false);
-        setGameStarted(true);
-        setNumDeaths(0);
-        setProfitTaken(false);
-        setBoard(newBoard);
-    }
+    };
 
     const checkWin = (board: Cell[][]): boolean => {
         for (let i = 0; i < board.length; i++) {
@@ -141,11 +128,6 @@ export default function Minesweeper() {
             }
         }
         return true;
-    };
-
-    const handleRevealAll = () => {
-        const newBoard = revealAll(board);
-        setBoard(newBoard);
     };
 
     const handleCellClick = (row: number, col: number) => {
@@ -160,8 +142,7 @@ export default function Minesweeper() {
 
         if (board[row][col].isBomb) {
             setGameOver(true);
-            newBoard = revealAll(newBoard); // replace revealAll function call
-            setBoard(newBoard);
+            revealAll();
             setNumDeaths((prevCount) => prevCount + 1);
             setRoundResults((prevResults) => [
                 ...prevResults,
@@ -215,6 +196,7 @@ export default function Minesweeper() {
             handleCellClick(row, col);
         }, HOLD_MOUSE_DELAY);
     };
+
     const toggleHoldMouseClick = () => {
         setToggleHoldMouse(prevToggleHoldMouse => !prevToggleHoldMouse);
     };
@@ -223,8 +205,8 @@ export default function Minesweeper() {
         <>
             <div className='flex gap-2'>
                 <div className='flex gap-2 flex-col w-max-4/6  p-10'>
-                    <SelectMode/>
-                    <BalanceBetSize/>
+                    <SelectMode />
+                    <BalanceBetSize />
                     <hr />
                     <BalanceDisplay balance={baseBalance} profitLoss={0} />
                     <BetSize betSize={betSize} setBetSize={setBetSize} />
@@ -243,7 +225,7 @@ export default function Minesweeper() {
                         />
                     </SidebarShell>
                     <Flexer>
-                    {!gameStarted && <Button className='bg-main w-full' onClick={startGame}>Start Game</Button>}
+                        {!gameStarted && <Button className='bg-main w-full' onClick={startGame}>Start Game</Button>}
                         {(gameStarted && !gameOver && !profitTaken) && <Button onClick={takeProfit}>Take profit</Button>}
                         {(gameOver || profitTaken) && (
                             <Button onClick={startNewGame}>
@@ -251,11 +233,12 @@ export default function Minesweeper() {
                                 Start New Game
                             </Button>
                         )}
-                    </Flexer>     </div>
+                    </Flexer>
+                </div>
                 {gameStarted && (
                     <GameShell title="Minesweeper">
                         <div className="flex">
-                            <div className="    center items-start">
+                            <div className="center items-start">
                                 <div className={`grid ${rows === 3 && cols === 3 ? 'grid-cols-3' : 'grid-cols-5'} gap-1 w-max place-items-center w-max-[900px]`}>
                                     {board.map((row, rowIndex) =>
                                         row.map((cell, colIndex) => (
@@ -285,97 +268,6 @@ export default function Minesweeper() {
             </div>
         </>
     );
-}function ResultsSidebar({ reset, roundResults }: ResultsSidebarProps) {
-    const sessionStatistics = () => {
-        const totalDeaths = roundResults.filter(result => result.timesDied > 0).length;
-        const totalWins = roundResults.filter(result => result.timesDied === 0).length;
-        const totalRounds = roundResults.length;
-        const winPercentage = totalRounds > 0 ? (totalWins / totalRounds) * 100 : 0;
-        const averageClicksPerRound = roundResults.reduce((acc, result) => acc + result.timesClicked, 0) / totalRounds;
-        return (
-            <Table>
-                <TableHeader className='mt-4 border-b' style={{ width: '100%' }}>
-                    <TableCell>Result</TableCell>
-                    <TableCell>Round</TableCell>
-                    <TableCell>Clicks</TableCell>
-                    <TableCell>Rows/Cols</TableCell>
-                    <TableCell>Bombs</TableCell>
-                    <TableCell>Bet size</TableCell> {/* Add this line */}
-                </TableHeader>
-                <TableBody>
-                    {roundResults.map((result, index) => (
-                        <TableRow key={index}>
-                            <TableCell>
-                                {result.timesDied === 0 ? (
-                                    <CheckIcon color="green" />
-                                ) : (
-                                    <Cross2Icon color="red" />
-                                )}
-                            </TableCell>
-                            <TableCell>{result.round}</TableCell>
-                            <TableCell>{result.timesClicked}</TableCell>
-                            <TableCell>{result.rows} x {result.cols}</TableCell>
-                            <TableCell>{result.bombs}</TableCell>
-                            <TableCell>{result.betSize}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableCell colSpan={2}><div className='flex flex-col gap-0'>Total Deaths: {totalDeaths}
-                    Total Wins: {totalWins}
-                    </div></TableCell>
-                    <TableCell colSpan={2}></TableCell>
-                    <TableCell colSpan={2}>Win Percentage: {winPercentage.toFixed(2)}%</TableCell>
-                    <TableCell colSpan={2}>Your average click is on the {averageClicksPerRound}th click</TableCell>
-                </TableFooter>
-            </Table>
-        );
-    };
-
-    const globalStatistics = () => {
-        return (
-            <>
-                <TableHeader className='mt-4 border-b'>
-                    <h2>Todo store data</h2>
-                    <TableCell>Round</TableCell>
-                    <TableCell>Times Died</TableCell>
-                    <TableCell>Times Clicked</TableCell>
-                    <TableCell>Rows</TableCell>
-                    <TableCell>Columns</TableCell>
-                    <TableCell>Bombs</TableCell>
-                    <TableCell>Result</TableCell>
-                    <TableCell>Bet size</TableCell> {/* Add this line */}
-                </TableHeader>
-                <TableBody>
-                    {roundResults.map((result, index) => (
-                        <TableRow key={index}>
-                            <TableCell>
-                                {result.timesDied === 0 ? (
-                                    <CheckIcon color="green" />
-                                ) : (
-                                    <Cross2Icon color="red" />
-                                )}
-                            </TableCell>
-                            <TableCell>{result.round}</TableCell>
-                            <TableCell>{result.timesDied}</TableCell>
-                            <TableCell>{result.timesClicked}</TableCell>
-                            <TableCell>{result.rows}</TableCell>
-                            <TableCell>{result.cols}</TableCell>
-                            <TableCell>{result.bombs}</TableCell>
-                            <TableCell>{result.betSize}</TableCell> {/* Add this line */}
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </>
-        );
-    };
-
-    return (
-        <Wrapper>
-            <StatisticTabs triggerOne='Session statistics' triggerTwo='Global Statistics' contentTwo={globalStatistics()} contentOne={<Table>
-                <ResetIcon height={30} width={30} className='absolute top-12 right-4' onClick={reset} />
-                {sessionStatistics()}
-            </Table>} />
-        </Wrapper>
-    );
 };
+
+export default Minesweeper;

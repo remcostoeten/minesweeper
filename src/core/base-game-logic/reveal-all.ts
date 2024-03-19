@@ -1,9 +1,20 @@
-export const revealAll = (board: Array<Array<any>>) => {
-    const newBoard: Array<Array<any>> = [...board];
-    for (let i = 0; i < newBoard.length; i++) {
-        for (let j = 0; j < newBoard[0].length; j++) {
-            newBoard[i][j].isRevealed = true;
-        }
-    }
-    return newBoard;
+'use client'
+import { useState } from 'react';
+
+const useRevealAll = (initialBoard) => {
+  const [board, setBoard] = useState(initialBoard);
+
+  const revealAll = () => {
+    const newBoard = board.map(row =>
+      row.map(cell => ({
+        ...cell,
+        isRevealed: true,
+      }))
+    );
+    setBoard(newBoard);
+  };
+
+  return { board, setBoard, revealAll };
 };
+
+export default useRevealAll;

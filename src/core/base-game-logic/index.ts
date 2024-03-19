@@ -1,3 +1,3 @@
-import { revealAll } from "./reveal-all";
+import useRevealAll from "./reveal-all";
 
-export { revealAll}
+export { useRevealAll }

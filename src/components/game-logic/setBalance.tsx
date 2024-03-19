@@ -1,6 +1,7 @@
    "use client"
 import { useMutation } from 'convex/react'
 import React, { useState } from 'react'
+import { api } from '../../../convex/_generated/api'
 export default function setBalance() {
     const createFileMutation = useMutation(api.balance.setBalance)
     const [balance, setBalance] = useState('')
