@@ -6,10 +6,10 @@ import Block from "@/components/Block";
 import ConvexClientProvider from './ConvexClientProvider';
 import { Toaster } from 'sonner';
 import { TailwindIndicator } from '@/components/core/TailwindIndicator';
-import Sidebar from './__layout';
 import { Inter } from "next/font/google";
 import { useState } from 'react';
 import HeaderShell from '@/components/header/headerShell';
+import Sidebar from '@/components/sidebar/MainSidebar';
 
 const inter = Inter({ subsets: ["latin"] });
 
