@@ -14,6 +14,11 @@ import Balance from '../game-logic/displayBalance';
 import BetSize from '../game-logic/betSize';
 import FreezeGame from '../game-logic/freezeGame';
 import ToggleHoldMouse from '../game-logic/toggleHoldMouse';
+import Flexer from '../core/Flexer';
+import SelectMode from '../settings/SelectGameMode';
+import BalanceBetSize from '../settings/BalanceBetSize';
+import BalanceDisplay from './BalanceDisplay';
+import { useBalance } from '@/core/useBalance';
 
 interface Cell {
     isBomb: boolean;
@@ -59,7 +64,6 @@ export default function Minesweeper() {
     const [toggleHoldMouse, setToggleHoldMouse] = useState<boolean>(false);
     const [baseBalance, setBaseBalance] = useState<number>(100);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
-    const [betSize, setBetSize] = useState<number>(1);
     const [freezeGame, setFreezeGame] = useState<boolean>(false);
     const [roundResults, setRoundResults] = useState<
         Array<{
@@ -72,6 +76,8 @@ export default function Minesweeper() {
             betSize: number;
         }>
     >([]);
+    const { balance, handleChange, handleSubmit } = useBalance();
+    const [betSize, setBetSize] = useState<number>(1);
 
     const freezeGameClick = () => {
         setFreezeGame((prevFreezeGame) => !prevFreezeGame);
@@ -91,6 +97,7 @@ export default function Minesweeper() {
         setGameOver(false);
         setGameStarted(true);
         setBaseBalance((prevBalance) => prevBalance - betSize);
+        updateBalance((prevBalance) => prevBalance - betSize);
     };
 
     let newBoard = initializeBoard(rows, cols);
@@ -231,18 +238,10 @@ export default function Minesweeper() {
         <>
             <div className='flex gap-2'>
                 <div className='flex gap-2 flex-col w-max-4/6  p-10'>
-                    <div className="flex justify-center flex-col mb-4 ">
-                    {!gameStarted && <Button onClick={startGame}>Start Game</Button>}
-                        {(gameStarted && !gameOver && !profitTaken) && <Button onClick={takeProfit}>Take profit</Button>}
-                        {(gameOver || profitTaken) && (
-                            <Button onClick={startNewGame}>
-                                <ResetIcon height={30} width={30} className="mr-2" />
-                                Start New Game
-                            </Button>
-                        )}
-                    </div>
-                    <Balance baseBalance={baseBalance} />
+                    <SelectMode/>
+                    <BalanceBetSize/>
                     <hr />
+                    <BalanceDisplay balance={baseBalance} profitLoss={0} />
                     <BetSize betSize={betSize} setBetSize={setBetSize} />
                     <hr />
                     <ToggleHoldMouse toggleHoldMouse={toggleHoldMouse} toggleHoldMouseClick={toggleHoldMouseClick} />
@@ -258,7 +257,16 @@ export default function Minesweeper() {
                             setRows={handleSetRows}
                         />
                     </SidebarShell>
-                </div>
+                    <Flexer>
+                    {!gameStarted && <Button className='bg-main w-full' onClick={startGame}>Start Game</Button>}
+                        {(gameStarted && !gameOver && !profitTaken) && <Button onClick={takeProfit}>Take profit</Button>}
+                        {(gameOver || profitTaken) && (
+                            <Button onClick={startNewGame}>
+                                <ResetIcon height={30} width={30} className="mr-2" />
+                                Start New Game
+                            </Button>
+                        )}
+                    </Flexer>     </div>
                 {gameStarted && (
                     <GameShell title="Minesweeper">
                         <div className="flex">
