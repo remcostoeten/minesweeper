@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 // ToDo: Extract the layout to a separate file
 
-export default function Sidebar({}) {
+export default function SettingsSidebar({}) {
   const [rows, setRows] = useState(3);
   const [cols, setCols] = useState(3);
   const [bombs, setBombs] = useState(1);
