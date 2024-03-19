@@ -6,13 +6,10 @@ import Block from "@/components/Block";
 import ConvexClientProvider from './ConvexClientProvider';
 import { Toaster } from 'sonner';
 import { TailwindIndicator } from '@/components/core/TailwindIndicator';
-import { Inter } from "next/font/google";
 import { useState } from 'react';
 import HeaderShell from '@/components/header/headerShell';
-import SettingsSidebar from './__layout';
+import SettingsSidebar from './SettingsSidebar';
 import Sidebar from '@/components/sidebar/MainSidebar';
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   const [rows, setRows] = useState(3);
@@ -46,9 +43,8 @@ export default function RootLayout({ children }) {
 function Body({ children }) {
   return (
     <>
-      <body className="flex h-screen gap-4 pt-4 pl-4 bg-body text-white">
+      <body className="flex h-screen gap-4 !pt-4 !pl-4 bg-body text-white">
         {children}
-        <TailwindIndicator />
         <Toaster />
       </body>
     </>

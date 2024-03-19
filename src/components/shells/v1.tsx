@@ -47,7 +47,6 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
 };
 
 export default function Minesweeper() {
-
     const [rows, setRows] = useState<number>(5);
     const [cols, setCols] = useState<number>(5);
     const [bombs, setBombs] = useState<number>(3);
