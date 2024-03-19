@@ -18,6 +18,7 @@ import BetSize from '../game-logic/betSize';
 import FreezeGame from '../game-logic/freezeGame';
 import ToggleHoldMouse from '../game-logic/toggleHoldMouse';
 import { Table, TableHeader, TableCell, TableBody, TableRow, TableFooter } from '../ui/table';
+import { useBalance, walletAmount, walletBalance } from '@/core/useBalance';
 
 const HOLD_MOUSE_DELAY = 1250;
 
@@ -46,7 +47,8 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
 };
 
 const Minesweeper: React.FC = () => {
-    const [rows, setRows] = useState<number>(5);
+    const { walletAmount: amount } = walletAmount();
+ const [rows, setRows] = useState<number>(5);
     const [cols, setCols] = useState<number>(5);
     const [bombs, setBombs] = useState<number>(3);
     const [openedTilesCount, setOpenedTilesCount] = useState<number>(0);
@@ -55,7 +57,7 @@ const Minesweeper: React.FC = () => {
     const [gameOver, setGameOver] = useState<boolean>(false);
     const [numDeaths, setNumDeaths] = useState<number>(0);
     const [toggleHoldMouse, setToggleHoldMouse] = useState<boolean>(false);
-    const [baseBalance, setBaseBalance] = useState<number>(100);
+    const [baseBalance, setBaseBalance] = useState<number>(amount);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [betSize, setBetSize] = useState<number>(1);
     const [freezeGame, setFreezeGame] = useState<boolean>(false);
@@ -200,14 +202,14 @@ const Minesweeper: React.FC = () => {
     const toggleHoldMouseClick = () => {
         setToggleHoldMouse(prevToggleHoldMouse => !prevToggleHoldMouse);
     };
-    
+
     return (
         <>
             <div className='flex gap-2'>
                 <div className='flex gap-2 flex-col w-max-4/6  p-10'>
                     <SelectMode />
                     <BalanceBetSize />
-                    <BalanceDisplay balance={baseBalance} profitLoss={0} />
+                    <BalanceDisplay balance={amount} profitLoss={0} />
                     <BetSize betSize={betSize} setBetSize={setBetSize} />
                     <ToggleHoldMouse toggleHoldMouse={toggleHoldMouse} toggleHoldMouseClick={toggleHoldMouseClick} />
                     <FreezeGame freezeGame={freezeGame} freezeGameClick={freezeGameClick} />

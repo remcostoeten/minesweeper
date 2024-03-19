@@ -30,3 +30,13 @@ export function useBalance() {
         handleSubmit
     };
 }
+
+export const walletAmount = () => {
+    const { balance } = useBalance();
+
+    const walletAmount = balance?.setBalance;
+
+    return {
+        walletAmount
+    };
+}
