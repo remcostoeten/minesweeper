@@ -1,1 +1,1 @@
-import { createFile } from './../core/mutations/demo';
+import { createFile } from "./../core/mutations/demo"

@@ -1,9 +1,8 @@
 "use client"
 
 import * as React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
-
 import { cn } from "@/core/utils"
+import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 const Tabs = TabsPrimitive.Root
 
@@ -28,10 +27,7 @@ const TabsTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
-    className={cn(
-      "text-2xl h-24",
-      className
-    )}
+    className={cn("text-2xl h-24", className)}
     {...props}
   />
 ))

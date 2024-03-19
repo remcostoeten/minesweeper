@@ -1,25 +1,36 @@
-
-import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
 import { UserButton } from "@clerk/nextjs"
-import DisplayBalance from "../game-logic/displayBalance"
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import Block from "../Block"
+import DisplayBalance from "../game-logic/displayBalance"
 
 export default function HeaderShell() {
   return (
-    <Block padding="4" className='h-14 w-full bg-card justify-between items-center !flex-row ' as="header">
-          <DisplayBalance/>
-          <div className="flex items-center space-x-1">
-              <UserButton/>
-              <Select>
-              <SelectTrigger id="language" className="border-none">
-                <SelectValue placeholder=" EN  🇺🇸" />
-              </SelectTrigger>
-              <SelectContent position="popper">
-                <SelectItem value="en">EN 🇺🇸</SelectItem>
-                <SelectItem value="es">ES 🇪🇸</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+    <Block
+      padding="4"
+      className="h-14 w-full bg-card justify-between items-center !flex-row "
+      as="header"
+    >
+      <DisplayBalance />
+      <div className="flex items-center space-x-1">
+        <UserButton />
+        <Select>
+          <SelectTrigger id="language" className="border-none">
+            <SelectValue placeholder=" 🇺🇸" />
+          </SelectTrigger>
+          <SelectContent position="popper">
+            <SelectItem value="en"> 🇺🇸</SelectItem>
+            <SelectItem value="es">ES 🇪🇸</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
     </Block>
   )
 }
@@ -44,7 +55,6 @@ function Dice1Icon(props) {
   )
 }
 
-
 function GoalIcon(props) {
   return (
     <svg
@@ -65,7 +75,6 @@ function GoalIcon(props) {
     </svg>
   )
 }
-
 
 function SearchIcon(props) {
   return (

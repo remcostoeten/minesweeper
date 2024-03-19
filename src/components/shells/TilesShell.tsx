@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react"
 
 export default function TilesShell() {
-    return (
-        <div>TilesShell</div>
-    )
+  return <div>TilesShell</div>
 }

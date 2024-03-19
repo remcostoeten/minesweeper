@@ -15,8 +15,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as balance from "../balance.js";
-import type * as betsize from "../betsize.js";
-import type * as files from "../files.js";
+import type * as bet from "../bet.js";
 import type * as todo from "../todo.js";
 
 /**
@@ -29,8 +28,7 @@ import type * as todo from "../todo.js";
  */
 declare const fullApi: ApiFromModules<{
   balance: typeof balance;
-  betsize: typeof betsize;
-  files: typeof files;
+  bet: typeof bet;
   todo: typeof todo;
 }>;
 export declare const api: FilterApi<

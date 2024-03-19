@@ -1,20 +1,24 @@
-'use client';
-import Flexer from '@/components/core/Flexer';
-import '../styles/app.scss';
+"use client"
 
-import Block from "@/components/Block";
-import ConvexClientProvider from './ConvexClientProvider';
-import { Toaster } from 'sonner';
-import { TailwindIndicator } from '@/components/core/TailwindIndicator';
-import { useState } from 'react';
-import HeaderShell from '@/components/header/headerShell';
-import SettingsSidebar from './SettingsSidebar';
-import Sidebar from '@/components/sidebar/MainSidebar';
+import Flexer from "@/components/core/Flexer"
+
+import "../styles/app.scss"
+
+import { useState } from "react"
+import { Toaster } from "sonner"
+
+import Block from "@/components/Block"
+import { TailwindIndicator } from "@/components/core/TailwindIndicator"
+import HeaderShell from "@/components/header/headerShell"
+import Sidebar from "@/components/sidebar/MainSidebar"
+
+import ConvexClientProvider from "./ConvexClientProvider"
+import SettingsSidebar from "./SettingsSidebar"
 
 export default function RootLayout({ children }) {
-  const [rows, setRows] = useState(3);
-  const [cols, setCols] = useState(3);
-  const [bombs, setBombs] = useState(1);
+  const [rows, setRows] = useState(3)
+  const [cols, setCols] = useState(3)
+  const [bombs, setBombs] = useState(1)
   return (
     <html lang="en">
       <Body>
@@ -23,21 +27,19 @@ export default function RootLayout({ children }) {
           <Aside>
             <Sidebar />
           </Aside>
-          <div className='w-full gap-4 flex flex-col'>
+          <div className="w-full gap-4 flex flex-col">
             <HeaderShell />
-            <Flexer height='h-44' gap='4'>
+            <Flexer height="h-44" gap="4">
               <Section>
                 <GameControl />
               </Section>
-              <Main>
-                {children}
-              </Main>
+              <Main>{children}</Main>
             </Flexer>
           </div>
         </ConvexClientProvider>
       </Body>
     </html>
-  );
+  )
 }
 
 function Body({ children }) {
@@ -48,27 +50,27 @@ function Body({ children }) {
         <Toaster />
       </body>
     </>
-  );
+  )
 }
 
 function Aside({ children }) {
   return (
-    <Block className='w-28 overflow-hidden hidden xl:block' as="aside">
+    <Block className="w-28 overflow-hidden hidden xl:block" as="aside">
       {children}
     </Block>
-  );
+  )
 }
 
 function Section({ children }) {
   return (
-    <Block height='fit' className='w-[50%]' as="section">
+    <Block height="fit" className="w-[50%]" as="section">
       {children}
     </Block>
-  );
+  )
 }
 
 function GameControl() {
-  return <SettingsSidebar />;
+  return <SettingsSidebar />
 }
 
 function Main({ children }) {
@@ -76,5 +78,5 @@ function Main({ children }) {
     <Block width="full" as="main">
       {children}
     </Block>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import * as React from "react"
 import { cn } from "@/core/utils"
@@ -7,15 +7,15 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >((props, ref) => {
-  const { className, ...rest } = props;
-  const [isMounted, setIsMounted] = React.useState(false);
+  const { className, ...rest } = props
+  const [isMounted, setIsMounted] = React.useState(false)
 
   React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    setIsMounted(true)
+  }, [])
 
   if (!isMounted) {
-    return null;
+    return null
   }
 
   return (
@@ -26,8 +26,8 @@ const Table = React.forwardRef<
         {...rest}
       />
     </div>
-  );
-});
+  )
+})
 Table.displayName = "Table"
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,

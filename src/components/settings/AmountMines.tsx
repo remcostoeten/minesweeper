@@ -1,14 +1,21 @@
-import { Button } from "@/components/ui/button";
-import Wrapper from "./SettingWrapper";
-type AmountMinesProps = {
-  value: number;
-  onPlus: () => void;
-  onMinus: () => void;
-};
+import { Button } from "@/components/ui/button"
 
-export default function AmountMines({ value, onPlus, onMinus }: AmountMinesProps) {
+import SettingsShell from "./SettingsShell"
+import Wrapper from "./SettingWrapper"
+
+type AmountMinesProps = {
+  value: number
+  onPlus: () => void
+  onMinus: () => void
+}
+
+export default function AmountMines({
+  value,
+  onPlus,
+  onMinus,
+}: AmountMinesProps) {
   return (
-    <Wrapper title='Amount of mines'>
+    <SettingsShell title="Amount of mines">
       <div className="flex h-10 items-center border-outline p-2 rounded-md">
         <span>💣</span>
         <input
@@ -18,16 +25,22 @@ export default function AmountMines({ value, onPlus, onMinus }: AmountMinesProps
           value={value}
           placeholder="3"
         />
-        <div className='flex gap-2 items-center ml-auto'>
-          <Button className="bg-main h-7 text-white rounded-md p-1" onClick={onPlus}>
+        <div className="flex gap-2 items-center ml-auto">
+          <Button
+            className="bg-main h-7 text-white rounded-md p-1"
+            onClick={onPlus}
+          >
             <PlusIcon className="text-white/60" />
           </Button>
-          <Button className="bg-transparent border-outline h-7 text-white rounded-md p-1" onClick={onPlus}>
+          <Button
+            className="bg-transparent border-outline h-7 text-white rounded-md p-1"
+            onClick={onPlus}
+          >
             <MinusIcon className="text-white/60" />
           </Button>
         </div>
       </div>
-    </Wrapper>
+    </SettingsShell>
   )
 }
 
@@ -50,7 +63,6 @@ function MinusIcon(props) {
   )
 }
 
-
 function MouseIcon(props) {
   return (
     <svg
@@ -70,7 +82,6 @@ function MouseIcon(props) {
     </svg>
   )
 }
-
 
 function PlusIcon(props) {
   return (
