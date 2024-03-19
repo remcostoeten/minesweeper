@@ -6,8 +6,9 @@ import {toast} from 'sonner';
 
 export function useBalance() {
     const balance = useQuery(api.balance.get);
+    const latestBalance = balance?.[balance?.length - 1];
     const setBalanceMutation = useMutation(api.balance.setBalance);
-    const [currentBalance, setCurrentBalance] = useState(balance?.[0]?.balance || 0);
+    const [currentBalance, setCurrentBalance] = useState(latestBalance);
 
     const handleChange = (event) => {
         const newBalance = parseFloat(event.target.value);

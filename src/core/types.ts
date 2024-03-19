@@ -19,3 +19,8 @@ export type ResponsiveProps = {
     lg?: string;
     xl?: string;
   };
+
+  export type Cell = {
+    isBomb: boolean;
+    isRevealed: boolean;
+}

@@ -13,16 +13,11 @@ import BalanceBetSize from '../settings/BalanceBetSize';
 import BalanceDisplay from './BalanceDisplay';
 import StatisticTabs from '../statistics/StatisticTabs';
 import { Button } from '../ui';
-import { ResultsSidebarProps } from '@/core/types';
+import { Cell, ResultsSidebarProps } from '@/core/types';
 import BetSize from '../game-logic/betSize';
 import FreezeGame from '../game-logic/freezeGame';
 import ToggleHoldMouse from '../game-logic/toggleHoldMouse';
 import { Table, TableHeader, TableCell, TableBody, TableRow, TableFooter } from '../ui/table';
-
-interface Cell {
-    isBomb: boolean;
-    isRevealed: boolean;
-}
 
 const HOLD_MOUSE_DELAY = 1250;
 
@@ -205,19 +200,16 @@ const Minesweeper: React.FC = () => {
     const toggleHoldMouseClick = () => {
         setToggleHoldMouse(prevToggleHoldMouse => !prevToggleHoldMouse);
     };
-
+    
     return (
         <>
             <div className='flex gap-2'>
                 <div className='flex gap-2 flex-col w-max-4/6  p-10'>
                     <SelectMode />
                     <BalanceBetSize />
-                    <hr />
                     <BalanceDisplay balance={baseBalance} profitLoss={0} />
                     <BetSize betSize={betSize} setBetSize={setBetSize} />
-                    <hr />
                     <ToggleHoldMouse toggleHoldMouse={toggleHoldMouse} toggleHoldMouseClick={toggleHoldMouseClick} />
-                    <hr />
                     <FreezeGame freezeGame={freezeGame} freezeGameClick={freezeGameClick} />
                     <SidebarShell>
                         <AmountTilesShell
@@ -314,7 +306,7 @@ function ResultsSidebar({ reset, roundResults }: ResultsSidebarProps) {
                 </TableBody>
                 <TableFooter>
                     <TableCell colSpan={2}><div className='flex flex-col gap-0'>Total Deaths: {totalDeaths}
-                    Total Wins: {totalWins}
+                        Total Wins: {totalWins}
                     </div></TableCell>
                     <TableCell colSpan={2}></TableCell>
                     <TableCell colSpan={2}>Win Percentage: {winPercentage.toFixed(2)}%</TableCell>
