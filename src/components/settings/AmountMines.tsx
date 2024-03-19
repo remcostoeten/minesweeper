@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Wrapper from "./SettingWrapper";
 type AmountMinesProps = {
-  label: string;
   value: number;
   onPlus: () => void;
   onMinus: () => void;
@@ -10,21 +9,21 @@ type AmountMinesProps = {
 export default function AmountMines({ value, onPlus, onMinus }: AmountMinesProps) {
   return (
     <Wrapper title='Amount of mines'>
-      <div className="flex items-center justify-between border-outline p-2 rounded-md">
+      <div className="flex h-10 items-center border-outline p-2 rounded-md">
         <span>💣</span>
         <input
-          className="bg-transparent text-white text-center w-12 outline-none"
+          className="bg-transparent text-white h-10o text-center w-12 outline-none"
           id="mines"
           type="text"
           value={value}
           placeholder="3"
         />
-        <div className='flex gap-2 items-center'>
-          <Button className="bg-[#5c2b92] text-white rounded-md px-2 py-1" onClick={onPlus}>
-            <PlusIcon className="text-white" />
+        <div className='flex gap-2 items-center ml-auto'>
+          <Button className="bg-main h-7 text-white rounded-md p-1" onClick={onPlus}>
+            <PlusIcon className="text-white/60" />
           </Button>
-          <Button className="text-text bg-transparent border-outline rounded-md px-2 py-1" onClick={onMinus}>
-            <MinusIcon className="text-white" />
+          <Button className="bg-transparent border-outline h-7 text-white rounded-md p-1" onClick={onPlus}>
+            <MinusIcon className="text-white/60" />
           </Button>
         </div>
       </div>

@@ -65,7 +65,7 @@ function Aside({ children }) {
 
 function Section({ children }) {
   return (
-    <Block height='fit' as="section">
+    <Block height='fit' className='w-[50%]' as="section">
       {children}
     </Block>
   );

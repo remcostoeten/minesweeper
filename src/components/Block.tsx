@@ -11,7 +11,7 @@ type BlockProps = {
         padding?: string;
         bg?: string;
         margin?: string;
-        width?: string | '[30%]' | '1/3' | 'fit'| 'full'| '1/6' | '28';
+        width?: string | '[30%]' | '1/3' | 'fit'| 'full'| '[45%]' | '28';
         className?: string;
         children: React.ReactNode;
         direction?: 'col' | 'row';
@@ -20,7 +20,7 @@ type BlockProps = {
         height?: string;
 };
 
-export default function Block({width = '30' , height, padding = '0', children, bg = 'card', margin ,  className, direction = 'col', responsive = {}, as = 'div', ...rest }: BlockProps) {
+export default function Block({width , height, padding = '0', children, bg = 'card', margin ,  className, direction = 'col', responsive = {}, as = 'div', ...rest }: BlockProps) {
     const responsiveClasses = Object.entries(responsive).map(([key, value]) => `${key}:${value}`).join(' ');
     const AsComponent = as as keyof JSX.IntrinsicElements;
     return (
