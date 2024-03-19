@@ -18,7 +18,7 @@ import Flexer from '../core/Flexer';
 import SelectMode from '../settings/SelectGameMode';
 import BalanceBetSize from '../settings/BalanceBetSize';
 import BalanceDisplay from './BalanceDisplay';
-import { useBalance } from '@/core/useBalance';
+import { revealAll } from '@/core/base-game-logic';
 
 interface Cell {
     isBomb: boolean;
@@ -64,6 +64,7 @@ export default function Minesweeper() {
     const [toggleHoldMouse, setToggleHoldMouse] = useState<boolean>(false);
     const [baseBalance, setBaseBalance] = useState<number>(100);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
+    const [betSize, setBetSize] = useState<number>(1);
     const [freezeGame, setFreezeGame] = useState<boolean>(false);
     const [roundResults, setRoundResults] = useState<
         Array<{
@@ -76,8 +77,6 @@ export default function Minesweeper() {
             betSize: number;
         }>
     >([]);
-    const { balance, handleChange, handleSubmit } = useBalance();
-    const [betSize, setBetSize] = useState<number>(1);
 
     const freezeGameClick = () => {
         setFreezeGame((prevFreezeGame) => !prevFreezeGame);
@@ -97,7 +96,6 @@ export default function Minesweeper() {
         setGameOver(false);
         setGameStarted(true);
         setBaseBalance((prevBalance) => prevBalance - betSize);
-        updateBalance((prevBalance) => prevBalance - betSize);
     };
 
     let newBoard = initializeBoard(rows, cols);
@@ -145,13 +143,8 @@ export default function Minesweeper() {
         return true;
     };
 
-    const revealAll = () => {
-        const newBoard = [...board];
-        for (let i = 0; i < newBoard.length; i++) {
-            for (let j = 0; j < newBoard[0].length; j++) {
-                newBoard[i][j].isRevealed = true;
-            }
-        }
+    const handleRevealAll = () => {
+        const newBoard = revealAll(board);
         setBoard(newBoard);
     };
 
@@ -167,7 +160,8 @@ export default function Minesweeper() {
 
         if (board[row][col].isBomb) {
             setGameOver(true);
-            revealAll();
+            newBoard = revealAll(newBoard); // replace revealAll function call
+            setBoard(newBoard);
             setNumDeaths((prevCount) => prevCount + 1);
             setRoundResults((prevResults) => [
                 ...prevResults,
@@ -185,15 +179,6 @@ export default function Minesweeper() {
                 toast(`Congratulations, you won!`);
             }
         }
-    };
-
-    const renderBalance = () => {
-        return (
-            <div>
-                <h4>Balance</h4>
-                <p>Current balance: {baseBalance}</p>
-            </div>
-        );
     };
 
     const handleSetRows = (value: number) => {
