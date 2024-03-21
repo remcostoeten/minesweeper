@@ -7,6 +7,7 @@ import SettingsShell from "./SettingsShell";
 import Flexer from "../core/Flexer";
 import BetBtn from "../ui/setting-btnt";
 import EuroSign from "../ui/euro-sign";
+import { usePlaceBet } from "@/core/base-game-logic";
 
 export default function BalanceBetSize(): JSX.Element {
     const balance = useQuery(api.balance.get);
@@ -14,6 +15,7 @@ export default function BalanceBetSize(): JSX.Element {
     const [inputValue, setInputValue] = useState("0");
     const [bet, setBet] = useState(0);
     const showBalance = balance?.[balance.length - 1]?.setBalance.toFixed(2);
+    const handlePlaceBet = usePlaceBet(bet)
 
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -33,13 +35,13 @@ export default function BalanceBetSize(): JSX.Element {
         }
     };
 
-    const handlePlaceBet = async () => {
-        if (bet > 0) {
-            await setBetAmount({ amount: bet });
-            console.log(`Bet of ${bet} placed.`);
-            toast(`Bet of ${bet} placed.`);
-        }
-    };
+    // const handlePlaceBet = async () => {
+    //     if (bet > 0) {
+    //         await setBetAmount({ amount: bet });
+    //         console.log(`Bet of ${bet} placed.`);
+    //         toast(`Bet of ${bet} placed.`);
+    //     }
+    // };
 
     const handleButtonClick = (modifier: number) => {
         let newValue = parseFloat(inputValue);
@@ -74,8 +76,8 @@ export default function BalanceBetSize(): JSX.Element {
                     <Input
                         type="text"
                         placeholder="Your bet"
-                        value={inputValue}
-                        onChange={handleChange}
+                        value={bet}
+                        onChange={(e) => setBet(Number(e.target.value))}
                         onBlur={handlePlaceBet}
                         style={{ paddingLeft: "25px" }}
                     />

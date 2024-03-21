@@ -3,18 +3,16 @@
 import React, { useState } from "react"
 import { useRevealAll } from "@/core/base-game-logic"
 import { Cell, ResultsSidebarProps } from "@/core/types"
-import { useBalance, walletAmount, walletBalance } from "@/core/useBalance"
+import { walletAmount } from "@/core/useBalance"
 import { CheckIcon, Cross2Icon, ResetIcon } from "@radix-ui/react-icons"
 import { toast } from "sonner"
 
-import Flexer from "../core/Flexer"
 import BetSize from "../game-logic/betSize"
 import FreezeGame from "../game-logic/freezeGame"
 import ToggleHoldMouse from "../game-logic/toggleHoldMouse"
 import BalanceBetSize from "../settings/BalanceBetSize"
 import SelectMode from "../settings/SelectGameMode"
 import StatisticTabs from "../statistics/StatisticTabs"
-import { Button } from "../ui"
 import {
   Table,
   TableBody,
@@ -28,6 +26,7 @@ import BalanceDisplay from "./BalanceDisplay"
 import GameShell from "./GameShell"
 import SidebarShell from "./SidebarShell"
 import Wrapper from "./Wrapper"
+import StartGame from "../settings/StartGame"
 
 const HOLD_MOUSE_DELAY = 1250
 
@@ -264,22 +263,14 @@ const Minesweeper: React.FC = () => {
               setRows={handleSetRows}
             />
           </SidebarShell>
-          <Flexer>
-            {!gameStarted && (
-              <Button className="bg-main w-full" onClick={startGame}>
-                Start Game
-              </Button>
-            )}
-            {gameStarted && !gameOver && !profitTaken && (
-              <Button onClick={takeProfit}>Take profit</Button>
-            )}
-            {(gameOver || profitTaken) && (
-              <Button onClick={startNewGame}>
-                <ResetIcon height={30} width={30} className="mr-2" />
-                Start New Game
-              </Button>
-            )}
-          </Flexer>
+          <StartGame
+            gameStarted={gameStarted}
+            gameOver={gameOver}
+            profitTaken={profitTaken}
+            startGame={startGame}
+            takeProfit={takeProfit}
+            startNewGame={startNewGame}
+        />
         </div>
         {gameStarted && (
           <GameShell title="Minesweeper">
@@ -318,13 +309,13 @@ const Minesweeper: React.FC = () => {
             </div>
           </GameShell>
         )}
-        <div className="w-2/6">
+        {/* <div className="w-2/6">
           <ResultsSidebar
             reset={clearAll}
             timesDied={numDeaths}
             roundResults={roundResults}
           />
-        </div>
+        </div> */}
       </div>
     </>
   )
