@@ -19,17 +19,9 @@ const ShadInput = React.forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-export type InputProps = {
-  style?: React.CSSProperties;
-  type?: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
-
 const Input = ({ style, type = 'text', placeholder, value, ...rest }: InputProps) => (
   <input
-    className="bg-transparent text-white h-10o text-center w-12 outline-none"
+    className="bg-transparent w-fit border-outline text-white h-10 text-center w-12 outline-none"
     type={type}
     value={value}
     placeholder={placeholder}

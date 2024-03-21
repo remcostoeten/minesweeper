@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { Cell } from "../types"
 
-const useRevealAll = (initialBoard) => {
+const useRevealAll = (initialBoard: Cell[][]) => {
   const [board, setBoard] = useState(initialBoard)
 
   const revealAll = () => {

@@ -1,23 +1,17 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { useMutation } from "convex/react"
+import { usePlaceBet } from "@/core/base-game-logic/place-bet"
+import { Input } from "../ui/input"
 
-import { api } from "../../../convex/_generated/api"
 
-function PlaceBetComponent() {
-  const setBetAmount = useMutation(api.bet.createBet)
-  const [bet, setBet] = useState(0)
-
-  const handlePlaceBet = async () => {
-    await setBetAmount({ amount: bet })
-    console.log(`Bet of ${bet} placed.`)
-  }
+function PlaceBetComponent({ bet, setBet }) {
+  const handlePlaceBet = usePlaceBet(bet)
 
   return (
     <div>
-      <input
+      <Input
         type="number"
+        placeholder="Your bet"
         value={bet}
         onChange={(e) => setBet(Number(e.target.value))}
       />

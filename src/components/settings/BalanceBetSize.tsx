@@ -1,12 +1,11 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { useQuery, useMutation } from "convex/react"
-import { toast } from "sonner"
-
-import { api } from "../../../convex/_generated/api"
-import { Button } from "../ui"
-import SettingsShell from "./SettingsShell"
+import React, { useEffect, useRef, useState } from "react";
+import { useQuery, useMutation } from "convex/react";
+import { toast } from "sonner";
+import { api } from "../../../convex/_generated/api";
+import { Button } from "../ui";
+import SettingsShell from "./SettingsShell";
 
 const BetBtn = ({
     className,
@@ -19,21 +18,17 @@ const BetBtn = ({
     >
         {children}
     </Button>
-)
-
-import React from "react"
+);
 
 export default function BalanceBetSize(): JSX.Element {
-    const balance = useQuery(api.balance.get)
-    const setBetAmount = useMutation(api.bet.createBet)
-    const [inputValue, setInputValue] = useState("0")
-    const [bet, setBet] = useState(0)
-    const showBalance = balance?.[balance.length - 1]?.setBalance.toFixed(2)
-
-
+    const balance = useQuery(api.balance.get);
+    const setBetAmount = useMutation(api.bet.createBet);
+    const [inputValue, setInputValue] = useState("0");
+    const [bet, setBet] = useState(0);
+    const showBalance = balance?.[balance.length - 1]?.setBalance.toFixed(2);
 
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const handleChange = (event: { target: { value: string } }) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         setInputValue(newValue);
         const newBet = parseFloat(newValue);
@@ -51,25 +46,28 @@ export default function BalanceBetSize(): JSX.Element {
 
     const handlePlaceBet = async () => {
         if (bet > 0) {
-            await setBetAmount({ amount: bet })
-            console.log(`Bet of ${bet} placed.`)
-            toast(`Bet of ${bet} placed.`)
+            await setBetAmount({ amount: bet });
+            console.log(`Bet of ${bet} placed.`);
+            toast(`Bet of ${bet} placed.`);
         }
+
+        // Reset the input value after 2 seconds
+
     };
 
     const handleButtonClick = (modifier: number) => {
-        let newValue = parseFloat(inputValue)
-        newValue = Math.max(newValue + newValue * modifier, 0)
+        let newValue = parseFloat(inputValue);
+        newValue = Math.max(newValue + newValue * modifier, 0);
         if (newValue > showBalance) {
-            toast("You don't have enough balance to make this bet.  ")
-            newValue = balance?.[0]?.setBalance
+            toast("You don't have enough balance to make this bet.  ");
+            newValue = balance?.[0]?.setBalance;
         }
-        setInputValue(parseFloat(newValue.toFixed(2)).toString())
-    }
+        setInputValue(parseFloat(newValue.toFixed(2)).toString());
+    };
 
     const handleMaxClick = () => {
-        setInputValue(showBalance)
-    }
+        setInputValue(showBalance);
+    };
 
     useEffect(() => {
         return () => {
@@ -87,14 +85,14 @@ export default function BalanceBetSize(): JSX.Element {
         >
             <div className="flex justify-between items-center mb-4">
                 <div className="relative w-full">
-                <input
-                type="text"
-                placeholder="Your bet"
-                value={inputValue}
-                onChange={handleChange}
-                onBlur={handlePlaceBet}
-                style={{ paddingLeft: "25px" }}
-                 />
+                    <input
+                        type="text"
+                        placeholder="Your bet"
+                        value={inputValue}
+                        onChange={handleChange}
+                        onBlur={handlePlaceBet}
+                        style={{ paddingLeft: "25px" }}
+                    />
                     <span className="text-text absolute left-2 top-1/2 transform -translate-y-1/2">
                         €
                     </span>
@@ -145,5 +143,5 @@ export default function BalanceBetSize(): JSX.Element {
                 </BetBtn>
             </div>
         </SettingsShell>
-    )
+    );
 }
