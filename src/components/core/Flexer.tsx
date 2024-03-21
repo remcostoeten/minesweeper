@@ -6,12 +6,13 @@ type FlexProps = {
     | "flex-start"
     | "flex-end"
     | "center"
-    | "space-between"
-    | "space-around"
-    | "space-evenly"
-  align?: "stretch" | "flex-start" | "flex-end" | "center" | "baseline"
+    | "between"
+    | "around"
+    | "evenly"
+  align?: "stretch" | "start" | "end" | "center" | "baseline"
   wrap?: "nowrap" | "wrap" | "wrap-reverse"
   gap?: string
+  mb?: string
   children: React.ReactNode
   className?: string
   width?: string
@@ -26,13 +27,14 @@ export default function Flexer({
   align = "stretch",
   wrap = "nowrap",
   gap = "0",
+  mb = "0",
   children,
   className = "",
   ...rest
 }: FlexProps) {
   return (
     <div
-      className={`flex ${width} ${direction}  gap-${gap} h-${height}  ${justify} ${align} ${wrap} ${className}`}
+      className={`flex ${width} mb-${mb} flex-${direction} gap-${gap} h-${height}  justify-${justify} items-${align} flex-${wrap} ${className}`}
       {...rest}
     >
       {children}

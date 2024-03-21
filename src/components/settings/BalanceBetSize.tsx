@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { api } from "../../../convex/_generated/api";
 import { Button } from "../ui";
 import SettingsShell from "./SettingsShell";
+import Flexer from "../core/Flexer";
 
 const BetBtn = ({
     className,
@@ -83,7 +84,7 @@ export default function BalanceBetSize(): JSX.Element {
             subtitle="Max bet: €"
             showBalance={showBalance}
         >
-            <div className="flex justify-between items-center mb-4">
+            <Flexer mb='4' align="center" justify='between'>
                 <div className="relative w-full">
                     <input
                         type="text"
@@ -114,7 +115,7 @@ export default function BalanceBetSize(): JSX.Element {
                         </BetBtn>
                     </div>
                 </div>
-            </div>
+            </Flexer>
 
             <div className="grid grid-cols-4 gap-1">
                 <BetBtn

@@ -9,15 +9,15 @@ type substractBalanceProps = {
     setAmount?: (amount: number) => void;
 };
 
-export const SubstractFromBalance = (): substractBalanceProps => {
+export const SubtractFromBalance = () => {
     const getBalance = useQuery(api.balance.get);
     const setBalance = useMutation(api.balance.setBalance);
     const balance = getBalance?.[getBalance.length - 1]?.setBalance.toFixed(2);
     const [amount, setAmount] = useState(0);
 
-    const subtractFromBalance = async () => {
+    const subtractFromBalance = async (bet: number) => {
         try {
-            const newBalance = balance - amount;
+            const newBalance = balance - bet;
             await setBalance({ balance: newBalance });
             console.log(`New balance: ${newBalance}`);
         } catch (error) {
@@ -27,7 +27,6 @@ export const SubstractFromBalance = (): substractBalanceProps => {
 
     return { balance, subtractFromBalance, amount, setAmount };
 };
-
 /**
  * `useSubtractFromBalance` is a custom hook that provides functionality to subtract a certain amount from the balance.
  *
