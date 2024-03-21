@@ -9,7 +9,11 @@ export default function page() {
     return (
         <main className='p-10 text-xl'>
             <PlaceBetComponent bet={bet} setBet={setBet} />
-            <SubstractFromBalance />
+            <div>
+      <p>{balance}</p>
+      <input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
+      <button onClick={subtractFromBalance}>Subtract from balance</button>
+    </div>
         </main>
     )
 }
