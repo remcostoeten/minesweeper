@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 
-export const useSubtractFromBalance = () => {
+export const SubstractFromBalance = () => {
     const getBalance = useQuery(api.balance.get);
     const setBalance = useMutation(api.balance.setBalance);
     const balance = getBalance?.[getBalance.length - 1]?.setBalance.toFixed(2);
