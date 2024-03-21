@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { toast } from "sonner";
@@ -18,6 +16,7 @@ export default function BalanceBetSize(): JSX.Element {
     const showBalance = balance?.[balance.length - 1]?.setBalance.toFixed(2);
 
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         setInputValue(newValue);
@@ -80,7 +79,7 @@ export default function BalanceBetSize(): JSX.Element {
                         onBlur={handlePlaceBet}
                         style={{ paddingLeft: "25px" }}
                     />
-             <EuroSign variant='input'/>
+                    <EuroSign variant='input'/>
                     <div className="flex space-x-1 absolute top-1/2 right-2 transform -translate-y-1/2">
                         <BetBtn
                             className="text-xs h-6 px-2"
