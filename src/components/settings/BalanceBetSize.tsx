@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { toast } from "sonner";
 import { api } from "../../../convex/_generated/api";
-import { Button } from "../ui";
+import { Button, Input } from "../ui";
 import SettingsShell from "./SettingsShell";
 import Flexer from "../core/Flexer";
 
@@ -86,7 +86,7 @@ export default function BalanceBetSize(): JSX.Element {
         >
             <Flexer mb='4' align="center" justify='between'>
                 <div className="relative w-full">
-                    <input
+                    <Input
                         type="text"
                         placeholder="Your bet"
                         value={inputValue}
