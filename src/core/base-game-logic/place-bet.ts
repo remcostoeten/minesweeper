@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { toast } from "sonner";
-import { SubtractFromBalance } from "./helpers/substract-from-balance";
+import { SubtractFromBalance } from "./substract-from-balance";
 
 export const usePlaceBet = (bet: number) => {
     const setBetAmount = useMutation(api.bet.createBet);
@@ -15,7 +15,7 @@ export const usePlaceBet = (bet: number) => {
         subtractFromBalance(bet);
     };
 
-    
+
 
     return handlePlaceBet;
 };

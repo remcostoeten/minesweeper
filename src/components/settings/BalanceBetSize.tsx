@@ -4,22 +4,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { toast } from "sonner";
 import { api } from "../../../convex/_generated/api";
-import { Button, Input } from "../ui";
+import { Input } from "../ui";
 import SettingsShell from "./SettingsShell";
 import Flexer from "../core/Flexer";
-
-const BetBtn = ({
-    className,
-    children,
-    ...rest
-}: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
-    <Button
-        className={`bg-transparent hover:bg-black/20 text-text border-outline ${className}`}
-        {...rest}
-    >
-        {children}
-    </Button>
-);
+import BetBtn from "../ui/setting-btnt";
+import EuroSign from "../ui/euro-sign";
 
 export default function BalanceBetSize(): JSX.Element {
     const balance = useQuery(api.balance.get);
@@ -51,9 +40,6 @@ export default function BalanceBetSize(): JSX.Element {
             console.log(`Bet of ${bet} placed.`);
             toast(`Bet of ${bet} placed.`);
         }
-
-        // Reset the input value after 2 seconds
-
     };
 
     const handleButtonClick = (modifier: number) => {
@@ -94,9 +80,7 @@ export default function BalanceBetSize(): JSX.Element {
                         onBlur={handlePlaceBet}
                         style={{ paddingLeft: "25px" }}
                     />
-                    <span className="text-text absolute left-2 top-1/2 transform -translate-y-1/2">
-                        €
-                    </span>
+             <EuroSign variant='input'/>
                     <div className="flex space-x-1 absolute top-1/2 right-2 transform -translate-y-1/2">
                         <BetBtn
                             className="text-xs h-6 px-2"

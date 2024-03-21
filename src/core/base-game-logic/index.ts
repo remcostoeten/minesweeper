@@ -1,3 +1,5 @@
 import useRevealAll from "./reveal-all"
+import { usePlaceBet } from "./place-bet"
+import { SubtractFromBalance } from "./substract-from-balance"
 
-export { useRevealAll }
+export { useRevealAll, usePlaceBet , SubtractFromBalance}
