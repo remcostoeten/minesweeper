@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useRef, useState } from "react"
 import { usePlaceBet } from "@/core/base-game-logic"
 import { useMutation, useQuery } from "convex/react"
@@ -30,19 +31,16 @@ export default function BalanceBetSize(): JSX.Element {
     } else {
       setBet(newBet)
     }
-
-    if (timerRef.current) {
-      clearTimeout(timerRef.current)
-    }
   }
 
-  // const handlePlaceBet = async () => {
-  //     if (bet > 0) {
-  //         await setBetAmount({ amount: bet });
-  //         console.log(`Bet of ${bet} placed.`);
-  //         toast(`Bet of ${bet} placed.`);
-  //     }
-  // };
+  useEffect(() => {
+    const currentTimer = timerRef.current;
+    return () => {
+      if (currentTimer) {
+        clearTimeout(currentTimer);
+      }
+    };
+  }, [timerRef.current]); // Include timerRef.current in the dependency array
 
   const handleButtonClick = (modifier: number) => {
     let newValue = parseFloat(inputValue)
@@ -64,7 +62,7 @@ export default function BalanceBetSize(): JSX.Element {
         clearTimeout(timerRef.current)
       }
     }
-  }, [])
+  }, [timerRef.current]); // Include timerRef.current in the dependency array
 
   return (
     <SettingsShell

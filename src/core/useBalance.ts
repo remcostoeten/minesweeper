@@ -33,7 +33,7 @@ export function useBalance() {
   }
 }
 
-export const useWalletAmount = () => {
+export const walletAmount = () => {
   const { balance } = useBalance()
 
   const walletAmount = balance?.setBalance
