@@ -27,7 +27,7 @@ export default function BalanceBetSize(): JSX.Element {
     const newBet = parseFloat(newValue);
     if (newBet > balance?.[0]?.setBalance) {
       setInputValue(balance?.[0]?.setBalance.toFixed(2).toString());
-      toast("Your bet is above your balance");
+      toast("That's ambitious 🚀 trying to bet more than your net worth...");
     } else {
       setBet(newBet);
     }
@@ -46,7 +46,7 @@ export default function BalanceBetSize(): JSX.Element {
     let newValue = parseFloat(inputValue);
     newValue = Math.max(newValue + newValue * modifier, 0);
     if (newValue > balance?.[0]?.setBalance) {
-      toast("You don't have enough balance to make this bet.");
+      toast("Sorry to break it to you, but you can't bet more than you have. 👾");
       newValue = balance?.[0]?.setBalance;
     }
     setInputValue(newValue.toFixed(2).toString());
@@ -54,22 +54,24 @@ export default function BalanceBetSize(): JSX.Element {
 
   const handleMaxClick = () => {
     setInputValue(showBalance);
+
+    toast("All in! 🚀");
   };
 
   return (
     <SettingsShell title="Bet size" subtitle={`Max bet: €${showBalance}`}>
       <Flexer mb="4" align="center" justify="between">
         <div className="relative w-full">
-          <Input
+          <Input center={false}
             type="text"
             placeholder="Your bet"
             value={inputValue}
             onChange={handleChange}
             onBlur={handlePlaceBet}
-            style={{ paddingLeft: "25px" }}
+            style={{ paddingLeft: "35px", height: "59px" }}
           />
           <EuroSign variant="input" />
-          <div className="flex space-x-1 absolute top-1/2 right-2 transform -translate-y-1/2">
+          <div className="flex space-x-1 absolute top-1/2 right-1 transform -translate-y-1/2">
             <BetBtn onClick={() => handleButtonClick(-0.5)}>1/2</BetBtn>
             <BetBtn onClick={() => handleButtonClick(2)}>2x</BetBtn>
             <BetBtn onClick={handleMaxClick}>MAX</BetBtn>
