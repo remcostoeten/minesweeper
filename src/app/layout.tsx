@@ -12,7 +12,7 @@ import { TailwindIndicator } from "@/components/core/TailwindIndicator"
 import HeaderShell from "@/components/header/headerShell"
 import Sidebar from "@/components/sidebar/MainSidebar"
 
-import ConvexClientProvider from "./ConvexClientProvider"
+import ConvexClientProvider from "../core/ConvexClientProvider"
 import SettingsSidebar from "./SettingsSidebar"
 
 export default function RootLayout({ children }) {

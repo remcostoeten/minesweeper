@@ -2,7 +2,7 @@ import { Toaster } from "sonner"
 
 import { TailwindIndicator } from "@/components/core/TailwindIndicator"
 
-import ConvexClientProvider from "./ConvexClientProvider"
+import ConvexClientProvider from "../core/ConvexClientProvider"
 
 import "../styles/app.scss"
 

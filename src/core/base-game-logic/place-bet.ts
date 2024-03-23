@@ -11,6 +11,11 @@ export const usePlaceBet = (bet: number) => {
 
     const handlePlaceBet = async () => {
         await setBetAmount({ amount: bet });
+
+        if (balance < bet) {
+            return toast("Insufficient balance.");
+        }
+
         toast(`Bet of ${bet} placed.`);
         subtractFromBalance(bet);
     };

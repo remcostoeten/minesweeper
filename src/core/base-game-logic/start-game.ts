@@ -1,28 +1,10 @@
-'use client';
-import { useState, useCallback } from 'react';
-
-const useGameLogic = () => {
-  const [gameStarted, setGameStarted] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  const [profitTaken, setProfitTaken] = useState(false);
-
-  const startGame = useCallback(() => {
+export const startGame = (setBoard, initializeBoard, placeBombs, rows, cols, bombs, setOpenedTilesCount, setTimesClicked, setGameOver, setGameStarted, setBaseBalance, betSize) => {
+    const initializedBoard = initializeBoard(rows, cols); // Initialize the board first
+    const boardWithBombs = placeBombs(initializedBoard, bombs); // Then place bombs on the initialized board
+    setBoard(boardWithBombs); // Update the board state with the new board that includes bombs
+    setOpenedTilesCount(0);
+    setTimesClicked(0);
+    setGameOver(false);
     setGameStarted(true);
-    setGameOver(false);
-    setProfitTaken(false);
-  }, []);
-
-  const takeProfit = useCallback(() => {
-    setProfitTaken(true);
-  }, []);
-
-  const startNewGame = useCallback(() => {
-    setGameStarted(false);
-    setGameOver(false);
-    setProfitTaken(false);
-  }, []);
-
-  return { gameStarted, gameOver, profitTaken, startGame, takeProfit, startNewGame };
+    setBaseBalance((prevBalance) => prevBalance - betSize);
 };
-
-export default useGameLogic;
