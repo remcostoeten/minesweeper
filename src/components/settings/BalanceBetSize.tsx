@@ -1,16 +1,25 @@
-'use client';
-import { useQuery } from "convex/react";
+"use client"
 
-import { api } from "../../../convex/_generated/api";
-import Flexer from "../core/Flexer";
-import EuroSign from "../ui/euro-sign";
-import SettingsShell from "./SettingsShell";
-import BetBtn from "../ui/setting-btn";
-import { Input } from "@ui/index";
+import { Input } from "@ui/index"
+import { useQuery } from "convex/react"
 
-export default function BalanceBetSize({betSize, setBetSize,handleChange, handlePlaceBet, handleMaxClick, handleButtonClick}) {
-  const balance = useQuery(api.balance.get);
-  const showBalance = balance?.[balance.length - 1]?.setBalance.toFixed(2) || "0";
+import { api } from "../../../convex/_generated/api"
+import Flexer from "../core/Flexer"
+import EuroSign from "../ui/euro-sign"
+import BetBtn from "../ui/setting-btn"
+import SettingsShell from "./SettingsShell"
+
+export default function BalanceBetSize({
+  betSize,
+  setBetSize,
+  handleChange,
+  handlePlaceBet,
+  handleMaxClick,
+  handleButtonClick,
+}) {
+  const balance = useQuery(api.balance.get)
+  const showBalance =
+    balance?.[balance.length - 1]?.setBalance.toFixed(2) || "0"
 
   return (
     <SettingsShell title="Bet size" subtitle={`Max bet: €${showBalance}`}>
@@ -20,7 +29,6 @@ export default function BalanceBetSize({betSize, setBetSize,handleChange, handle
             type="text"
             placeholder="Your bet"
             value={betSize}
-
             onChange={handleChange}
             onBlur={handlePlaceBet}
             style={{ paddingLeft: "35px", height: "59px" }}
@@ -34,5 +42,5 @@ export default function BalanceBetSize({betSize, setBetSize,handleChange, handle
         </div>
       </Flexer>
     </SettingsShell>
-  );
+  )
 }

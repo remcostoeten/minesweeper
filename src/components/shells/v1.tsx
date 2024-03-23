@@ -2,13 +2,16 @@
 
 import React, { useState } from "react"
 import { useRevealAll } from "@/core/base-game-logic"
+import { useStore } from "@/core/state/store"
 import { Cell, ResultsSidebarProps } from "@/core/types"
 import { useWalletAmount } from "@/core/useBalance"
 import { CheckIcon, Cross2Icon, ResetIcon } from "@radix-ui/react-icons"
 import { toast } from "sonner"
+
 import BetSize from "../game-logic/betSize"
 import FreezeGame from "../game-logic/freezeGame"
 import ToggleHoldMouse from "../game-logic/toggleHoldMouse"
+import SelectTiles from "../settings/AmountTiles"
 import BalanceBetSize from "../settings/BalanceBetSize"
 import SelectMode from "../settings/SelectGameMode"
 import StartGame from "../settings/StartGame"
@@ -25,8 +28,6 @@ import BalanceDisplay from "./_BalanceDisplay"
 import GameShell from "./GameShell"
 import SidebarShell from "./SidebarShell"
 import Wrapper from "./Wrapper"
-import { useStore } from "@/core/state/store"
-import SelectTiles from "../settings/AmountTiles"
 
 const HOLD_MOUSE_DELAY = 1250
 
@@ -56,7 +57,17 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
 
 const Minesweeper: React.FC = () => {
   const { walletAmount: amount } = useWalletAmount()
- const { cols, setRows, rows, setCols, bombs, setBombs, openedTilesCount, setOpenedTilesCount } = useStore();  const [timesClicked, setTimesClicked] = useState<number>(0)
+  const {
+    cols,
+    setRows,
+    rows,
+    setCols,
+    bombs,
+    setBombs,
+    openedTilesCount,
+    setOpenedTilesCount,
+  } = useStore()
+  const [timesClicked, setTimesClicked] = useState<number>(0)
 
   const [profitTaken, setProfitTaken] = useState<boolean>(false)
   const [gameOver, setGameOver] = useState<boolean>(false)
@@ -251,16 +262,15 @@ const Minesweeper: React.FC = () => {
             freezeGameClick={freezeGameClick}
           />
           <SidebarShell>
-
-<SelectTiles
-              // rows={rows}
-              // cols={cols}
-              // bombs={bombs}
-              // setRows={handleSetRows}
-              // setCols={handleSetCols} setBombs={function (value: number): void {
-              //   throw new Error("Function not implemented.")
-              // } }             // Add other required props here
-           />
+            <SelectTiles
+            // rows={rows}
+            // cols={cols}
+            // bombs={bombs}
+            // setRows={handleSetRows}
+            // setCols={handleSetCols} setBombs={function (value: number): void {
+            //   throw new Error("Function not implemented.")
+            // } }             // Add other required props here
+            />
           </SidebarShell>
           <StartGame
             gameStarted={gameStarted}

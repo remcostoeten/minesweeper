@@ -39,7 +39,7 @@ const Sidebar = () => {
       href: "/",
     },
     {
-      icon: <IconJarLogoIcon/>,
+      icon: <IconJarLogoIcon />,
       label: "Logic",
       href: "/currency",
     },

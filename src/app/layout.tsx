@@ -47,7 +47,12 @@ function Body({ children }) {
         <ConvexClientProvider>
           {children}
           <TailwindIndicator />
-          <Toaster position="top-right" invert closeButton={true} duration={5555} />
+          <Toaster
+            position="top-right"
+            invert
+            closeButton={true}
+            duration={5555}
+          />
         </ConvexClientProvider>
       </body>
     </>
