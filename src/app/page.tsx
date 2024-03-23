@@ -7,7 +7,7 @@ import PlaceBetComponent from "@/components/game-logic/b"
 import StartGame from "@/components/settings/StartGame"
 import Minesweeper from "@/components/shells/v1"
 
-export default function page() {
+export default function Page() {
   const [bet, setBet] = useState(0)
   const {
     gameStarted,

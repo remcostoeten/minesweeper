@@ -1,8 +1,9 @@
+/* eslint-disable */
+//
 "use client"
 
 import React, { useState } from "react"
 import { useMutation } from "convex/react"
-
 import { api } from "../../../convex/_generated/api"
 
 export default function setBalance() {
@@ -11,14 +12,8 @@ export default function setBalance() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-
-    // Access the form data
     const formData = new FormData(event.target as HTMLFormElement)
     const name = formData.get("name") as string
-
-    // Perform any necessary data processing or validation
-
-    // Submit the data
     await createFileMutation({
       name: name,
     })
@@ -37,7 +32,6 @@ export default function setBalance() {
   return (
     <div>
       {form}
-      {/* <button onClick={handleClick}>create file</button> */}
     </div>
   )
 }

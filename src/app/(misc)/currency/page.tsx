@@ -4,7 +4,7 @@ import { useState } from "react"
 
 import PlaceBetComponent from "@/components/game-logic/b"
 
-export default function page() {
+export default function CurrencyPage() {
   const [bet, setBet] = useState(0)
   return (
     <main className="p-10 text-xl">

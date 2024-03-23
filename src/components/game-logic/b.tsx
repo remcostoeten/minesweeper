@@ -4,7 +4,12 @@ import { usePlaceBet } from "@/core/base-game-logic/place-bet"
 
 import { Input } from "../ui/input"
 
-function PlaceBetComponent({ bet, setBet }) {
+type PlaceBetProps = {
+  bet?: number
+  setBet?: (bet: number) => void
+}
+
+export default function PlaceBetComponent({ bet, setBet }: PlaceBetProps) {
   const handlePlaceBet = usePlaceBet(bet)
 
   return (
@@ -20,4 +25,3 @@ function PlaceBetComponent({ bet, setBet }) {
   )
 }
 
-export default PlaceBetComponent
