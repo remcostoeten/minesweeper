@@ -1,78 +1,61 @@
 'use client';
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useCallback } from "react";
 import { usePlaceBet } from "@/core/base-game-logic";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { toast } from "sonner";
 
 import { api } from "../../../convex/_generated/api";
 import Flexer from "../core/Flexer";
-import { Input } from "../ui";
 import EuroSign from "../ui/euro-sign";
 import SettingsShell from "./SettingsShell";
 import BetBtn from "../ui/setting-btn";
+import { Input } from "@ui/index";
 
-export default function BalanceBetSize(): JSX.Element {
+export default function BalanceBetSize() {
   const balance = useQuery(api.balance.get);
-  const setBetAmount = useMutation(api.bet.createBet);
-  const [inputValue, setInputValue] = useState("0");
   const [bet, setBet] = useState(0);
-  const showBalance = balance?.[balance.length - 1]?.setBalance.toFixed(2);
+  const showBalance = balance?.[balance.length - 1]?.setBalance.toFixed(2) || "0";
   const handlePlaceBet = usePlaceBet(bet);
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    setInputValue(newValue);
-    const newBet = parseFloat(newValue);
-    if (newBet > balance?.[0]?.setBalance) {
-      setInputValue(balance?.[0]?.setBalance.toFixed(2).toString());
+  const handleChange = useCallback((event) => {
+    const newBet = parseFloat(event.target.value) || 0;
+    if (newBet > parseFloat(showBalance)) {
       toast("That's ambitious 🚀 trying to bet more than your net worth...");
+      setBet(parseFloat(showBalance));
     } else {
       setBet(newBet);
     }
-  };
+  }, [showBalance]);
 
-  useEffect(() => {
-    const currentTimer = timerRef.current;
-    return () => {
-      if (currentTimer) {
-        clearTimeout(currentTimer);
-      }
-    };
-  }, []);
-
-  const handleButtonClick = (modifier: number) => {
-    let newValue = parseFloat(inputValue);
-    newValue = Math.max(newValue + newValue * modifier, 0);
-    if (newValue > balance?.[0]?.setBalance) {
+  const handleButtonClick = useCallback((modifier) => {
+    let newValue = bet * modifier;
+    if (newValue > parseFloat(showBalance)) {
       toast("Sorry to break it to you, but you can't bet more than you have. 👾");
-      newValue = balance?.[0]?.setBalance;
+      newValue = parseFloat(showBalance);
     }
-    setInputValue(newValue.toFixed(2).toString());
-  };
+    setBet(newValue);
+  }, [bet, showBalance]);
 
-  const handleMaxClick = () => {
-    setInputValue(showBalance);
-
+  const handleMaxClick = useCallback(() => {
+    setBet(parseFloat(showBalance));
     toast("All in! 🚀");
-  };
+  }, [showBalance]);
 
   return (
     <SettingsShell title="Bet size" subtitle={`Max bet: €${showBalance}`}>
       <Flexer mb="4" align="center" justify="between">
         <div className="relative w-full">
-          <Input center={false}
+          <Input
             type="text"
             placeholder="Your bet"
-            value={inputValue}
+            value={bet.toString()}
             onChange={handleChange}
             onBlur={handlePlaceBet}
             style={{ paddingLeft: "35px", height: "59px" }}
           />
           <EuroSign variant="input" />
           <div className="flex space-x-1 absolute top-1/2 right-1 transform -translate-y-1/2">
-            <BetBtn onClick={() => handleButtonClick(-0.5)}>1/2</BetBtn>
+            <BetBtn onClick={() => handleButtonClick(0.5)}>1/2</BetBtn>
             <BetBtn onClick={() => handleButtonClick(2)}>2x</BetBtn>
             <BetBtn onClick={handleMaxClick}>MAX</BetBtn>
           </div>
