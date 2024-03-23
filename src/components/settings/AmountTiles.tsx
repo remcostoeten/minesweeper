@@ -1,13 +1,12 @@
 import React from "react";
-import Flexer from "../core/Flexer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/select";
 import { useStore } from "@/core/state/store";
 import SettingsShell from "./SettingsShell";
-import { Input } from "@ui/index";
+import { Button } from "@ui/index";
+import { MinusIcon, PlusIcon } from "../icons";
 
 const GridSizeSelect = ({ onGridSizeChange }) => {
   const { rows, cols } = useStore();
-
   return (
     <Select value={`${rows}x${cols}`} onValueChange={onGridSizeChange}>
       <SelectTrigger className="w-[180px]">
@@ -22,28 +21,40 @@ const GridSizeSelect = ({ onGridSizeChange }) => {
   );
 };
 
-export default function SelectTiles() {
+export default function AmountBombs() {
   const { rows, cols, bombs, setRows, setCols, setBombs } = useStore();
-
-  const handleGridSizeChange = (value: string) => {
-    const [newRows, newCols] = value.split("x").map(Number);
-    setRows(newRows);
-    setCols(newCols);
+  const onPlus = () => {
+    setBombs(bombs + 1);
   };
 
+  const onMinus = () => {
+    setBombs(bombs - 1);
+  }
+
   return (
-    <Flexer mb="4" justify="center">
-      <SettingsShell title="Grid size">
-        <GridSizeSelect onGridSizeChange={handleGridSizeChange} />
-      </SettingsShell>
-      <div className="flex flex-col items-center text-white ml-2">
-        Bombs:
-        <Input
+    <SettingsShell title="Amount of bombs">
+     <div className="flex  items-center border-outline p-2 rounded-md h-[59px]">
+        <span>💣</span>
+        <input className="bg-transparent text-white h-10 text-center w-12 outline-none text-text"
           type="number"
           value={bombs.toString()}
           onChange={(e) => setBombs(Number(e.target.value))}
         />
-      </div>
-    </Flexer>
+      <div className="flex gap-2 items-center ml-auto">
+          <Button
+            className="bg-main h-7 text-white rounded-md p-1"
+            onClick={onPlus}
+          >
+            <PlusIcon className="text-white/60" />
+          </Button>
+          <Button
+            className="bg-transparent border-outline h-7 text-white rounded-md p-1"
+            onClick={onMinus}
+          >
+            <MinusIcon className="text-white/60" />
+          </Button>
+          </div>
+          </div>
+    </SettingsShell>
   );
 }

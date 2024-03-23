@@ -15,10 +15,10 @@ export default function AmountMines({
 }: AmountMinesProps) {
   return (
     <SettingsShell title="Amount of mines">
-      <div className="flex h-10 items-center border-outline p-2 rounded-md">
+      <div className="flex  items-center border-outline p-2 rounded-md h-[59px]">
         <span>💣</span>
         <input
-          className="bg-transparent text-white h-10o text-center w-12 outline-none"
+          className="x[bg-transparent text-white h-10o text-center w-12 outline-none"
           id="mines"
           type="text"
           value={value}
