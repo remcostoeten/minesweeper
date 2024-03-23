@@ -8,7 +8,7 @@ import Flexer from "@/components/core/Flexer"
 import AmountMines from "@/components/settings/AmountMines"
 import BalanceBetSize from "@/components/settings/BalanceBetSize"
 import SelectMode from "@/components/settings/SelectGameMode"
-import AmountTileShell from "@/components/shells/AmountTilesShell"
+import SelectTiles from "../settings/AmountTiles"
 
 export default function SettingsSidebar({}) {
   const [rows, setRows] = useState(3)
@@ -43,13 +43,13 @@ export default function SettingsSidebar({}) {
     <Block padding="4" className="gap-2 flex flex-col">
       <SelectMode />
       <BalanceBetSize />
-      <AmountTileShell
-        rows={rows}
-        cols={cols}
-        bombs={bombs}
-        setRows={setRows}
-        setCols={setCols}
-        setBombs={setBombs}
+      <SelectTiles
+        // rows={rowsxxxx}
+        // cols={cols}
+        // bombs={bombs}
+        // setRows={setRows}
+        // setCols={setCols}
+        // setBombs={setBombs}
       />
       <AmountMines value={mines} onPlus={handlePlus} onMinus={handleMinus} />
     </Block>

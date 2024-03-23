@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { UserButton } from "@clerk/nextjs"
-import { HomeIcon } from "@radix-ui/react-icons"
+import { HomeIcon, IconJarLogoIcon } from "@radix-ui/react-icons"
 
 type MenuItemProps = {
   icon: string | JSX.Element
@@ -37,6 +37,11 @@ const Sidebar = () => {
       icon: <HomeIcon />,
       label: "Home",
       href: "/",
+    },
+    {
+      icon: <IconJarLogoIcon/>,
+      label: "Logic",
+      href: "/currency",
     },
     {
       label: "Theme ui",

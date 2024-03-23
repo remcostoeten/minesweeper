@@ -2,8 +2,6 @@
 
 import { useState } from "react"
 
-import PlaceBetComponent from "@/components/game-logic/b"
-import Minesweeper from "@/components/shells/V2"
 import BalanceBetSizeLogic from "@/components/settings/BalanceBetSizeLogic"
 
 export default function CurrencyPage() {
@@ -11,8 +9,11 @@ export default function CurrencyPage() {
   return (
     <main className="p-10 text-xl">
       <BalanceBetSizeLogic/>
+      <hr/>
+      <hr/>
       {/* <PlaceBetComponent bet={bet} setBet={setBet} /> */}
       {/* <Minesweeper/> */}
+
     </main>
   )
 }
