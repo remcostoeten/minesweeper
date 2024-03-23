@@ -4,7 +4,7 @@ import { toast } from "sonner"
 import { api } from "../../../convex/_generated/api"
 import { useSubstractFromBalance } from "./useSubstractFromBalance"
 
-export const usePlaceBet = (bet: number) => {
+export const usePlaceBet = (bet: number ) => {
   const setBetAmount = useMutation(api.bet.createBet)
   const getBalance = useQuery(api.balance.get)
   const balance = getBalance?.[getBalance.length - 1]?.setBalance.toFixed(2)
