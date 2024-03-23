@@ -33,7 +33,7 @@ const Input = function Input({
 }: InputProps) {
   return (
     <input
-      className="bg-transparent w-fit border-outline text-white h-10 text-center outline-none"
+      className="bg-transparent w-full border-outline text-white h-10 text-center outline-none"
       type={type}
       value={value}
       placeholder={placeholder}
