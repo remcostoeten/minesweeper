@@ -13,7 +13,7 @@ import HeaderShell from "@/components/header/headerShell"
 import Sidebar from "@/components/sidebar/MainSidebar"
 
 import ConvexClientProvider from "../core/ConvexClientProvider"
-import SettingsSidebar from "./SettingsSidebar"
+import SettingsSidebar from "../components/sidebar/SettingsSidebar"
 
 export default function RootLayout({ children }) {
   const [rows, setRows] = useState(3)
