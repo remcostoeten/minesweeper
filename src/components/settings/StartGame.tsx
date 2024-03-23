@@ -4,12 +4,12 @@ import { Button } from '../ui';
 import { ResetIcon } from '@radix-ui/react-icons';
 
 type GameControlsProps = {
-    gameStarted: boolean;
-    gameOver: boolean;
-    profitTaken: boolean;
-    startGame: () => void;
-    takeProfit: () => void;
-    startNewGame: () => void;
+    gameStarted?: boolean;
+    gameOver?: boolean;
+    profitTaken?: boolean;
+    startGame?: () => void;
+    takeProfit?: () => void;
+    startNewGame?: () => void;
 };
 
 export default function StartGame({

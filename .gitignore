@@ -42,3 +42,5 @@ postgress-auth-starter/
 # vercel
 .vercel
 .env*.local
+src/app/v2/page.tsx
+src/components/shells/V2.tsx
