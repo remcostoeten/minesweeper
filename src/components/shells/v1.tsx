@@ -23,7 +23,7 @@ import {
   TableRow,
 } from "../ui/table"
 import AmountTilesShell from "./AmountTilesShell"
-import BalanceDisplay from "./BalanceDisplay"
+import BalanceDisplay from "./_BalanceDisplay"
 import GameShell from "./GameShell"
 import SidebarShell from "./SidebarShell"
 import Wrapper from "./Wrapper"
