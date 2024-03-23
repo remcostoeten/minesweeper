@@ -12,6 +12,7 @@ import FreezeGame from "../game-logic/freezeGame"
 import ToggleHoldMouse from "../game-logic/toggleHoldMouse"
 import BalanceBetSize from "../settings/BalanceBetSize"
 import SelectMode from "../settings/SelectGameMode"
+import StartGame from "../settings/StartGame"
 import StatisticTabs from "../statistics/StatisticTabs"
 import {
   Table,
@@ -26,7 +27,6 @@ import BalanceDisplay from "./BalanceDisplay"
 import GameShell from "./GameShell"
 import SidebarShell from "./SidebarShell"
 import Wrapper from "./Wrapper"
-import StartGame from "../settings/StartGame"
 
 const HOLD_MOUSE_DELAY = 1250
 
@@ -270,7 +270,7 @@ const Minesweeper: React.FC = () => {
             startGame={startGame}
             takeProfit={takeProfit}
             startNewGame={startNewGame}
-        />
+          />
         </div>
         {gameStarted && (
           <GameShell title="Minesweeper">

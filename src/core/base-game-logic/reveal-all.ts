@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+
 import { Cell } from "../types"
 
 const useRevealAll = (initialBoard: Cell[][]) => {

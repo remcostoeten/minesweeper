@@ -55,13 +55,13 @@ const config = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-            },
-            borderRadius: {
+      },
+      borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-            },
-            keyframes: {
+      },
+      keyframes: {
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -70,14 +70,14 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-            },
-            animation: {
+      },
+      animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-            },
-          },
-        },
-        plugins: [require("tailwindcss-animate")],
-      } satisfies Config
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config
 
 export default config

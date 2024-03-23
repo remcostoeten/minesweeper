@@ -1,28 +1,36 @@
-'use client';
-import { useState, useCallback } from 'react';
+"use client"
+
+import { useCallback, useState } from "react"
 
 const useGameLogic = () => {
-  const [gameStarted, setGameStarted] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  const [profitTaken, setProfitTaken] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false)
+  const [gameOver, setGameOver] = useState(false)
+  const [profitTaken, setProfitTaken] = useState(false)
 
   const startGame = useCallback(() => {
-    setGameStarted(true);
-    setGameOver(false);
-    setProfitTaken(false);
-  }, []);
+    setGameStarted(true)
+    setGameOver(false)
+    setProfitTaken(false)
+  }, [])
 
   const takeProfit = useCallback(() => {
-    setProfitTaken(true);
-  }, []);
+    setProfitTaken(true)
+  }, [])
 
   const startNewGame = useCallback(() => {
-    setGameStarted(false);
-    setGameOver(false);
-    setProfitTaken(false);
-  }, []);
+    setGameStarted(false)
+    setGameOver(false)
+    setProfitTaken(false)
+  }, [])
 
-  return { gameStarted, gameOver, profitTaken, startGame, takeProfit, startNewGame };
-};
+  return {
+    gameStarted,
+    gameOver,
+    profitTaken,
+    startGame,
+    takeProfit,
+    startNewGame,
+  }
+}
 
-export default useGameLogic;
+export default useGameLogic

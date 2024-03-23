@@ -12,8 +12,8 @@ import { TailwindIndicator } from "@/components/core/TailwindIndicator"
 import HeaderShell from "@/components/header/headerShell"
 import Sidebar from "@/components/sidebar/MainSidebar"
 
-import ConvexClientProvider from "../core/ConvexClientProvider"
 import SettingsSidebar from "../components/sidebar/SettingsSidebar"
+import ConvexClientProvider from "../core/ConvexClientProvider"
 
 export default function RootLayout({ children }) {
   const [rows, setRows] = useState(3)

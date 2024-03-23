@@ -1,8 +1,8 @@
-'use client'
+"use client"
 
 import { usePlaceBet } from "@/core/base-game-logic/place-bet"
-import { Input } from "../ui/input"
 
+import { Input } from "../ui/input"
 
 function PlaceBetComponent({ bet, setBet }) {
   const handlePlaceBet = usePlaceBet(bet)

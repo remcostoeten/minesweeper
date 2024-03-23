@@ -1,32 +1,33 @@
-import { useState } from 'react';
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { useState } from "react"
+import { useMutation, useQuery } from "convex/react"
+
+import { api } from "../../../convex/_generated/api"
 
 type substractBalanceProps = {
-    balance?: number;
-    subtractFromBalance: () => void;
-    amount?: number;
-    setAmount?: (amount: number) => void;
-};
+  balance?: number
+  subtractFromBalance: () => void
+  amount?: number
+  setAmount?: (amount: number) => void
+}
 
 export const SubtractFromBalance = () => {
-    const getBalance = useQuery(api.balance.get);
-    const setBalance = useMutation(api.balance.setBalance);
-    const balance = getBalance?.[getBalance.length - 1]?.setBalance.toFixed(2);
-    const [amount, setAmount] = useState(0);
+  const getBalance = useQuery(api.balance.get)
+  const setBalance = useMutation(api.balance.setBalance)
+  const balance = getBalance?.[getBalance.length - 1]?.setBalance.toFixed(2)
+  const [amount, setAmount] = useState(0)
 
-    const subtractFromBalance = async (bet: number) => {
-        try {
-            const newBalance = balance - bet;
-            await setBalance({ balance: newBalance });
-            console.log(`New balance: ${newBalance}`);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+  const subtractFromBalance = async (bet: number) => {
+    try {
+      const newBalance = balance - bet
+      await setBalance({ balance: newBalance })
+      console.log(`New balance: ${newBalance}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
-    return { balance, subtractFromBalance, amount, setAmount };
-};
+  return { balance, subtractFromBalance, amount, setAmount }
+}
 /**
  * `useSubtractFromBalance` is a custom hook that provides functionality to subtract a certain amount from the balance.
  *
