@@ -15,6 +15,7 @@ export default function setBalance() {
     const formData = new FormData(event.target as HTMLFormElement)
     const name = formData.get("name") as string
     await createFileMutation({
+      // @ts-ignore
       name: name,
     })
   }

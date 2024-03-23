@@ -3,7 +3,6 @@
 import React, { useState } from "react"
 import { useRevealAll } from "@/core/base-game-logic"
 import { Cell, ResultsSidebarProps } from "@/core/types"
-import { walletAmount } from "@/core/useBalance"
 import { CheckIcon, Cross2Icon, ResetIcon } from "@radix-ui/react-icons"
 import { toast } from "sonner"
 
@@ -27,6 +26,7 @@ import BalanceDisplay from "./BalanceDisplay"
 import GameShell from "./GameShell"
 import SidebarShell from "./SidebarShell"
 import Wrapper from "./Wrapper"
+import { useWalletAmount } from "@/core/useBalance"
 
 const HOLD_MOUSE_DELAY = 1250
 
@@ -55,7 +55,7 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
 }
 
 const Minesweeper: React.FC = () => {
-  const { walletAmount: amount } = walletAmount()
+  const { walletAmount: amount } = useWalletAmount()
   const [rows, setRows] = useState<number>(5)
   const [cols, setCols] = useState<number>(5)
   const [bombs, setBombs] = useState<number>(3)

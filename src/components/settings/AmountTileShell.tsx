@@ -9,7 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select"
-import Wrapper from "./SettingWrapper"
+import Wrapper from "../shells/Wrapper"
+import Block from "../Block"
+import SettingsShell from "./SettingsShell"
 
 type AmountTileShellProps = {
   rows: number
@@ -36,7 +38,7 @@ export default function AmountTileShell({
   }
 
   return (
-    <Wrapper title="Grid Size">
+    <SettingsShell title="Grid Size">
       <Select value={`${rows}x${cols}`} onValueChange={handleGridSizeChange}>
         <SelectTrigger className="w-">
           <SelectValue placeholder="Grid Size" />
@@ -48,6 +50,6 @@ export default function AmountTileShell({
           <SelectItem value="9x9">9x9</SelectItem>
         </SelectContent>
       </Select>
-    </Wrapper>
+    </SettingsShell>
   )
 }

@@ -13,6 +13,11 @@ const useGameLogic = () => {
     setProfitTaken(false)
   }, [])
 
+  const endGame = useCallback(() => {
+    setGameOver(true)
+  }, [])
+
+
   const takeProfit = useCallback(() => {
     setProfitTaken(true)
   }, [])
@@ -30,6 +35,7 @@ const useGameLogic = () => {
     startGame,
     takeProfit,
     startNewGame,
+    endGame
   }
 }
 

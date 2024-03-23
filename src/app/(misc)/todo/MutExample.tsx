@@ -1,3 +1,4 @@
+// ts-ignore
 import React from "react"
 import { createFile } from "@/core/mutations/demo"
 import { useMutation } from "convex/react"
@@ -19,6 +20,7 @@ export default function MutExample() {
 
     // Submit the data
     await createFileMutation({
+      // @ts-ignore
       name: name,
     })
   }
@@ -36,7 +38,7 @@ export default function MutExample() {
   return (
     <div>
       {form}
-      <button onClick={handleClick}>create file</button>
+      <button onClick={handleSubmit}>create file</button>
     </div>
   )
 }

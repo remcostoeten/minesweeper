@@ -103,7 +103,6 @@ const TodoApp: React.FC = () => {
           />
           <textarea
             className="bg-transparent w-full p-2 border border-gray-300 rounded"
-            type="text"
             value={descriptionValue}
             onChange={handleDescriptionChange}
           ></textarea>

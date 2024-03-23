@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react"
 import { createFile } from "@/core/mutations/demo"
 import { useMutation } from "convex/react"

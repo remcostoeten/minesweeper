@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 
 import SettingsShell from "./SettingsShell"
-import Wrapper from "./SettingWrapper"
 
 type AmountMinesProps = {
   value: number

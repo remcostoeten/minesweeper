@@ -12,12 +12,12 @@ export function useBalance() {
   const setBalanceMutation = useMutation(api.balance.setBalance)
   const [currentBalance, setCurrentBalance] = useState(latestBalance)
 
-  const handleChange = (event) => {
+  const handleChange = (event: { target: { value: string } }) => {
     const newBalance = parseFloat(event.target.value)
     setCurrentBalance(newBalance)
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault()
 
     await setBalanceMutation({
@@ -33,7 +33,7 @@ export function useBalance() {
   }
 }
 
-export const walletAmount = () => {
+export const useWalletAmount = () => {
   const { balance } = useBalance()
 
   const walletAmount = balance?.setBalance
