@@ -1,11 +1,12 @@
 import * as React from "react"
 import { cn } from "@/core/utils"
+import { forwardRef } from "react"
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const ShadInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+const ShadInput = forwardRef<HTMLInputElement, InputProps>(
+  function ShadInput({ className, type, ...props }, ref) {
     return (
       <input
         type={type}
@@ -20,21 +21,27 @@ const ShadInput = React.forwardRef<HTMLInputElement, InputProps>(
   }
 )
 
-const Input = ({
+ShadInput.displayName = "ShadInput"
+
+const Input = function Input({
   style,
   type = "text",
   placeholder,
   value,
   ...rest
-}: InputProps) => (
-  <input
-    className="bg-transparent w-fit border-outline text-white h-10 text-center w-12 outline-none"
-    type={type}
-    value={value}
-    placeholder={placeholder}
-    style={style}
-    {...rest}
-  />
-)
+}: InputProps) {
+  return (
+    <input
+      className="bg-transparent w-fit border-outline text-white h-10 text-center outline-none"
+      type={type}
+      value={value}
+      placeholder={placeholder}
+      style={style}
+      {...rest}
+    />
+  )
+}
+
+Input.displayName = "Input"
 
 export { ShadInput, Input }
