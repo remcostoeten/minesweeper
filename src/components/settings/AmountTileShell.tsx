@@ -2,6 +2,8 @@
 
 import { toast } from "sonner"
 
+import Block from "../Block"
+import Wrapper from "../shells/Wrapper"
 import {
   Select,
   SelectContent,
@@ -9,8 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select"
-import Wrapper from "../shells/Wrapper"
-import Block from "../Block"
 import SettingsShell from "./SettingsShell"
 
 type AmountTileShellProps = {

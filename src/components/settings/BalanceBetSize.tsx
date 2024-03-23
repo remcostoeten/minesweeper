@@ -1,4 +1,5 @@
-'use client';
+"use client"
+
 import React, { useEffect, useRef, useState } from "react"
 import { usePlaceBet } from "@/core/base-game-logic"
 import { useMutation, useQuery } from "convex/react"
@@ -34,13 +35,13 @@ export default function BalanceBetSize(): JSX.Element {
   }
 
   useEffect(() => {
-    const currentTimer = timerRef.current;
+    const currentTimer = timerRef.current
     return () => {
       if (currentTimer) {
-        clearTimeout(currentTimer);
+        clearTimeout(currentTimer)
       }
-    };
-  }, [timerRef.current]); // Include timerRef.current in the dependency array
+    }
+  }, [timerRef.current]) // Include timerRef.current in the dependency array
 
   const handleButtonClick = (modifier: number) => {
     let newValue = parseFloat(inputValue)
@@ -62,7 +63,7 @@ export default function BalanceBetSize(): JSX.Element {
         clearTimeout(timerRef.current)
       }
     }
-  }, [timerRef.current]); // Include timerRef.current in the dependency array
+  }, [timerRef.current])
 
   return (
     <SettingsShell
