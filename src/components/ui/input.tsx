@@ -33,7 +33,7 @@ const Input = function Input({
   ...rest
 }: InputProps & { center?: boolean }) {
   const inputClassName = cn(
-    "bg-transparent w-full border-outline text-white h-10 outline-none text-text",
+    "bg-transparent w-full border-outline text-white rounded-lg h-10 outline-none text-text",
     center ? "text-center" : ""
   )
 

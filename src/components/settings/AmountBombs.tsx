@@ -1,5 +1,5 @@
 import { useStore } from "@/core/state/store"
-import { Button } from "@ui/index"
+import { Button, Input } from "@ui/index"
 import {
   Select,
   SelectContent,
@@ -18,7 +18,7 @@ const GridSizeSelect = ({ onGridSizeChange }) => {
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select Grid Size" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="text-2xls">
         {["3x3", "5x5", "7x7", "9x9"].map((size) => (
           <SelectItem key={size} value={size}>
             {size}
@@ -41,10 +41,10 @@ export default function AmountBombs() {
 
   return (
     <SettingsShell title="Amount of bombs">
-      <div className="flex  items-center border-outline p-2 rounded-md h-[59px]">
+      <div className="flex text-text items-center border-outline p-2 rounded-md h-[59px]">
         <span>💣</span>
-        <input
-          className="bg-transparent text-white h-10 text-center w-12 outline-none text-text"
+        <Input
+          // className="bg-transparent  h-10 text-center w-12 outline-none text-text"
           type="number"
           value={bombs.toString()}
           onChange={(e) => setBombs(Number(e.target.value))}

@@ -8,11 +8,9 @@ import { useWalletAmount } from "@/core/useBalance"
 import { CheckIcon, Cross2Icon, ResetIcon } from "@radix-ui/react-icons"
 import { toast } from "sonner"
 
-import BetSize from "../game-logic/betSize"
 import FreezeGame from "../game-logic/freezeGame"
 import ToggleHoldMouse from "../game-logic/toggleHoldMouse"
 import SelectTiles from "../settings/AmountBombs"
-import BalanceBetSize from "../settings/BalanceBetSize"
 import SelectMode from "../settings/SelectGameMode"
 import StartGame from "../settings/StartGame"
 import StatisticTabs from "../statistics/StatisticTabs"
@@ -250,9 +248,7 @@ const Minesweeper: React.FC = () => {
       <div className="flex gap-2">
         <div className="flex gap-2 flex-col w-max-4/6  p-10">
           <SelectMode />
-          <BalanceBetSize />
           <BalanceDisplay balance={amount} profitLoss={0} />
-          <BetSize betSize={betSize} setBetSize={setBetSize} />
           <ToggleHoldMouse
             toggleHoldMouse={toggleHoldMouse}
             toggleHoldMouseClick={toggleHoldMouseClick}

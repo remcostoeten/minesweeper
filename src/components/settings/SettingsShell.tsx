@@ -1,3 +1,5 @@
+import Flexer from "../core/Flexer"
+
 type SettingsShellProps = {
   title?: string
   subtitle?: string
@@ -12,15 +14,15 @@ export default function SettingsShell({
   showBalance,
 }: SettingsShellProps) {
   return (
-    <div className="flex flex-col justify-center">
-      <div className="flex items-center justify-between w-full">
-        <span className="text-md text-text">{title}</span>
+    <Flexer justify="center" direction="col">
+      <Flexer align="center" justify="between" width="full">
+        <span className="text-md text-heading">{title}</span>
         <span className="text-md text-text">
           {subtitle} {showBalance}
         </span>
-      </div>
+      </Flexer>
       {children}
-    </div>
+    </Flexer>
   )
 }
 
