@@ -25,7 +25,7 @@ type FlexProps = {
 
 export default function Flexer({
   width = "w-full",
-  height,
+  height = "h-full",
   direction = "row",
   justify = "start",
   align = "stretch",

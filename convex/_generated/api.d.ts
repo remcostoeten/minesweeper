@@ -16,7 +16,6 @@ import type {
 } from "convex/server";
 import type * as balance from "../balance.js";
 import type * as bet from "../bet.js";
-import type * as note from "../note.js";
 import type * as todo from "../todo.js";
 
 /**
@@ -30,7 +29,6 @@ import type * as todo from "../todo.js";
 declare const fullApi: ApiFromModules<{
   balance: typeof balance;
   bet: typeof bet;
-  note: typeof note;
   todo: typeof todo;
 }>;
 export declare const api: FilterApi<

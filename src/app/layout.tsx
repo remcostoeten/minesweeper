@@ -81,7 +81,7 @@ function GameControl() {
 
 function Main({ children }) {
   return (
-    <Block width="full" as="main">
+    <Block width="full" as="main" padding="4">
       {children}
     </Block>
   )

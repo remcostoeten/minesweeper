@@ -5,16 +5,18 @@ type SettingsShellProps = {
   subtitle?: string
   showBalance?: number
   children: React.ReactNode
+  className?: string
 }
 
 export default function SettingsShell({
   children,
   title,
   subtitle,
+  className,
   showBalance,
 }: SettingsShellProps) {
   return (
-    <Flexer justify="center" direction="col">
+    <Flexer className={className} justify="center" direction="col">
       <Flexer align="center" justify="between" width="full">
         <span className="text-md text-heading">{title}</span>
         <span className="text-md text-text">
