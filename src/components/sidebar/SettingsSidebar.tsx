@@ -4,12 +4,10 @@ import { useState } from "react"
 import { toast } from "sonner"
 
 import Block from "@/components/Block"
-import Flexer from "@/components/core/Flexer"
-import AmountMines from "@/components/settings/AmountMines"
 import BalanceBetSize from "@/components/settings/BalanceBetSize"
 import SelectMode from "@/components/settings/SelectGameMode"
 
-import SelectTiles from "../settings/AmountTiles"
+import SelectTiles from "../settings/AmountBombs"
 
 export default function SettingsSidebar({}) {
   const [rows, setRows] = useState(3)
@@ -52,7 +50,6 @@ export default function SettingsSidebar({}) {
       // setCols={setCols}
       // setBombs={setBombs}
       />
-      <AmountMines value={mines} onPlus={handlePlus} onMinus={handleMinus} />
     </Block>
   )
 }
