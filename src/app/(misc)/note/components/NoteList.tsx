@@ -3,7 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 
 export default function NotesList() {
-    const notes = useQuery(api.notes.get) as any;
+    const notes = useQuery(api.note.get)
     if (!notes) return <div>Loading...</div>;
 
   return (

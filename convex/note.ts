@@ -1,6 +1,6 @@
 import { v } from "convex/values"
 
-import { mutation } from "./_generated/server"
+import { mutation, query } from "./_generated/server"
 
 export const createNote = mutation({
   args: {
@@ -15,5 +15,12 @@ export const createNote = mutation({
       content: args.content,
       category: args.category,
     })
+  },
+})
+
+export const get = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("notes").collect()
   },
 })
