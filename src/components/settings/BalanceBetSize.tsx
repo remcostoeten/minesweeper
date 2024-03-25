@@ -42,31 +42,31 @@ export default function BalanceBetSize({
         </div>
       </Flexer>
       <div className="grid grid-cols-4 gap-1">
-                <BetBtn
-                    className="h-[50px] text-xs "
-                    onClick={() => handleButtonClick(0.1)}
-                >
-                    +10%
-                </BetBtn>
-                <BetBtn
-                    className="h-[50px] text-xs p"
-                    onClick={() => handleButtonClick(0.5)}
-                >
-                    +50%
-                </BetBtn>
-                <BetBtn
-                    className="h-[50px] text-xs p"
-                    onClick={() => handleButtonClick(1)}
-                >
-                    +100%
-                </BetBtn>
-                <BetBtn
-                    className="h-[50px] text-xs py"
-                    onClick={() => handleButtonClick(10)}
-                >
-                    +1000%
-                </BetBtn>
-            </div>
+        <BetBtn
+          className="h-[50px] text-xs "
+          onClick={() => handleButtonClick(0.1)}
+        >
+          +10%
+        </BetBtn>
+        <BetBtn
+          className="h-[50px] text-xs p"
+          onClick={() => handleButtonClick(0.5)}
+        >
+          +50%
+        </BetBtn>
+        <BetBtn
+          className="h-[50px] text-xs p"
+          onClick={() => handleButtonClick(1)}
+        >
+          +100%
+        </BetBtn>
+        <BetBtn
+          className="h-[50px] text-xs py"
+          onClick={() => handleButtonClick(10)}
+        >
+          +1000%
+        </BetBtn>
+      </div>
     </SettingsShell>
   )
 }
