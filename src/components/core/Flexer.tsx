@@ -1,17 +1,11 @@
 import React from "react"
 
-type Direction = "row" | "row-reverse" | "col" | "column-reverse";
+type Direction = "row" | "row-reverse" | "col" | "column-reverse"
 
 type FlexProps = {
-  dir?: Direction;
-  direction?: Direction;
-  justify?:
-    | "start"
-    | "end"
-    | "center"
-    | "between"
-    | "around"
-    | "evenly"
+  dir?: Direction
+  direction?: Direction
+  justify?: "start" | "end" | "center" | "between" | "around" | "evenly"
   align?: "stretch" | "start" | "end" | "center" | "baseline"
   wrap?: "nowrap" | "wrap" | "wrap-reverse"
   gap?: string
