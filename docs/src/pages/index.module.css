@@ -3,6 +3,22 @@
  * and scoped locally.
  */
 
+ [data-channel=desktop][data-layout-type=aside_panel] .UiAsideUserPanel .Button--collect .Title, [data-channel=desktop][data-layout-type=aside_panel] .UiAsideUserPanel .Button--place-bet .Title, [data-channel=desktop][data-layout-type=aside_panel] .UiAsideUserPanel .Button--startautoplay .Title, [data-channel=desktop][data-layout-type=aside_panel] .UiAsideUserPanel .Button--stopautoplay .Title {
+  color: #fff; !important
+font-size: 75px !important;
+  margin-top: -150px;
+}
+
+.BetAmountPanel .Input--bet-amount {
+  font-size: 3:rem;
+}
+
+/* aviator */
+/* top bar title */
+
+
+
+
 .heroBanner {
   padding: 4rem 0;
   text-align: center;
