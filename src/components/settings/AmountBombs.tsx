@@ -44,7 +44,7 @@ export default function AmountBombs() {
       <div className="flex text-text items-center border-outline p-2 rounded-md h-[59px]">
         <span>💣</span>
         <Input
-          // className="bg-transparent  h-10 text-center w-12 outline-none text-text"
+          className="bg-transparent  h-10 text-center w-12 outline-none text-text"
           type="number"
           value={bombs.toString()}
           onChange={(e) => setBombs(Number(e.target.value))}
