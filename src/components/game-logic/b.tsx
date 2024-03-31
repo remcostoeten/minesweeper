@@ -24,4 +24,3 @@ export default function PlaceBetComponent({ bet, setBet }: PlaceBetProps) {
     </div>
   )
 }
-

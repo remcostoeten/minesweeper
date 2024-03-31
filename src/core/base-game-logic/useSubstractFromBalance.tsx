@@ -10,7 +10,7 @@ type substractBalanceProps = {
   setAmount?: (amount: number) => void
 }
 
-export const SubtractFromBalance = () => {
+export const useSubstractFromBalance = () => {
   const getBalance = useQuery(api.balance.get)
   const setBalance = useMutation(api.balance.setBalance)
   const balance = getBalance?.[getBalance.length - 1]?.setBalance.toFixed(2)

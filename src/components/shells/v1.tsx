@@ -2,14 +2,15 @@
 
 import React, { useState } from "react"
 import { useRevealAll } from "@/core/base-game-logic"
+import { useStore } from "@/core/state/store"
 import { Cell, ResultsSidebarProps } from "@/core/types"
+import { useWalletAmount } from "@/core/useBalance"
 import { CheckIcon, Cross2Icon, ResetIcon } from "@radix-ui/react-icons"
 import { toast } from "sonner"
 
-import BetSize from "../game-logic/betSize"
 import FreezeGame from "../game-logic/freezeGame"
 import ToggleHoldMouse from "../game-logic/toggleHoldMouse"
-import BalanceBetSize from "../settings/BalanceBetSize"
+import SelectTiles from "../settings/AmountBombs"
 import SelectMode from "../settings/SelectGameMode"
 import StartGame from "../settings/StartGame"
 import StatisticTabs from "../statistics/StatisticTabs"
@@ -21,12 +22,10 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table"
-import AmountTilesShell from "./AmountTilesShell"
-import BalanceDisplay from "./BalanceDisplay"
+import BalanceDisplay from "./_BalanceDisplay"
 import GameShell from "./GameShell"
 import SidebarShell from "./SidebarShell"
 import Wrapper from "./Wrapper"
-import { useWalletAmount } from "@/core/useBalance"
 
 const HOLD_MOUSE_DELAY = 1250
 
@@ -56,11 +55,18 @@ const placeBombs = (board: Cell[][], bombs: number): Cell[][] => {
 
 const Minesweeper: React.FC = () => {
   const { walletAmount: amount } = useWalletAmount()
-  const [rows, setRows] = useState<number>(5)
-  const [cols, setCols] = useState<number>(5)
-  const [bombs, setBombs] = useState<number>(3)
-  const [openedTilesCount, setOpenedTilesCount] = useState<number>(0)
+  const {
+    cols,
+    setRows,
+    rows,
+    setCols,
+    bombs,
+    setBombs,
+    openedTilesCount,
+    setOpenedTilesCount,
+  } = useStore()
   const [timesClicked, setTimesClicked] = useState<number>(0)
+
   const [profitTaken, setProfitTaken] = useState<boolean>(false)
   const [gameOver, setGameOver] = useState<boolean>(false)
   const [numDeaths, setNumDeaths] = useState<number>(0)
@@ -242,9 +248,7 @@ const Minesweeper: React.FC = () => {
       <div className="flex gap-2">
         <div className="flex gap-2 flex-col w-max-4/6  p-10">
           <SelectMode />
-          <BalanceBetSize />
           <BalanceDisplay balance={amount} profitLoss={0} />
-          <BetSize betSize={betSize} setBetSize={setBetSize} />
           <ToggleHoldMouse
             toggleHoldMouse={toggleHoldMouse}
             toggleHoldMouseClick={toggleHoldMouseClick}
@@ -254,13 +258,14 @@ const Minesweeper: React.FC = () => {
             freezeGameClick={freezeGameClick}
           />
           <SidebarShell>
-            <AmountTilesShell
-              rows={rows}
-              cols={cols}
-              bombs={bombs}
-              setCols={handleSetCols}
-              setBombs={setBombs}
-              setRows={handleSetRows}
+            <SelectTiles
+            // rows={rows}
+            // cols={cols}
+            // bombs={bombs}
+            // setRows={handleSetRows}
+            // setCols={handleSetCols} setBombs={function (value: number): void {
+            //   throw new Error("Function not implemented.")
+            // } }             // Add other required props here
             />
           </SidebarShell>
           <StartGame

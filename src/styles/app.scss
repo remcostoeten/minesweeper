@@ -1,4 +1,4 @@
-@import './_tailwind-base.scss';
 @import './variables/colors.scss';
-
+@import './_tailwind-base.scss';
+@import './components/_override-toast.scss';
 @import './effects/_animated-tooltip.scss';

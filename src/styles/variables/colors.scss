@@ -3,6 +3,13 @@ $color-card: #111521;
 $color-card-inner: #171C2B;
 $color-primary: #6F18DE;
 $color-outline: #222734;
+$text: #474f70;
+// $heading: #5d6893;
+$heading: #66729d;
+
+.text-heading {
+    color: $heading
+}
 
 .border-outline {
     border: 1px solid $color-outline

@@ -1,14 +1,11 @@
 import React from "react"
 
+type Direction = "row" | "row-reverse" | "col" | "column-reverse"
+
 type FlexProps = {
-  direction?: "row" | "row-reverse" | "column" | "column-reverse"
-  justify?:
-    | "flex-start"
-    | "flex-end"
-    | "center"
-    | "between"
-    | "around"
-    | "evenly"
+  dir?: Direction
+  direction?: Direction
+  justify?: "start" | "end" | "center" | "between" | "around" | "evenly"
   align?: "stretch" | "start" | "end" | "center" | "baseline"
   wrap?: "nowrap" | "wrap" | "wrap-reverse"
   gap?: string
@@ -17,24 +14,26 @@ type FlexProps = {
   className?: string
   width?: string
   height?: string
+  mt?: string
 }
 
 export default function Flexer({
   width = "w-full",
-  height,
+  height = "h-full",
   direction = "row",
-  justify = "flex-start",
+  justify = "start",
   align = "stretch",
   wrap = "nowrap",
   gap = "0",
   mb = "0",
+  mt = "0",
   children,
   className = "",
   ...rest
 }: FlexProps) {
   return (
     <div
-      className={`flex ${width} mb-${mb} flex-${direction} gap-${gap} h-${height}  justify-${justify} items-${align} flex-${wrap} ${className}`}
+      className={`flex ${width} mt-${mt} mb-${mb} flex-${direction} gap-${gap} h-${height}  justify-${justify} items-${align} flex-${wrap} ${className}`}
       {...rest}
     >
       {children}

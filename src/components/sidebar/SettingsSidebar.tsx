@@ -4,11 +4,12 @@ import { useState } from "react"
 import { toast } from "sonner"
 
 import Block from "@/components/Block"
-import Flexer from "@/components/core/Flexer"
-import AmountMines from "@/components/settings/AmountMines"
-import BalanceBetSize from "@/components/settings/BalanceBetSize"
+import BalanceBetWrapper from "../settings/(balance)/BalanceBetWrapper"
 import SelectMode from "@/components/settings/SelectGameMode"
-import AmountTileShell from "@/components/shells/AmountTilesShell"
+
+import BalanceBetSizeLogic from "../settings/(balance)/BalanceBetSizeLogic"
+import AmountBombs from "../settings/AmountBombs"
+import SelectTiles from "../settings/AmountTiles"
 
 export default function SettingsSidebar({}) {
   const [rows, setRows] = useState(3)
@@ -42,16 +43,9 @@ export default function SettingsSidebar({}) {
   return (
     <Block padding="4" className="gap-2 flex flex-col">
       <SelectMode />
-      <BalanceBetSize />
-      <AmountTileShell
-        rows={rows}
-        cols={cols}
-        bombs={bombs}
-        setRows={setRows}
-        setCols={setCols}
-        setBombs={setBombs}
-      />
-      <AmountMines value={mines} onPlus={handlePlus} onMinus={handleMinus} />
+      <BalanceBetSizeLogic/>
+      <AmountBombs />
+      <SelectTiles />
     </Block>
   )
 }

@@ -1,14 +1,15 @@
 "use client"
 
-import { useState } from "react"
-
-import PlaceBetComponent from "@/components/game-logic/b"
+import AmountBombs from "@/components/settings/AmountBombs"
+import SelectTiles from "@/components/settings/AmountTiles"
+import BalanceBetSizeLogic from "@/components/settings/(balance)/BalanceBetSizeLogic"
 
 export default function CurrencyPage() {
-  const [bet, setBet] = useState(0)
   return (
     <main className="p-10 text-xl">
-      <PlaceBetComponent bet={bet} setBet={setBet} />
+      <BalanceBetSizeLogic />
+      <AmountBombs />
+      <SelectTiles />
     </main>
   )
 }
