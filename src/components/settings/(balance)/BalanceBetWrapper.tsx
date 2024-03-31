@@ -3,13 +3,13 @@
 import { Input } from "@ui/index"
 import { useQuery } from "convex/react"
 
-import { api } from "../../../convex/_generated/api"
-import Flexer from "../core/Flexer"
-import EuroSign from "../ui/euro-sign"
-import BetBtn from "../ui/setting-btn"
-import SettingsShell from "./SettingsShell"
+import { api } from "../../../../convex/_generated/api"
+import Flexer from "../../core/Flexer"
+import EuroSign from "../../ui/euro-sign"
+import BetBtn from "../../ui/setting-btn"
+import SettingsShell from "../SettingsShell"
 
-export default function BalanceBetSize({
+export default function BalanceBetWrapper({
   betSize,
   setBetSize,
   handleChange,

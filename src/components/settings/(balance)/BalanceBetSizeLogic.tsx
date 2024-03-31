@@ -5,7 +5,7 @@ import { usePlaceBet } from "@/core/base-game-logic/place-bet"
 import { useWalletAmount } from "@/core/useBalance"
 import { toast } from "sonner"
 
-import BalanceBetSize from "./BalanceBetSize"
+import BalanceBetSize from "./BalanceBetWrapper"
 
 export default function BalanceBetSizeLogic() {
   const [bet, setBet] = useState(0)

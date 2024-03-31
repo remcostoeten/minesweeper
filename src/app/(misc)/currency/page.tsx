@@ -2,7 +2,7 @@
 
 import AmountBombs from "@/components/settings/AmountBombs"
 import SelectTiles from "@/components/settings/AmountTiles"
-import BalanceBetSizeLogic from "@/components/settings/BalanceBetSizeLogic"
+import BalanceBetSizeLogic from "@/components/settings/(balance)/BalanceBetSizeLogic"
 
 export default function CurrencyPage() {
   return (
@@ -10,8 +10,6 @@ export default function CurrencyPage() {
       <BalanceBetSizeLogic />
       <AmountBombs />
       <SelectTiles />
-      {/* <PlaceBetComponent bet={bet} setBet={setBet} /> */}
-      {/* <Minesweeper/> */}
     </main>
   )
 }
