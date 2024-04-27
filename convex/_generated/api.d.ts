@@ -13,10 +13,11 @@ import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
-} from "convex/server";
-import type * as balance from "../balance.js";
-import type * as bet from "../bet.js";
-import type * as todo from "../todo.js";
+} from "convex/server"
+
+import type * as balance from "../balance.js"
+import type * as bet from "../bet.js"
+import type * as todo from "../todo.js"
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,15 +28,15 @@ import type * as todo from "../todo.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  balance: typeof balance;
-  bet: typeof bet;
-  todo: typeof todo;
-}>;
+  balance: typeof balance
+  bet: typeof bet
+  todo: typeof todo
+}>
 export declare const api: FilterApi<
   typeof fullApi,
   FunctionReference<any, "public">
->;
+>
 export declare const internal: FilterApi<
   typeof fullApi,
   FunctionReference<any, "internal">
->;
+>
