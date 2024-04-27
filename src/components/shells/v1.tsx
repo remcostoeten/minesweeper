@@ -184,6 +184,7 @@ const Minesweeper: React.FC = () => {
       ])
       toast(`Too bad, you died on the ${newTimesClicked + 1} click`)
     } else if (!board[row][col].isRevealed) {
+      // @ts-ignore
       setOpenedTilesCount((prevCount) => prevCount + 1)
       if (checkWin(newBoard)) {
         setGameOver(true)

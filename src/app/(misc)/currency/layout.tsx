@@ -1,15 +1,9 @@
-import Minesweeper from "@/components/shells/v1"
-
-export default function DashboardLayout({
-  children, // will be a page or nested layout
+export default function Layout({
+  children,
 }: {
   children: React.ReactNode
-  sidebar: React.ReactNode
-  header: React.ReactNode
 }) {
   return (
-    <section>
-      <Minesweeper/>.
-    </section>
+    <div>{children}</div>
   )
 }

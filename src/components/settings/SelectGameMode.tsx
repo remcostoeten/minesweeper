@@ -31,7 +31,7 @@ export default function SelectMode(): JSX.Element {
     <>
       <div className="p-2 flex items-center justify-center bg-card-inner lg:flex-row flex-col">
         <Flexer
-          direction="column"
+          dir="col"
           align="center"
           className="lg:flex-row flex-col"
         >
