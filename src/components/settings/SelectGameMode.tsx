@@ -30,11 +30,7 @@ export default function SelectMode(): JSX.Element {
   return (
     <>
       <div className="p-2 flex items-center justify-center bg-card-inner lg:flex-row flex-col">
-        <Flexer
-          dir="col"
-          align="center"
-          className="lg:flex-row flex-col"
-        >
+        <Flexer dir="col" align="center" className="lg:flex-row flex-col">
           <div className="lg:w-1/2 w-full bg-[#161821]">
             <Button border text="Manual" />
           </div>

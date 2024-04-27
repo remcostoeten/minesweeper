@@ -4,10 +4,10 @@ import { useState } from "react"
 import { toast } from "sonner"
 
 import Block from "@/components/Block"
-import BalanceBetWrapper from "../settings/(balance)/BalanceBetWrapper"
 import SelectMode from "@/components/settings/SelectGameMode"
 
 import BalanceBetSizeLogic from "../settings/(balance)/BalanceBetSizeLogic"
+import BalanceBetWrapper from "../settings/(balance)/BalanceBetWrapper"
 import AmountBombs from "../settings/AmountBombs"
 import SelectTiles from "../settings/AmountTiles"
 
@@ -43,7 +43,7 @@ export default function SettingsSidebar({}) {
   return (
     <Block padding="4" className="gap-2 flex flex-col">
       <SelectMode />
-      <BalanceBetSizeLogic/>
+      <BalanceBetSizeLogic />
       <AmountBombs />
       <SelectTiles />
     </Block>
